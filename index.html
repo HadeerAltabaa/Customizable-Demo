@@ -5,26 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customizable Frontend for Demos</title>
-    <style>
-    #custom-image {
-      width: 300px;
-      height: 200px;
-      object-fit: cover;
-      cursor: pointer;
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-    }
-  </style>
 </head>
 
 <body>
     <div class="head">
         <div class="Logo">
-            <!-- Default image -->
-            <img id="custom-image" src="images/image.png" alt="Custom Image">
-
-            <!-- Hidden file input -->
-            <input type="file" id="image-input" accept="image/*" style="display: none;">
+            
         </div>
     </div>
     <div class="body">
@@ -33,25 +19,5 @@
     <div class="footer">
 
     </div>
-    <script>
-    const image = document.getElementById('custom-image');
-    const fileInput = document.getElementById('image-input');
-
-    image.addEventListener('click', () => {
-      fileInput.click(); // Trigger file input when image is clicked
-    });
-
-    fileInput.addEventListener('change', (event) => {
-      const file = event.target.files[0];
-      if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          image.src = e.target.result; // Replace image src with uploaded image
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  </script>
 </body>
-
 </html>
