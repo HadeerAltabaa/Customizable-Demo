@@ -1,0 +1,218 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+:root {
+    --bg-color: #ffffff;
+    --sec-bg-color: #f0f0f0;
+    --section-color: #057bc6;
+    --text-color: #333333;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: var(--sec-bg-color);
+    color: var(--text-color);
+}
+
+/* Header styles */
+.head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-color);
+    padding: 10px 20px;
+    color: var(--bg-color);
+}
+
+/* Logo styles */
+.logo img {
+    height: 50px;
+    width: auto;
+}
+
+/* Navigation bar styles */
+.nav-bar ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-bar li {
+    display: inline;
+}
+
+.nav-bar a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.nav-bar a:hover {
+    color: #057BC6;
+}
+
+/* Eddit Button styles */
+.edit button {
+    padding: 10px 20px;
+    background-color: var(--section-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit button:hover {
+    background-color: var(--bg-color);
+    border: 2px solid var(--section-color);
+    color: var(--section-color);
+}
+
+.main-body {
+    min-height: 400px;
+    padding: 40px 20px;
+    background-color: var(--bg-color);
+    scroll-behavior: smooth;
+}
+
+/* Document section styles */
+.doc-section {
+    padding: 20px;
+}
+
+.doc-section h2 {
+    color: var(--text-color);
+    margin-bottom: 20px;
+}
+
+.doc-containers {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--section-color);
+    color: var(--bg-color);
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    gap: 20px;
+}
+
+.doc-containers label {
+    padding: 4px 10px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border-radius: 25px;
+    cursor: pointer;
+}
+
+.doc-containers input[type="file"] {
+    display: none; /* Hide the default file input */
+}
+
+.doc-containers input[type="number"] {
+    width: 50px;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.doc-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.doc-controls input[type="number"] {
+    margin: 0;
+}
+
+.doc-controls label {
+    margin: 0;
+}
+
+/*.doc-section {
+    padding: 20px;
+}
+
+.doc-section h2 {
+    color: var(--section-color);
+    margin-bottom: 20px;
+}
+
+.doc-containers {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--section-color);
+    margin-bottom: 20px;
+    padding: 20px;
+    border-radius: 10px;
+    gap: 20px;
+}
+
+.file-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.file-item {
+    background-color: #057BC6;
+    color: white;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.file-item:hover {
+    background-color: #035a91;
+}*/
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: var(--sec-bg-color);    
+    color: var(--text-color);
+    text-align: center;
+    padding: 15px 20px;
+    max-height: 50px;
+}
+
+.footer img {
+    position: absolute;
+    left: 20px;
+    height: 30px;
+}
+
+.footer p {
+    margin: 0 auto;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Remove number input arrows for Chrome, Safari, Edge */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove number input arrows for Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
