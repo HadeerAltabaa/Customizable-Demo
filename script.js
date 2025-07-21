@@ -1,103 +1,224 @@
 const fileInput = document.getElementById('fileInput');
 const fileGrid = document.getElementById('fileGrid');
 const preview = document.getElementById('preview');
-const fileLimitInput = document.querySelector('input[type="number"]');
+const fileLimitInput = document.getElementById('fileLimit');
+const noFilesPanel = document.getElementById('noFilesPanel');
+const filesPresentPanel = document.getElementById('filesPresentPanel');
+const commentInput = document.getElementById("commentInput");
+const addCommentBtn = document.getElementById("addCommentBtn");
+const commentList = document.getElementById("commentList");
+
 const storageKey = 'uploadedExcelFiles';
+let fileLimit = parseInt(fileLimitInput.value, 10) || 1;
 
-let fileLimit = 0;
-
-// Load from localStorage
+// Load stored files on page load
 window.addEventListener('load', () => {
-  const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
-  stored.forEach(f => renderFileButton(f));
+    const storedFiles = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    if (storedFiles.length > 0) {
+        switchToFilesPanel();
+        storedFiles.forEach(renderFileButton);
+    } else {
+        switchToEmptyPanel();
+    }
 });
 
 // Update file limit
 fileLimitInput.addEventListener('input', () => {
-  fileLimit = parseInt(fileLimitInput.value, 10) || 0;
-  clearAllFiles();
+    fileLimit = parseInt(fileLimitInput.value, 10) || 1;
+    clearAllFiles();
 });
 
-// File input handler
+// File upload handler
 fileInput.addEventListener('change', () => {
-  const selected = Array.from(fileInput.files);
-  const stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    const selectedFiles = Array.from(fileInput.files);
+    let storedFiles = JSON.parse(localStorage.getItem(storageKey) || '[]');
 
-  if (fileLimit && stored.length + selected.length > fileLimit) {
-    alert(`You can only upload ${fileLimit} file(s) in total.`);
+    if (fileLimit && storedFiles.length + selectedFiles.length > fileLimit) {
+        alert(`You can only upload up to ${fileLimit} file(s).`);
+        fileInput.value = '';
+        return;
+    }
+
+    selectedFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const fileObj = {
+                name: file.name,
+                type: file.type,
+                content: Array.from(new Uint8Array(reader.result)) // Store as array of numbers
+            };
+            storedFiles.push(fileObj);
+            localStorage.setItem(storageKey, JSON.stringify(storedFiles));
+            renderFileButton(fileObj);
+            switchToFilesPanel();
+        };
+        reader.readAsArrayBuffer(file);
+    });
+
     fileInput.value = '';
-    return;
-  }
-
-  selected.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const fileObj = {
-        name: file.name,
-        type: file.type,
-        content: reader.result
-      };
-
-      const updated = [...stored, fileObj];
-      localStorage.setItem(storageKey, JSON.stringify(updated));
-      renderFileButton(fileObj);
-    };
-    reader.readAsArrayBuffer(file);
-  });
-
-  fileInput.value = '';
 });
 
-// Render file button
+addCommentBtn.addEventListener("click", () => {
+    const commentText = commentInput.value.trim();
+
+    if (commentText !== "") {
+        const comment = document.createElement("div");
+        comment.className = "comment";
+        comment.textContent = commentText;
+
+        commentList.appendChild(comment);
+        commentInput.value = "";
+    }
+});
+
+// Render individual file icon + preview + delete button
 function renderFileButton(file) {
-  const wrapper = document.createElement('div');
-  wrapper.className = 'file-icon';
-  wrapper.innerHTML = `
-    <button class="file-item">${file.name}</button>
-    <button class="delete-btn" title="Delete file">&times;</button>
+    const wrapper = document.createElement('div');
+    wrapper.className = 'file-icon';
+
+    wrapper.innerHTML = `
+    <button class="delete-btn" title="Delete">&times;</button>
+    <img src="images/excel-icon.png" alt="Excel Icon">
+    <p>${file.name}</p>
   `;
 
-  wrapper.querySelector('.file-item').addEventListener('click', () => {
-    previewExcelFile(file);
-  });
+    wrapper.addEventListener('click', () => {
+        previewExcelFile(file);
 
-  wrapper.querySelector('.delete-btn').addEventListener('click', (e) => {
-    e.stopPropagation();
-    deleteFile(file.name);
-  });
+        // Deselect all other file icons
+        document.querySelectorAll('.file-icon').forEach(icon => {
+            icon.classList.remove('selected');
+        });
 
-  fileGrid.appendChild(wrapper);
+        // Select this one
+        wrapper.classList.add('selected');
+    });
+
+    wrapper.querySelector('.delete-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        deleteFile(file.name);
+    });
+
+    fileGrid.appendChild(wrapper);
 }
 
-// Preview first 6 rows
+// Preview first 6 rows of Excel sheet
 function previewExcelFile(file) {
-  preview.innerHTML = 'Loading preview...';
-  const data = new Uint8Array(file.content);
-  const workbook = XLSX.read(data, { type: 'array' });
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 6);
+    preview.innerHTML = 'Loading preview...';
 
-  let html = '<table border="1" cellspacing="0" cellpadding="4">';
-  rows.forEach(row => {
-    html += '<tr>' + row.map(cell => `<td>${cell ?? ''}</td>`).join('') + '</tr>';
-  });
-  html += '</table>';
-  preview.innerHTML = html;
+    const data = new Uint8Array(file.content);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 6);
+
+    let html = '<table border="1" cellspacing="0" cellpadding="4">';
+    rows.forEach(row => {
+        html += '<tr>' + row.map(cell => `<td>${cell ?? ''}</td>`).join('') + '</tr>';
+    });
+    html += '</table>';
+
+    preview.innerHTML = html;
+
+    // Re-add comment list inside preview
+    const commentList = document.createElement("div");
+    commentList.id = "commentList";
+    commentList.className = "comment-list";
+    preview.appendChild(commentList);
+
 }
 
-// Delete file from storage
+// Delete file from localStorage and UI
 function deleteFile(fileName) {
-  let stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
-  stored = stored.filter(f => f.name !== fileName);
-  localStorage.setItem(storageKey, JSON.stringify(stored));
-  fileGrid.innerHTML = '';
-  stored.forEach(f => renderFileButton(f));
-  preview.innerHTML = '<p>Select a file from the right to preview here.</p>';
+    let stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    stored = stored.filter(f => f.name !== fileName);
+    localStorage.setItem(storageKey, JSON.stringify(stored));
+
+    fileGrid.innerHTML = '';
+    preview.innerHTML = '';
+
+    if (stored.length === 0) {
+        switchToEmptyPanel();
+    } else {
+        stored.forEach(renderFileButton);
+    }
 }
 
-// Clear all on file limit change
+// Clear everything on file limit change
 function clearAllFiles() {
-  localStorage.removeItem(storageKey);
-  fileGrid.innerHTML = '';
-  preview.innerHTML = '<p>Upload and add your Excel Sheets here...</p>';
+    localStorage.removeItem(storageKey);
+    fileGrid.innerHTML = '';
+    preview.innerHTML = '';
+    switchToEmptyPanel();
 }
+
+// UI Toggle Functions
+function switchToFilesPanel() {
+    noFilesPanel.style.display = 'none';
+    filesPresentPanel.style.display = 'block';
+}
+
+function switchToEmptyPanel() {
+    noFilesPanel.style.display = 'block';
+    filesPresentPanel.style.display = 'none';
+}
+
+
+// add the notes functionality
+const notesContainer = document.getElementById("notesContainer");
+const notesInput = document.getElementById("notesInput");
+const addBtn = document.getElementById("addNotesBtn");
+
+let notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+function saveNotes() {
+    localStorage.setItem('notes', JSON.stringify(notes));
+    renderNotes();
+}
+
+function renderNotes() {
+    notesContainer.innerHTML = '';
+    notes.forEach((note, index) => {
+        const noteDiv = document.createElement("div");
+        noteDiv.className = "note-item";
+
+        const editBtn = document.createElement("button");
+        editBtn.innerHTML = '✏️';
+        editBtn.onclick = () => {
+            const newText = prompt("Edit your note:", note);
+            if (newText !== null) {
+                notes[index] = newText;
+                saveNotes();
+            }
+        };
+
+        const textSpan = document.createElement('div');
+        textSpan.className = 'note-text';
+        textSpan.innerText = note;
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.innerHTML = '🗑️';
+        deleteBtn.onclick = () => {
+            if (confirm('Delete this note?')) {
+                notes.splice(index, 1);
+                saveNotes();
+            }
+        };
+
+        noteDiv.appendChild(editBtn);
+        noteDiv.appendChild(textSpan);
+        noteDiv.appendChild(deleteBtn);
+
+        notesContainer.appendChild(noteDiv);
+    });
+}
+
+addBtn.onclick = () => {
+    const note = notesInput.value.trim();
+    if (note) {
+        notes.unshift(note);
+        notesInput.value = '';
+        saveNotes();
+    }
+};
+
+renderNotes();
