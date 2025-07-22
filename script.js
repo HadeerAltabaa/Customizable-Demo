@@ -84,6 +84,7 @@ function renderFileButton(file) {
 
     wrapper.addEventListener('click', () => {
         previewExcelFile(file);
+        generateChartFromExcel(file);
 
         // Deselect all other file icons
         document.querySelectorAll('.file-icon').forEach(icon => {
@@ -124,8 +125,56 @@ function previewExcelFile(file) {
     commentList.id = "commentList";
     commentList.className = "comment-list";
     preview.appendChild(commentList);
-
 }
+
+async function generateChartFromExcel(file) {
+    const graphCanvas = document.getElementById("generatedChart");
+    const context = graphCanvas.getContext("2d");
+    const chartKey = `chart_${file.name}`;
+    const storedChart = localStorage.getItem(chartKey);
+
+    if (storedChart) {
+        const config = JSON.parse(storedChart);
+        renderChart(context, config);
+        return;
+    }
+
+    const data = new Uint8Array(file.content);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(0, 6);
+    const plainText = rows.map(r => r.join(", ")).join("\n");
+
+    const chartConfig = await getChartInstructionFromOpenAI(plainText);
+
+    if (chartConfig) {
+        localStorage.setItem(chartKey, JSON.stringify(chartConfig));
+        renderChart(context, chartConfig);
+    } else {
+        context.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+        context.font = "16px Arial";
+        context.fillText("Failed to generate chart", 10, 50);
+    }
+}
+
+function renderChart(ctx, config) {
+    if (window.currentChart) {
+        window.currentChart.destroy();
+    }
+
+    window.currentChart = new Chart(ctx, {
+        type: config.type || 'bar',
+        data: {
+            labels: config.labels,
+            datasets: config.datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
 
 // Delete file from localStorage and UI
 function deleteFile(fileName) {

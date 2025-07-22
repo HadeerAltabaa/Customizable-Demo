@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -17,11 +18,11 @@
         </div>
         <div class="nav-bar">
             <ul>
-                <li><a href="#">Documents</a></li>
-                <li><a href="#">Image</a></li>
-                <li><a href="#">Graph</a></li>
-                <li><a href="#">Notes</a></li>
-                <li><a href="#">Map</a></li>
+                <li><a href="#docSection">Documents</a></li>
+                <li><a href="#imgSection">Image</a></li>
+                <li><a href="#graphSection">Graph</a></li>
+                <li><a href="#notesSection">Notes</a></li>
+                <li><a href="#mapSection">Map</a></li>
             </ul>
         </div>
         <div class="edit">
@@ -29,7 +30,7 @@
         </div>
     </div>
     <div class="main-body">
-        <div class="doc-section">
+        <div class="doc-section" id="docSection">
             <h2>Documents</h2>
             <!-- when no files are uploaded -->
             <div class="no-files-panel" id="noFilesPanel">
@@ -64,7 +65,7 @@
         </div>
 
         <div class="row-section">
-            <div class="img-section">
+            <div class="img-section" id="imgSection">
                 <h2>Image</h2>
                 <div class="img-preview">
                     <label for="imageInput">
@@ -74,20 +75,17 @@
                 </div>
             </div>
 
-            <div class="graph-section">
+            <div class="graph-section" id="graphSection">
                 <h2>Graph</h2>
                 <div class="graph-preview">
-                    <label for="graphInput">
-                        <img src="images/graph.png" id="previewGraph" alt="Preview Graph">
-                    </label>
-                    <input type="file" id="graphInput" accept="image/*">
+                    <canvas id="generatedChart" width="400" height="300"></canvas>
                 </div>
             </div>
         </div>
 
         <div class="row-section">
             <!-- Notes Section -->
-            <div class="notes-sectection">
+            <div class="notes-section" id="notesSection">
                 <h2>Notes</h2>
                 <div class="notes-preview" id="notesContainer"></div>
                 <div class="notes-adding">
@@ -97,7 +95,7 @@
             </div>
 
             <!-- Map Section -->
-            <div class="map-section">
+            <div class="map-section" id="mapSection">
                 <h2>Map</h2>
                 <div class="map-preview">
                     <label for="mapInput">
@@ -113,6 +111,7 @@
         <img src="images/logo.png">
         <p>© 2025 Customizable Frontend for Demos | All rights reserved.</p>
     </div>
+    <script src="openai.js"></script>
     <script src="script.js"></script>
 </body>
 
