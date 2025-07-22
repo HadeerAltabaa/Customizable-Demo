@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
     <div class="head">
         <div class="logo">
-            <img src="images/logo.png">
+            <label for="logoInput"><img src="images/logo.png" id="previewLogo"></label>
+            <input type="file" id="logoInput" accept="image/*" style="display: none;">
         </div>
         <div class="nav-bar">
             <ul>
@@ -51,6 +53,7 @@
 
                     <div class="preview-panel" id="preview">
                         <!-- Preview content injected via JS -->
+                        <h2 id="commentsTitle" style="display: none;">Comments</h2>
                         <div id="commentList" class="comment-list"></div>
                     </div>
 
@@ -68,17 +71,29 @@
             <div class="img-section" id="imgSection">
                 <h2>Image</h2>
                 <div class="img-preview">
-                    <label for="imageInput">
-                        <img src="images/map.png" id="previewImage" alt="Preview Image">
-                    </label>
+                    <div class="image-wrapper">
+                        <button id="downloadImageBtn" title="Download Image">
+                            <i class="fa-solid fa-circle-down"></i>
+                        </button>
+                        <label for="imageInput">
+                            <img src="images/map.png" id="previewImage" alt="Preview Image">
+                        </label>
+                    </div>
                     <input type="file" id="imageInput" accept="image/*">
+
                 </div>
             </div>
 
             <div class="graph-section" id="graphSection">
                 <h2>Graph</h2>
                 <div class="graph-preview">
-                    <canvas id="generatedChart" width="400" height="300"></canvas>
+                    <div class="graph-wrapper">
+                        <button id="downloadGraphBtn" title="Download Graph">
+                            <i class="fa-solid fa-circle-down"></i>
+                        </button>
+                        <canvas id="generatedChart" width="400" height="300"></canvas>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -98,10 +113,15 @@
             <div class="map-section" id="mapSection">
                 <h2>Map</h2>
                 <div class="map-preview">
-                    <label for="mapInput">
-                        <img src="images/map.png" id="previewMap" alt="Preview Map">
-                    </label>
-                    <input type="url" id="mapInput">
+                    <div class="map-wrapper">
+                        <button id="downloadMapBtn" title="Download Map">
+                            <i class="fa-solid fa-circle-down"></i>
+                        </button>
+                        <iframe id="previewMap"
+                            src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed"
+                            allowfullscreen loading="lazy"></iframe>
+                        <input type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)...">
+                    </div>
                 </div>
             </div>
         </div>

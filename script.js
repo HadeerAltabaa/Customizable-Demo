@@ -1,15 +1,32 @@
+const logoInput = document.getElementById('logoInput');
+const previewLogo = document.getElementById('previewLogo');
+
 const fileInput = document.getElementById('fileInput');
 const fileGrid = document.getElementById('fileGrid');
 const preview = document.getElementById('preview');
 const fileLimitInput = document.getElementById('fileLimit');
 const noFilesPanel = document.getElementById('noFilesPanel');
+
 const filesPresentPanel = document.getElementById('filesPresentPanel');
 const commentInput = document.getElementById("commentInput");
 const addCommentBtn = document.getElementById("addCommentBtn");
 const commentList = document.getElementById("commentList");
 
+// Handle logo upload
+logoInput.addEventListener('change', () => {
+    const file = logoInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64Image = e.target.result;
+        previewLogo.src = base64Image;
+        localStorage.setItem('logoImage', base64Image);
+    };
+    reader.readAsDataURL(file);
+});
+
 const storageKey = 'uploadedExcelFiles';
-let fileLimit = parseInt(fileLimitInput.value, 10) || 1;
+let fileLimit = parseInt(fileLimitInput.value, 20) || 1;
 
 // Load stored files on page load
 window.addEventListener('load', () => {
@@ -19,6 +36,11 @@ window.addEventListener('load', () => {
         storedFiles.forEach(renderFileButton);
     } else {
         switchToEmptyPanel();
+    }
+
+    const storedImage = localStorage.getItem('previewImage');
+    if (storedImage) {
+        previewImage.src = storedImage;
     }
 });
 
@@ -30,6 +52,49 @@ fileLimitInput.addEventListener('input', () => {
 
 // File upload handler
 fileInput.addEventListener('change', () => {
+    const selectedFiles = Array.from(fileInput.files);
+
+    if (fileLimit && selectedFiles.length > fileLimit) {
+        alert(`You can only upload up to ${fileLimit} file(s).`);
+        fileInput.value = '';
+        return;
+    }
+
+    // Clear stored files and UI before adding new ones
+    localStorage.setItem(storageKey, JSON.stringify([]));
+    fileGrid.innerHTML = "";
+    clearPreview();
+    switchToEmptyPanel();
+
+    let storedFiles = [];
+
+    let filesProcessed = 0;
+    selectedFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            const fileObj = {
+                name: file.name,
+                type: file.type,
+                content: Array.from(new Uint8Array(reader.result))
+            };
+            storedFiles.push(fileObj);
+            renderFileButton(fileObj);
+
+            filesProcessed++;
+            if (filesProcessed === selectedFiles.length) {
+                localStorage.setItem(storageKey, JSON.stringify(storedFiles));
+            }
+        };
+        reader.readAsArrayBuffer(file);
+    });
+
+    fileInput.value = '';
+});
+
+function clearPreview() {
+    preview.innerHTML = '';
+}
+/*fileInput.addEventListener('change', () => {
     const selectedFiles = Array.from(fileInput.files);
     let storedFiles = JSON.parse(localStorage.getItem(storageKey) || '[]');
 
@@ -56,7 +121,7 @@ fileInput.addEventListener('change', () => {
     });
 
     fileInput.value = '';
-});
+});*/
 
 addCommentBtn.addEventListener("click", () => {
     const commentText = commentInput.value.trim();
@@ -64,10 +129,26 @@ addCommentBtn.addEventListener("click", () => {
     if (commentText !== "") {
         const comment = document.createElement("div");
         comment.className = "comment";
-        comment.textContent = commentText;
+
+        const textSpan = document.createElement("span");
+        textSpan.textContent = commentText;
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "x";
+        deleteBtn.className = "delete-comment-btn";
+        deleteBtn.title = "Delete this Comment";
+        deleteBtn.onclick = () => {
+            comment.remove();
+            updateCommentTitleVisibility();
+        };
+
+        comment.appendChild(textSpan);
+        comment.appendChild(deleteBtn);
 
         commentList.appendChild(comment);
         commentInput.value = "";
+
+        updateCommentTitleVisibility();
     }
 });
 
@@ -103,8 +184,17 @@ function renderFileButton(file) {
     fileGrid.appendChild(wrapper);
 }
 
+function updateCommentTitleVisibility() {
+    const title = document.getElementById("commentsTitle");
+    const hasComments = commentList.querySelectorAll(".comment").length > 0;
+    title.style.display = hasComments ? "block" : "none";
+}
+
 // Preview first 6 rows of Excel sheet
 function previewExcelFile(file) {
+    const commentsTitle = document.getElementById("commentsTitle");
+    const currentComments = commentList;
+
     preview.innerHTML = 'Loading preview...';
 
     const data = new Uint8Array(file.content);
@@ -120,11 +210,12 @@ function previewExcelFile(file) {
 
     preview.innerHTML = html;
 
-    // Re-add comment list inside preview
-    const commentList = document.createElement("div");
-    commentList.id = "commentList";
-    commentList.className = "comment-list";
-    preview.appendChild(commentList);
+    preview.appendChild(commentsTitle);
+    preview.appendChild(currentComments);
+
+    //preview.appendChild(commentList);
+
+    updateCommentTitleVisibility();
 }
 
 async function generateChartFromExcel(file) {
@@ -271,3 +362,73 @@ addBtn.onclick = () => {
 };
 
 renderNotes();
+
+let previewImage = document.getElementById("previewImage");
+let imageInput = document.getElementById("imageInput");
+
+imageInput.onchange = function() {
+    const file = imageInput.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64Image = e.target.result;
+        previewImage.src = base64Image;
+        localStorage.setItem('previewImage', base64Image);
+    };
+    reader.readAsDataURL(file);
+}
+
+const downloadImageBtn = document.getElementById("downloadImageBtn");
+
+downloadImageBtn.addEventListener("click", () => {
+    const imageURL = previewImage.src;
+    const link = document.createElement('a');
+    link.href = imageURL;
+    link.download = 'image.png'; // default name for download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+
+// Download graph button functionality
+const downloadGraphBtn = document.getElementById("downloadGraphBtn");
+const graphCanvas = document.getElementById("generatedChart");
+
+downloadGraphBtn.addEventListener("click", () => {
+    const imageURL = graphCanvas.toDataURL("image/png");
+    const link = document.createElement('a');
+    link.href = imageURL;
+    link.download = 'graph.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+});
+
+// Update map preview and Persist the map URL
+const previewMap = document.getElementById("previewMap");
+const mapInput = document.getElementById("mapInput");
+const downloadMapBtn = document.getElementById("downloadMapBtn");
+
+// Load saved map URL on page load
+const savedMapURL = localStorage.getItem('mapURL');
+if (savedMapURL) {
+    previewMap.src = savedMapURL;
+    mapInput.value = savedMapURL;
+}
+
+// Update map preview when user enters a new URL
+mapInput.addEventListener("input", () => {
+    const url = mapInput.value.trim();
+    if (url) {
+        previewMap.src = url;
+        localStorage.setItem('mapURL', url);
+    } else {
+        alert("Please enter a valid Google Maps embed URL.");
+    }
+});
+
+// Download map preview as an image
+downloadMapBtn.addEventListener("click", () => {
+    alert("Due to browser limitations, downloading maps directly as images is not supported. Please use the Google Maps interface to save the map image.");
+})
