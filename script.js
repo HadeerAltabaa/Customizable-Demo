@@ -1,18 +1,7 @@
+// Handle logo upload - Working Perfectly
 const logoInput = document.getElementById('logoInput');
 const previewLogo = document.getElementById('previewLogo');
 
-const fileInput = document.getElementById('fileInput');
-const fileGrid = document.getElementById('fileGrid');
-const preview = document.getElementById('preview');
-const fileLimitInput = document.getElementById('fileLimit');
-const noFilesPanel = document.getElementById('noFilesPanel');
-
-const filesPresentPanel = document.getElementById('filesPresentPanel');
-const commentInput = document.getElementById("commentInput");
-const addCommentBtn = document.getElementById("addCommentBtn");
-const commentList = document.getElementById("commentList");
-
-// Handle logo upload
 logoInput.addEventListener('change', () => {
     const file = logoInput.files[0];
     if (!file) return;
@@ -25,8 +14,16 @@ logoInput.addEventListener('change', () => {
     reader.readAsDataURL(file);
 });
 
+// Handle uploading files, preview, and delete
+const fileInput = document.getElementById('fileInput');
+const fileGrid = document.getElementById('fileGrid');
+const preview = document.getElementById('preview');
+const fileLimitInput = document.getElementById('fileLimit');// The number of file uploaded
+const noFilesPanel = document.getElementById('noFilesPanel');// The panel when no files uploaded
+const filesPresentPanel = document.getElementById('filesPresentPanel');// Preview the uploaded files panel
+
 const storageKey = 'uploadedExcelFiles';
-let fileLimit = parseInt(fileLimitInput.value, 20) || 1;
+let fileLimit = parseInt(fileLimitInput.value) || 1;
 
 // Load stored files on page load
 window.addEventListener('load', () => {
@@ -53,49 +50,6 @@ fileLimitInput.addEventListener('input', () => {
 // File upload handler
 fileInput.addEventListener('change', () => {
     const selectedFiles = Array.from(fileInput.files);
-
-    if (fileLimit && selectedFiles.length > fileLimit) {
-        alert(`You can only upload up to ${fileLimit} file(s).`);
-        fileInput.value = '';
-        return;
-    }
-
-    // Clear stored files and UI before adding new ones
-    localStorage.setItem(storageKey, JSON.stringify([]));
-    fileGrid.innerHTML = "";
-    clearPreview();
-    switchToEmptyPanel();
-
-    let storedFiles = [];
-
-    let filesProcessed = 0;
-    selectedFiles.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = () => {
-            const fileObj = {
-                name: file.name,
-                type: file.type,
-                content: Array.from(new Uint8Array(reader.result))
-            };
-            storedFiles.push(fileObj);
-            renderFileButton(fileObj);
-
-            filesProcessed++;
-            if (filesProcessed === selectedFiles.length) {
-                localStorage.setItem(storageKey, JSON.stringify(storedFiles));
-            }
-        };
-        reader.readAsArrayBuffer(file);
-    });
-
-    fileInput.value = '';
-});
-
-function clearPreview() {
-    preview.innerHTML = '';
-}
-/*fileInput.addEventListener('change', () => {
-    const selectedFiles = Array.from(fileInput.files);
     let storedFiles = JSON.parse(localStorage.getItem(storageKey) || '[]');
 
     if (fileLimit && storedFiles.length + selectedFiles.length > fileLimit) {
@@ -112,16 +66,24 @@ function clearPreview() {
                 type: file.type,
                 content: Array.from(new Uint8Array(reader.result)) // Store as array of numbers
             };
+
             storedFiles.push(fileObj);
             localStorage.setItem(storageKey, JSON.stringify(storedFiles));
-            renderFileButton(fileObj);
+            
+            fileGrid.innerHTML = "";
+            storedFiles.forEach(renderFileButton);
+
             switchToFilesPanel();
         };
         reader.readAsArrayBuffer(file);
     });
-
     fileInput.value = '';
-});*/
+});
+
+// Add comments to the documents
+const commentInput = document.getElementById("commentInput");
+const addCommentBtn = document.getElementById("addCommentBtn");
+const commentList = document.getElementById("commentList");
 
 addCommentBtn.addEventListener("click", () => {
     const commentText = commentInput.value.trim();
