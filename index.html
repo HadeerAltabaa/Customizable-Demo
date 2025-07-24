@@ -28,12 +28,30 @@
             </ul>
         </div>
         <div class="edit">
-            <button>Edit</button>
+            <button id="editButton">Edit</button>
+            <div class="dropdown" id="addSectionContainer" style="display: none;">
+                <button id="addSectionBtn" style="display: none;">+</button>
+                <div class="dropdown-content" id="sectionOptions">
+                    <button data-type="doc-section">Documents</button>
+                    <button data-type="img-section">Image</button>
+                    <button data-type="graph-section">Graph</button>
+                    <button data-type="notes-section">Notes</button>
+                    <button data-type="map-section">Map</button>
+                </div>
+            </div>
+            <button id="saveBtn" style="display: none;">Save</button>
+            <div class="edit-controls" id="editControls" style="display: none;">
+                <h2>Colors:</h2>
+                <label for="">Background Color: <input type="color" id="bgColorInput"></label>
+                <label for="">Second Background Color: <input type="color" id="secondColorInput"></label>
+                <label for="">Section Color: <input type="color" id="sectionColorInput"></label>
+                <label for="">Text Color: <input type="color" id="txtColorInput"></label>
+            </div>
         </div>
     </div>
     <div class="main-body">
         <div class="doc-section" id="docSection">
-            <h2>Documents</h2>
+            <h2 id="editableDoc" contenteditable="true">Documents</h2>
             <!-- when no files are uploaded -->
             <div class="no-files-panel" id="noFilesPanel">
                 <p>Please add your excel sheets from here...</p>
@@ -56,8 +74,6 @@
                         <h2 id="commentsTitle" style="display: none;">Comments</h2>
                         <div id="commentList" class="comment-list"></div>
                     </div>
-
-
                 </div>
 
                 <div class="comment-box">
@@ -69,7 +85,7 @@
 
         <div class="row-section">
             <div class="img-section" id="imgSection">
-                <h2>Image</h2>
+                <h2 id="editableImage" contenteditable="true">Image</h2>
                 <div class="img-preview">
                     <div class="image-wrapper">
                         <button id="downloadImageBtn" title="Download Image">
@@ -85,7 +101,7 @@
             </div>
 
             <div class="graph-section" id="graphSection">
-                <h2>Graph</h2>
+                <h2 id="editableGraph" contenteditable="true">Graph</h2>
                 <div class="graph-preview">
                     <div class="graph-wrapper">
                         <button id="downloadGraphBtn" title="Download Graph">
@@ -101,7 +117,7 @@
         <div class="row-section">
             <!-- Notes Section -->
             <div class="notes-section" id="notesSection">
-                <h2>Notes</h2>
+                <h2 id="editableNotes" contenteditable="true">Notes</h2>
                 <div class="notes-preview" id="notesContainer"></div>
                 <div class="notes-adding">
                     <textarea id="notesInput" placeholder="Write your notes here..."></textarea>
@@ -111,7 +127,7 @@
 
             <!-- Map Section -->
             <div class="map-section" id="mapSection">
-                <h2>Map</h2>
+                <h2 id="editableMap" contenteditable="true">Map</h2>
                 <div class="map-preview">
                     <div class="map-wrapper">
                         <button id="downloadMapBtn" title="Download Map">
@@ -128,7 +144,7 @@
     </div>
 
     <div class=" footer">
-        <img src="images/logo.png">
+        <label for="logoInput"></label><img src="images/logo.png" id="logoFooter"></lable>
         <p>© 2025 Customizable Frontend for Demos | All rights reserved.</p>
     </div>
     <script src="openai.js"></script>

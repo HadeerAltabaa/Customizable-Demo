@@ -67,7 +67,7 @@ body {
     background-color: var(--section-color);
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 50px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -76,6 +76,64 @@ body {
     background-color: var(--bg-color);
     border: 2px solid var(--section-color);
     color: var(--section-color);
+}
+
+.deleteBtn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: red;
+}
+
+#editControls label {
+  margin-right: 1em;
+}
+
+/* Container */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Hide dropdown by default */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  color: var(--text-color);
+  min-width: 140px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  z-index: 1000;
+  padding: 6px 0;
+  flex-direction: column;
+}
+
+/* Each button in dropdown */
+.dropdown-content button {
+  background: none;
+  color: var(--text-color);
+  border: none;
+  text-align: left;
+  padding: 10px 16px;
+  width: 100%;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dropdown-content button:hover {
+  background-color: var(--bg-color);
+  border: 1px solid var(--section-color);
+  border-radius: 0px;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-content {
+  display: flex;
 }
 
 .main-body {
