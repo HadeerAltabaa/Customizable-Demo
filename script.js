@@ -29,7 +29,11 @@ if (!sessionStorage.getItem('sessionStarted')) {
 
 // Editing Mode
 const editBtn = document.getElementById('editButton');
+const addSectionBtn = document.getElementById('addSectionBtn');
+const saveBtn = document.getElementById('saveBtn');
 const editControls = document.getElementById('editControls');
+const addSectionContainer = document.getElementById('addSectionContainer');
+
 let editMode = false;
 
 const sectionTemplates = {
@@ -110,23 +114,29 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
     });
 });
 
-editBtn.addEventListener('click', () => {
+/* editBtn.addEventListener('click', () => {
     editMode = !editMode;
     editControls.style.display = editMode ? 'block' : 'none';
 
     // Show/hide Save and Add buttons
-    document.getElementById('saveBtn').style.display = editMode ? 'inline-block' : 'none';
-    document.getElementById('addSectionBtn').style.display = editMode ? 'inline-block' : 'none';
-    document.getElementById('addSectionContainer').style.display = editMode ? 'inline-block' : 'none';
-    document.getElementById('editButton').style.display = editMode ? 'none' : 'inline-block';
+    saveBtn.style.display = editMode ? 'inline-block' : 'none';
+    addSectionBtn.style.display = editMode ? 'inline-block' : 'none';
+    addSectionContainer.style.display = editMode ? 'inline-block' : 'none';
+    editBtn.style.display = editMode ? 'none' : 'inline-block';
+    document.body.classList.toggle('edit-mode-active', editMode);
 
     document.querySelectorAll('.main-body > div').forEach(section => {
         if (editMode) {
             if (!section.querySelector('.deleteBtn')) {
-                const delBtn = document.createElement('button');
-                delBtn.textContent = '🗑️';
+                const delBtn = document.createElement('img');
+                delBtn.src = 'images/delete.png';
+                delBtn.alt = 'Delete';
                 delBtn.className = 'deleteBtn';
-                delBtn.style.float = 'right';
+                delBtn.title = 'Delete this section';
+                delBtn.style.float = 'left';
+                delBtn.style.width = '25px'
+                delBtn.style.height = '25px'
+                delBtn.style.marginRight = '5px'
                 delBtn.addEventListener('click', () => section.remove());
                 section.prepend(delBtn);
             }
@@ -135,10 +145,46 @@ editBtn.addEventListener('click', () => {
             if (btn) btn.remove();
         }
     })
-})
+}) */
 
-// Save button
-const saveBtn = document.getElementById('saveBtn');
+editBtn.addEventListener('click', () => {
+    editMode = !editMode;
+    editControls.style.display = editMode ? 'block' : 'none';
+
+    saveBtn.style.display = editMode ? 'inline-block' : 'none';
+    addSectionBtn.style.display = editMode ? 'inline-block' : 'none';
+    addSectionContainer.style.display = editMode ? 'inline-block' : 'none';
+    editBtn.style.display = editMode ? 'none' : 'inline-block';
+    document.body.classList.toggle('edit-mode-active', editMode);
+
+    // Select all sections regardless of nesting
+    const allSections = document.querySelectorAll(
+        '.main-body > .doc-section, .row-section > .img-section, .row-section > .graph-section, .row-section > .notes-section, .row-section > .map-section'
+    );
+
+    allSections.forEach(section => {
+        if (editMode) {
+            if (!section.querySelector('.deleteBtn')) {
+                const delBtn = document.createElement('img');
+                delBtn.src = 'images/delete.png';
+                delBtn.alt = 'Delete';
+                delBtn.className = 'deleteBtn';
+                delBtn.title = 'Delete this section';
+                delBtn.style.float = 'left';
+                delBtn.style.width = '25px';
+                delBtn.style.height = '25px';
+                delBtn.style.marginRight = '5px';
+                delBtn.style.cursor = 'pointer';
+                delBtn.addEventListener('click', () => section.remove());
+                section.prepend(delBtn);
+            }
+        } else {
+            const btn = section.querySelector('.deleteBtn');
+            if (btn) btn.remove();
+        }
+    });
+});
+
 
 saveBtn.addEventListener('click', () => {
     // Exit edit mode
@@ -149,6 +195,7 @@ saveBtn.addEventListener('click', () => {
     saveBtn.style.display = 'none';
     document.getElementById('addSectionContainer').style.display = 'none';
     document.getElementById('editButton').style.display = 'inline-block';
+    document.body.classList.toggle('edit-mode-active', editMode);
 
     // Remove all delete buttons
     document.querySelectorAll('.deleteBtn').forEach(btn => btn.remove());

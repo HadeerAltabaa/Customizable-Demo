@@ -40,12 +40,15 @@
                 </div>
             </div>
             <button id="saveBtn" style="display: none;">Save</button>
-            <div class="edit-controls" id="editControls" style="display: none;">
-                <h2>Colors:</h2>
-                <label for="">Background Color: <input type="color" id="bgColorInput"></label>
-                <label for="">Second Background Color: <input type="color" id="secondColorInput"></label>
-                <label for="">Section Color: <input type="color" id="sectionColorInput"></label>
-                <label for="">Text Color: <input type="color" id="txtColorInput"></label>
+        </div>
+        <div class="edit-sidebar" id="editControls" style="display: none;">
+            <h2>Customize Your Web</h2>
+            <div class="edit-group">
+                <h3>Colors:</h3>
+                <label>Background Color: <input type="color" id="bgColorInput"></label>
+                <label>Second Background Color: <input type="color" id="secondColorInput"></label>
+                <label>Section Color: <input type="color" id="sectionColorInput"></label>
+                <label>Text Color: <input type="color" id="txtColorInput"></label>
             </div>
         </div>
     </div>
@@ -84,6 +87,7 @@
         </div>
 
         <div class="row-section">
+            <!-- Image Section -->
             <div class="img-section" id="imgSection">
                 <h2 id="editableImage" contenteditable="true">Image</h2>
                 <div class="img-preview">
@@ -96,10 +100,10 @@
                         </label>
                     </div>
                     <input type="file" id="imageInput" accept="image/*">
-
                 </div>
             </div>
 
+            <!-- Graph Section -->
             <div class="graph-section" id="graphSection">
                 <h2 id="editableGraph" contenteditable="true">Graph</h2>
                 <div class="graph-preview">
@@ -109,12 +113,9 @@
                         </button>
                         <canvas id="generatedChart" width="400" height="300"></canvas>
                     </div>
-
                 </div>
             </div>
-        </div>
 
-        <div class="row-section">
             <!-- Notes Section -->
             <div class="notes-section" id="notesSection">
                 <h2 id="editableNotes" contenteditable="true">Notes</h2>

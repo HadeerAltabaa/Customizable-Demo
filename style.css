@@ -62,6 +62,72 @@ body {
 }
 
 /* Eddit Button styles */
+
+.edit-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background: white;
+    padding: 15px;
+    overflow-y: auto;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-left: 2px solid #333333;
+}
+
+.edit-sidebar h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333333;
+    text-align: center;
+}
+
+.edit-sidebar h3 {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 5px;
+    color: #333333;
+    text-align: left;
+}
+
+.edit {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.edit-sidebar label {
+    color: #333333;
+    display: flex;
+    font-size: 14px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.edit-sidebar input {
+    width: 30px;
+    height: 30px;
+    border-style: hidden;
+    background: none;
+    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+#addSectionBtn {
+    margin-left: 10px;
+}
+
+body.edit-mode-active {
+    margin-right: 300px;
+}
+
 .edit button {
     padding: 10px 20px;
     background-color: var(--section-color);
