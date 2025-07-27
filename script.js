@@ -1,31 +1,10 @@
-// Handle logo upload - Working Perfectly
-const logoInput = document.getElementById('logoInput');
-const previewLogo = document.getElementById('previewLogo');
-const logoFooter = document.getElementById('logoFooter');
-
-logoInput.addEventListener('change', () => {
-    const file = logoInput.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function (e) {
-        const base64Image = e.target.result;
-        previewLogo.src = base64Image;
-        logoFooter.src = base64Image;
-        localStorage.setItem('logoImage', base64Image);
-    };
-    reader.readAsDataURL(file);
+// Load stored files on page load
+window.addEventListener('DOMContentLoaded', () => {
+    const storedImage = localStorage.getItem('previewImage');
+    if (storedImage) {
+        previewImage.src = storedImage;
+    }
 });
-
-// Editible headers
-// If it's a new session (tab closed and reopened), reset all saved titles
-if (!sessionStorage.getItem('sessionStarted')) {
-    Object.keys(localStorage).forEach((key) => {
-        if (key.startsWith('tempTitle_')) {
-            localStorage.removeItem(key);
-        }
-    });
-    sessionStorage.setItem('sessionStarted', 'true');
-}
 
 // Editing Mode
 const editBtn = document.getElementById('editButton');
@@ -313,41 +292,87 @@ editableTitles.forEach((el) => {
 });
 
 // Handle uploading files, preview, and delete
-const fileInput = document.getElementById('fileInput');
-const fileGrid = document.getElementById('fileGrid');
 const preview = document.getElementById('preview');
-const fileLimitInput = document.getElementById('fileLimit');// The number of file uploaded
-const noFilesPanel = document.getElementById('noFilesPanel');// The panel when no files uploaded
-const filesPresentPanel = document.getElementById('filesPresentPanel');// Preview the uploaded files panel
+const fileGrid = document.getElementById('fileGrid');
+const fileInput = document.getElementById('fileInput');
+const noFilesPanel = document.getElementById('noFilesPanel');
+const filesPresentPanel = document.getElementById('filesPresentPanel');
 
-const storageKey = 'uploadedExcelFiles';
-let fileLimit = parseInt(fileLimitInput.value) || 1;
+let uploadedFiles = [];
 
-// Load stored files on page load
-window.addEventListener('load', () => {
-    const storedFiles = JSON.parse(localStorage.getItem(storageKey) || '[]');
-    applyStoredColors();
-    if (storedFiles.length > 0) {
-        switchToFilesPanel();
-        storedFiles.forEach(renderFileButton);
-    } else {
-        switchToEmptyPanel();
+function handleFileUpload(input) {
+    const files = Array.from(input.files);
+
+    files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const data = new Uint8Array(e.target.result);
+            const workbook = XLSX.read(data, {type: 'array'});
+
+            const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
+
+            uploadedFiles.push({id: fileId, file, workbook});
+            renderFileGrid();
+            noFilesPanel.style.display = 'none';
+            filesPresentPanel.style.display = 'block';
+        };
+        reader.readAsArrayBuffer(file);
+    });
+    input.value = "";
+}
+
+// Render individual file 
+function renderFileGrid() {
+    fileGrid.innerHTML = '';
+    uploadedFiles.forEach(({id, file}) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = 'file-box';
+        wrapper.innerHTML = `
+            <div class='file-icon' onclick="previewExcelFile('${id}')">
+                <button class='delete-btn' title="Delete" onclick="deleteFile('${id}')">&times;</button>
+                <img src="https://img.icons8.com/color/48/000000/ms-excel.png" alt="Excel" />
+                <p>${file.name}</p>
+            </div>
+        `;
+        fileGrid.appendChild(wrapper);
+    });
+
+    if (uploadedFiles.length === 0) {
+        noFilesPanel.style.display = 'block';
+        filesPresentPanel.style.display = 'none';
     }
+}
 
-    const storedImage = localStorage.getItem('previewImage');
-    if (storedImage) {
-        previewImage.src = storedImage;
-    }
-});
+// Preview the file content
+function previewExcelFile(fileId) {
+    const commentsTitle = document.getElementById("commentsTitle");
+    const currentComments = commentList;
 
-// Update file limit
-fileLimitInput.addEventListener('input', () => {
-    fileLimit = parseInt(fileLimitInput.value, 10) || 1;
-    clearAllFiles();
-});
+    const fileObj = uploadedFiles.find(f => f.id === fileId);
+    if (!fileObj) return;
+
+    const sheetName = fileObj.workbook.SheetNames[0];
+    const worksheet = fileObj.workbook.Sheets[sheetName];
+    const htmlTable = XLSX.utils.sheet_to_html(worksheet, {editable: true});
+
+    preview.innerHTML = `<h3>${fileObj.file.name}</h3>` + htmlTable;
+
+    preview.appendChild(commentsTitle);
+    preview.appendChild(currentComments);
+
+    //preview.appendChild(commentList);
+
+    updateCommentTitleVisibility();
+}
+
+function deleteFile(fileId) {
+    uploadedFiles = uploadedFiles.filter(f => f.id !== fileId);
+    renderFileGrid();
+    preview.innerHTML = '';
+}
 
 // File upload handler
-fileInput.addEventListener('change', () => {
+/*fileInput.addEventListener('change', () => {
     const selectedFiles = Array.from(fileInput.files);
     let storedFiles = JSON.parse(localStorage.getItem(storageKey) || '[]');
 
@@ -376,9 +401,6 @@ fileInput.addEventListener('change', () => {
             previewExcelFile(fileObj);
             generateChartFromExcel(fileObj);
 
-            /*fileGrid.innerHTML = "";
-            storedFiles.forEach(renderFileButton);*/
-
             document.querySelectorAll('.file-icon').forEach(icon => icon.classList.remove('selected'));
             if (buttonElement) buttonElement.classList.add('selected');
 
@@ -387,10 +409,10 @@ fileInput.addEventListener('change', () => {
         reader.readAsDataURL(file);
     });
     fileInput.value = '';
-});
+});*/
 
 // Render individual file icon + preview + delete button
-function renderFileButton(file) {
+/*function renderFileButton(file) {
     const wrapper = document.createElement('div');
     wrapper.className = 'file-icon';
 
@@ -421,10 +443,10 @@ function renderFileButton(file) {
     fileGrid.appendChild(wrapper);
 
     return wrapper;
-}
+}*/
 
 // Preview first 6 rows of Excel sheet
-function previewExcelFile(file) {
+/*function previewExcelFile(file) {
     const commentsTitle = document.getElementById("commentsTitle");
     const currentComments = commentList;
 
@@ -448,12 +470,12 @@ function previewExcelFile(file) {
     //preview.appendChild(commentList);
 
     updateCommentTitleVisibility();
-}
+}*/
 
 // Delete file from localStorage and UI
-function deleteFile(fileName) {
+/*function deleteFile(fileId) {
     let stored = JSON.parse(localStorage.getItem(storageKey) || '[]');
-    stored = stored.filter(f => f.name !== fileName);
+    stored = stored.filter(f => f.name !== fileId);
     localStorage.setItem(storageKey, JSON.stringify(stored));
 
     fileGrid.innerHTML = '';
@@ -464,7 +486,7 @@ function deleteFile(fileName) {
     } else {
         stored.forEach(renderFileButton);
     }
-}
+}*/
 
 // Clear everything on file limit change
 function clearAllFiles() {

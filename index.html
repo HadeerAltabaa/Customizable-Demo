@@ -16,7 +16,7 @@
     <div class="head">
         <div class="logo">
             <label for="logoInput"><img src="images/logo.png" id="previewLogo"></label>
-            <input type="file" id="logoInput" accept="image/*" style="display: none;">
+            <input type="file" id="logoInput" accept="image/*" style="display: none;" onchange="changeLogoHandler(this)">
         </div>
         <div class="nav-bar">
             <ul>
@@ -59,9 +59,8 @@
             <div class="no-files-panel" id="noFilesPanel">
                 <p>Please add your excel sheets from here...</p>
                 <div class="upload-box">
-                    <input type="number" min="1" id="fileLimit" value="1">
                     <label for="fileInput">Select</label>
-                    <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv">
+                    <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv" max="1" onchange="handleFileUpload(this)">
                 </div>
             </div>
 
@@ -149,6 +148,9 @@
         <p>© 2025 Customizable Frontend for Demos | All rights reserved.</p>
     </div>
     <script src="openai.js"></script>
+    <script src="script/logo.js"></script>
+    <script src="script/edit-headers.js"></script>
+    <!--<script src="script/upload-files.js"></script>-->
     <script src="script.js"></script>
 </body>
 
