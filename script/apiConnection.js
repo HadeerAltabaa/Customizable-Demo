@@ -13,5 +13,7 @@ async function sendAPIRequest(file) {
 
     const json = await res.json();
 
-    document.querySelector("#previewID").innerHTML = JSON.stringify(json, null, 4)
+    const content = json.content
+
+    document.querySelector("#previewID").innerHTML = content
 }
