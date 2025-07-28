@@ -245,8 +245,9 @@ body.edit-mode-active {
 .offers-preview {
     background-color: var(--bg-color);
     width: 3/4;
-    height: 150px;
+    height: max(150px);
     border-radius: 12px;
+    overflow: scroll;
 }
 
 .offers-preview p {
