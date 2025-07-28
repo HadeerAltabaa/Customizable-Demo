@@ -12,6 +12,10 @@ function handleFileUpload(input) {
     const file = input.files[0];
     if (!file) return;
 
+
+    // Handles the logic of sending the api request to the backend
+    sendAPIRequest(file);
+
     const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
     const fileExt = file.name.split('.').pop().toLowerCase();
 
