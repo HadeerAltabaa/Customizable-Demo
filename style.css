@@ -236,7 +236,7 @@ body.edit-mode-active {
 }
 
 .offers-text {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     margin-top: 20px;
     font-size: 1.1rem;
     font-weight: bold;
@@ -245,9 +245,13 @@ body.edit-mode-active {
 .offers-preview {
     background-color: var(--bg-color);
     width: 3/4;
-    height: max(150px);
+    max-height: 150px;
     border-radius: 12px;
     overflow: scroll;
+}
+
+.offers-preview::-webkit-scrollbar {
+    display: none;
 }
 
 .offers-preview p {
@@ -380,18 +384,27 @@ body.edit-mode-active {
     overflow: auto;
     background-color: var(--sec-bg-color);
     color: var(--text-color);
-    border-radius: 0 0 12px;
+    border-radius: 0 12px 12px 0;
     padding: 10px;
     margin-left: 0;
 }
 
+.preview-panel::-webkit-scrollbar{
+    display: none;
+}
+
+.comment-text {
+    margin-bottom: 5px;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
 .comment-box {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     background-color: var(--bg-color);
     padding: 10px;
-    margin-top: 20px;
     border-radius: 12px;
 }
 
@@ -490,6 +503,36 @@ body.edit-mode-active {
     justify-content: center;
     box-sizing: border-box;
     position: relative;
+}
+
+.img-preview {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.img-preview .dragged-human {
+    width: 50px;
+    height: auto;
+    cursor: grab;
+}
+
+.human-on-map {
+    position: absolute;
+    width: 40px;
+    pointer-events: none;
+}
+
+#dropArea {
+    position: relative;
+    display: inline-block;
+}
+
+#dropArea img {
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 .image-wrapper {

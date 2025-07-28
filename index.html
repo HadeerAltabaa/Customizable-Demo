@@ -86,6 +86,7 @@
                     </div>
                 </div>
 
+                <p class="comment-text">Comment</p>
                 <div class="comment-box">
                     <input type="text" id="commentInput" placeholder="Write your comment here...">
                     <button type="button" id="addCommentBtn">Add</button>
@@ -98,12 +99,17 @@
             <div class="img-section" id="imgSection">
                 <h2 id="editableImage" contenteditable="true">Image</h2>
                 <div class="img-preview">
+                    <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
+                        draggable="true" title="Drag Me">
+
                     <div class="image-wrapper">
                         <button type="button" id="downloadImageBtn" title="Download Image">
                             <i class="fa-solid fa-circle-down"></i>
                         </button>
                         <label for="imageInput">
-                            <img src="images/map.png" id="previewImage" alt="Preview Image">
+                            <div class="drop-area" id="dropArea">
+                                <img src="images/map.png" id="previewImage" alt="Preview Image">
+                            </div>
                         </label>
                     </div>
                     <input type="file" id="imageInput" accept="image/*">
@@ -125,7 +131,7 @@
                     </div>
                 </div>
             </div>
-            
+
 
             <!-- Graph Section -->
             <div class="graph-section" id="graphSection">
@@ -164,6 +170,35 @@
     <script src="script/upload-files.js"></script>
     <script src="script/add-comments.js"></script>
     <script src="script.js"></script>
+    <script>
+        const draggableHuman = document.getElementById('draggableHuman');
+        const dropArea = document.getElementById('dropArea');
+
+        draggableHuman.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData("text/plain", "human");
+        });
+
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Allow drop
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+
+            const dropX = e.offsetX;
+            const dropY = e.offsetY;
+
+            // Create a new image element
+            const newHuman = document.createElement("img");
+            newHuman.src = draggableHuman.src;
+            newHuman.className = "human-on-map";
+            newHuman.style.left = `${dropX - 20}px`;  // Center image
+            newHuman.style.top = `${dropY - 20}px`;
+
+            dropArea.appendChild(newHuman);
+        });
+    </script>
+
 </body>
 
 </html>
