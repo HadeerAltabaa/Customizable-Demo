@@ -38,31 +38,32 @@ body {
 }
 
 /* Navigation bar styles */
-.nav-bar ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    gap: 20px;
+.nav-bar {
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 20px;
+    }
+
+    li {
+        display: inline;
+    }
+
+    a {
+        text-decoration: none;
+        color: var(--text-color);
+        font-weight: bold;
+        transition: color 0.3s ease;
+    }
+
+    a:hover {
+        color: var(--section-color);
+    }
 }
 
-.nav-bar li {
-    display: inline;
-}
-
-.nav-bar a {
-    text-decoration: none;
-    color: var(--text-color);
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-.nav-bar a:hover {
-    color: var(--section-color);
-}
-
-/* Eddit Button styles */
-
+/* Sidebar styles*/
 .edit-sidebar {
     position: fixed;
     right: 0;
@@ -77,131 +78,130 @@ body {
     flex-direction: column;
     gap: 20px;
     border-left: 2px solid #333333;
+
+    h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        color: #333333;
+        text-align: center;
+    }
+
+    h3 {
+        display: block;
+        font-size: 15px;
+        margin-bottom: 5px;
+        color: #333333;
+        text-align: left;
+    }
+
+    label {
+        color: #333333;
+        display: flex;
+        font-size: 14px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    input {
+        width: 30px;
+        height: 30px;
+        border-style: hidden;
+        background: none;
+        box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+    }
 }
 
-.edit-sidebar h2 {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #333333;
-    text-align: center;
+#editControls label {
+    margin-right: 1em;
 }
 
-.edit-sidebar h3 {
-    display: block;
-    font-size: 15px;
-    margin-bottom: 5px;
-    color: #333333;
-    text-align: left;
-}
-
+/* Edit mode styles */
 .edit {
     display: flex;
     align-items: center;
     gap: 10px;
-}
 
-.edit-sidebar label {
-    color: #333333;
-    display: flex;
-    font-size: 14px;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    border-bottom: 1px solid #f0f0f0;
-}
+    button {
+        padding: 10px 20px;
+        background-color: var(--section-color);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-.edit-sidebar input {
-    width: 30px;
-    height: 30px;
-    border-style: hidden;
-    background: none;
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
-    cursor: pointer;
-}
+    button:hover {
+        background-color: var(--bg-color);
+        border: 2px solid var(--section-color);
+        color: var(--section-color);
+    }
 
-#addSectionBtn {
-    margin-left: 10px;
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    #addSectionBtn {
+        margin-left: 10px;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: white;
+        color: var(--text-color);
+        min-width: 140px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        border-radius: 6px;
+        z-index: 1000;
+        padding: 6px 0;
+        flex-direction: column;
+    }
+
+    .dropdown-content button {
+        background: none;
+        color: var(--text-color);
+        border: none;
+        text-align: left;
+        padding: 10px 16px;
+        width: 100%;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.2s ease;
+    }
+
+    .dropdown-content button:hover {
+        background-color: var(--bg-color);
+        border: 1px solid var(--section-color);
+        border-radius: 0px;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: flex;
+    }
 }
 
 body.edit-mode-active {
     margin-right: 300px;
 }
 
-.edit button {
-    padding: 10px 20px;
-    background-color: var(--section-color);
-    color: white;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.edit button:hover {
-    background-color: var(--bg-color);
-    border: 2px solid var(--section-color);
-    color: var(--section-color);
-}
-
+/* Delete Button Style */
 .deleteBtn {
-  background: none;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: red;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: red;
 }
 
-#editControls label {
-  margin-right: 1em;
-}
-
-/* Container */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-/* Hide dropdown by default */
-.dropdown-content {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: white;
-  color: var(--text-color);
-  min-width: 140px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  border-radius: 6px;
-  z-index: 1000;
-  padding: 6px 0;
-  flex-direction: column;
-}
-
-/* Each button in dropdown */
-.dropdown-content button {
-  background: none;
-  color: var(--text-color);
-  border: none;
-  text-align: left;
-  padding: 10px 16px;
-  width: 100%;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.dropdown-content button:hover {
-  background-color: var(--bg-color);
-  border: 1px solid var(--section-color);
-  border-radius: 0px;
-}
-
-/* Show dropdown on hover */
-.dropdown:hover .dropdown-content {
-  display: flex;
-}
-
+/* Main Body Styles */
 .main-body {
     min-height: 400px;
     padding: 20px;
@@ -233,6 +233,26 @@ body.edit-mode-active {
     margin-bottom: 20px;
     font-size: 1.1rem;
     font-weight: bold;
+}
+
+.offers-text {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.offers-preview {
+    background-color: var(--bg-color);
+    width: 3/4;
+    height: 150px;
+    border-radius: 12px;
+}
+
+.offers-preview p {
+    color: var(--text-color);
+    font-size: 16px;
+    padding: 20px;
 }
 
 .upload-box {
@@ -281,6 +301,7 @@ body.edit-mode-active {
     gap: 20px;
     flex-wrap: wrap;
     background: var(--bg-color);
+    border-radius: 12px;
 }
 
 .file-grid {
@@ -320,15 +341,17 @@ body.edit-mode-active {
 }
 
 .file-icon p {
-    font-size: 12px; /* smaller text */
-  max-width: 70px; /* limit width */
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: center;
-  margin-top: 4px;
-  word-break: break-all;
-  color: var(--text-color);
+    font-size: 12px;
+    /* smaller text */
+    max-width: 70px;
+    /* limit width */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: center;
+    margin-top: 4px;
+    word-break: break-all;
+    color: var(--text-color);
 }
 
 .delete-btn {
@@ -356,7 +379,7 @@ body.edit-mode-active {
     overflow: auto;
     background-color: var(--sec-bg-color);
     color: var(--text-color);
-    border-radius: 0px;
+    border-radius: 0 0 12px;
     padding: 10px;
     margin-left: 0;
 }
@@ -372,7 +395,7 @@ body.edit-mode-active {
 }
 
 .comment-box input {
-    flex:3 ;
+    flex: 3;
     border: none;
     border-radius: 10px;
     padding: 10px;
@@ -506,13 +529,14 @@ body.edit-mode-active {
     cursor: pointer;
 }
 
-.img-preview label, .graph-preview label {
+.img-preview label,
+.graph-preview label {
     display: block;
     height: 100%;
     width: 100%;
 }
 
-.img-preview input[type="file"], 
+.img-preview input[type="file"],
 .graph-preview input[type="file"] {
     display: none;
 }
@@ -682,22 +706,22 @@ body.edit-mode-active {
 }
 
 #notesInput {
-  width: 100%;
-  min-height: 80px;
-  border-radius: 10px;
-  padding: 10px;
-  box-sizing: border-box;
+    width: 100%;
+    min-height: 80px;
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 #addNotesBtn {
-  align-self: flex-end;
-  margin-top: 10px;
-  padding: 8px 16px;
-  border-radius: 10px;
-  background-color: var(--section-color);
-  color: var(--bg-color);
-  border: none;
-  cursor: pointer;
+    align-self: flex-end;
+    margin-top: 10px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    background-color: var(--section-color);
+    color: var(--bg-color);
+    border: none;
+    cursor: pointer;
 }
 
 #generatedChart {
