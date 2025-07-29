@@ -65,19 +65,24 @@ const sectionTemplates = {
       <p>Graph section content here...</p>
     </div>
   `,
-    "notes-section": `
-        <!-- Notes Section -->
-        <div class="notes-section" id="notesSection_${Date.now()}">
-            <div class="section-header">
-                <h2 id="editableNotes" contenteditable="true">Notes</h2>
-            </div>
-            <div class="notes-preview" id="notesContainer-notesInput_${Date.now()}"></div>
-            <div class="notes-adding">
-                <textarea id="notesInput_${Date.now()}" placeholder="Write your notes here..."></textarea>
-                <button onClick="addNotes('notesInput_${Date.now()}')" type="button" id="addNotesBtn">Add</button>
-            </div>
-        </div>
-    `,
+    "notes-section": () => {
+
+        const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
+
+        return `
+                <!-- Notes Section -->
+                <div class="custom-section notes-section" id="notesSection_${uniqueId}">
+                    <div class="section-header">
+                        <h2 id="editableNotes" contenteditable="true">Notes</h2>
+                    </div>
+                    <div class="notes-preview" id="notesContainer-notesInput_${uniqueId}"></div>
+                    <div class="notes-adding">
+                        <textarea id="notesInput_${uniqueId}" placeholder="Write your notes here..."></textarea>
+                        <button onClick="addNotes('notesInput_${uniqueId}')" type="button" id="addNotesBtn">Add</button>
+                    </div>
+                </div>
+            `
+    },
     "map-section": `
     <div class="map-section custom-section" id="map_${Date.now()}">
       <button class="deleteBtn" style="float:right;">🗑️</button>
@@ -90,12 +95,13 @@ const sectionTemplates = {
 document.querySelectorAll('#sectionOptions button').forEach(btn => {
     btn.addEventListener('click', () => {
         const type = btn.dataset.type;
-        const html = sectionTemplates[type];
+        const html = sectionTemplates[type]();
         if (!html) return;
 
         document.querySelector('.main-body').insertAdjacentHTML('beforeend', html);
         saveCustomSections();
-        attachDeleteLogic();
+        enterEditMode()
+        // attachDeleteLogic();
     });
 });
 
@@ -132,14 +138,9 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
     })
 }) */
 
-const sectionHeaders = document.querySelectorAll(".section-header")
-const sections = []
+function enterEditMode() {
+    const sectionHeaders = document.querySelectorAll(".section-header")
 
-sectionHeaders.forEach(section => {
-    sections.push(section.parentElement)
-})
-
-editBtn.addEventListener('click', () => {
     editMode = !editMode;
     editControls.style.display = editMode ? 'block' : 'none';
 
@@ -153,6 +154,7 @@ editBtn.addEventListener('click', () => {
     // const allSections = document.querySelectorAll(
     //     '.main-body > .doc-section, .row-section > .img-section, .row-section > .graph-section, .row-section > .notes-section, .row-section > .map-section'
     // );
+
 
 
 
@@ -180,8 +182,16 @@ editBtn.addEventListener('click', () => {
             if (btn) btn.remove();
         }
     });
-});
+}
 
+editBtn.addEventListener('click', () => enterEditMode());
+
+const sectionHeaders = document.querySelectorAll(".section-header")
+const sections = []
+
+sectionHeaders.forEach(section => {
+    sections.push(section.parentElement)
+})
 
 sections.forEach(section => {
     createNavElement(section.id, section.querySelector(".section-header h2").innerText);
@@ -277,14 +287,8 @@ document.getElementById('addSectionBtn').addEventListener('click', () => {
     document.querySelector('.main-body').insertAdjacentHTML('beforeend', sectionHTML);
 
     saveCustomSections(); // store updated sections
-    attachDeleteLogic();  // make sure delete buttons work
+    // attachDeleteLogic();  // make sure delete buttons work
 });
-
-function saveCustomSections() {
-    const sections = document.querySelectorAll('.custom-section');
-    const sectionData = Array.from(sections).map(sec => sec.outerHTML);
-    localStorage.setItem('customSections', JSON.stringify(sectionData));
-}
 
 function saveCustomSections() {
     const sections = document.querySelectorAll('.custom-section');
@@ -303,7 +307,7 @@ function loadCustomSections() {
         mainBody.appendChild(section);
     });
 
-    attachDeleteLogic();
+    // attachDeleteLogic();
 }
 
 // Load saved colors from localStorage
@@ -408,8 +412,7 @@ function getNotes(id) {
 let notes = {}
 notes[notesInput.id] = getNotes(notesInput.id);
 renderNotes(notesInput.id)
-
-console.log(notes)
+loadCustomSections()
 
 function saveNotes(notesID) {
     localStorage.setItem(`notes-${notesID}`, JSON.stringify(notes[notesID]));
@@ -463,7 +466,6 @@ function addNotes(noteInputID) {
     if (typeof noteInputID == "string") {
         noteInput = document.querySelector(`#${noteInputID}`)
 
-        console.log(noteInput)
     }
     else {
         noteInput = noteInputID
