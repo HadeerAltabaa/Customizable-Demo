@@ -126,6 +126,13 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
     })
 }) */
 
+const sectionHeaders = document.querySelectorAll(".section-header")
+const sections = []
+
+sectionHeaders.forEach(section => {
+    sections.push(section.parentElement)
+})
+
 editBtn.addEventListener('click', () => {
     editMode = !editMode;
     editControls.style.display = editMode ? 'block' : 'none';
@@ -141,9 +148,9 @@ editBtn.addEventListener('click', () => {
     //     '.main-body > .doc-section, .row-section > .img-section, .row-section > .graph-section, .row-section > .notes-section, .row-section > .map-section'
     // );
 
-    const allSections = document.querySelectorAll(".section-header")
 
-    allSections.forEach(section => {
+
+    sectionHeaders.forEach(section => {
         if (editMode) {
             if (!section.querySelector('.deleteBtn')) {
                 const delBtn = document.createElement('img');
@@ -156,7 +163,10 @@ editBtn.addEventListener('click', () => {
                 delBtn.style.height = '25px';
                 delBtn.style.marginRight = '5px';
                 delBtn.style.cursor = 'pointer';
-                delBtn.addEventListener('click', () => section.parentElement.remove());
+                delBtn.addEventListener('click', () => {
+                    document.querySelector(`li#nav-${section.parentElement.id}`).remove();
+                    section.parentElement.remove()
+                });
                 section.prepend(delBtn);
             }
         } else {
@@ -166,6 +176,18 @@ editBtn.addEventListener('click', () => {
     });
 });
 
+
+sections.forEach(section => {
+    createNavElement(section.id, section.querySelector(".section-header h2").innerText);
+});
+
+function createNavElement(id, title) {
+    const navbar = document.querySelector('.nav-bar ul');
+    const li = document.createElement('li');
+    li.id = `nav-${id}`;
+    li.innerHTML = `<a href="#${id}">${title}</a>`
+    navbar.appendChild(li);
+}
 
 saveBtn.addEventListener('click', () => {
     // Exit edit mode
@@ -201,7 +223,7 @@ function setColor(key, cssVar, value) {
 }
 
 function getColor(key, cssVar) {
-    if(localStorage.getItem(key)) {
+    if (localStorage.getItem(key)) {
         let color = localStorage.getItem(key)
         return color
     }
@@ -214,15 +236,15 @@ function getColor(key, cssVar) {
 
 // init base colors
 function InitColors() {
-     bgColorInput.value = getColor("bgColor", "--bg-color")
-     secondColorInput.value = getColor("secBgColor", "--sec-bg-color")
-     sectionColorInput.value = getColor("sectionColor", "--section-color")
-     txtColorInput.value = getColor("textColor", "--text-color")
+    bgColorInput.value = getColor("bgColor", "--bg-color")
+    secondColorInput.value = getColor("secBgColor", "--sec-bg-color")
+    sectionColorInput.value = getColor("sectionColor", "--section-color")
+    txtColorInput.value = getColor("textColor", "--text-color")
 
-     setColor("bgColor", "--bg-color", bgColorInput.value)
-     setColor("secBgColor", "--sec-bg-color", secondColorInput.value)
-     setColor("sectionColor", "--section-color", sectionColorInput.value)
-     setColor("textColor", "--text-color", txtColorInput.value)
+    setColor("bgColor", "--bg-color", bgColorInput.value)
+    setColor("secBgColor", "--sec-bg-color", secondColorInput.value)
+    setColor("sectionColor", "--section-color", sectionColorInput.value)
+    setColor("textColor", "--text-color", txtColorInput.value)
 }
 
 InitColors()
