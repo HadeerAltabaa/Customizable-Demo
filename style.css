@@ -191,7 +191,7 @@ body {
             justify-content: center !important;
             padding: 10px 20px !important;
             border: none !important;
-            border-radius: 10px !important;
+            border-radius: 50px !important;
             background-color: var(--section-color) !important;
             color: var(--bg-color) !important;
             cursor: pointer !important;
@@ -205,6 +205,31 @@ body {
             flex-direction: column;
             gap: 10px;
             margin-top: 20px;
+        }
+        
+        .reset-page-button {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .reset-page-button button {
+            padding: 10px 20px;
+            width: 250px;
+            background-color: #ff4d4f !important;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: fixed;
+            bottom: 20px;
+        }
+
+        .reset-page-button button:hover {
+            background-color: #e24446 !important;
         }
     }
 
