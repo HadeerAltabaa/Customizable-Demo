@@ -258,6 +258,16 @@ body.edit-mode-active {
             font-weight: bold;
         }
 
+        .offers-container {
+            flex: 1;
+            width: 3/4;
+        }
+
+        .comment-container {
+            flex: 1;
+            width: 3/4;
+        }
+
         .offers-text {
             margin-bottom: 5px;
             margin-top: 20px;
@@ -336,6 +346,13 @@ body.edit-mode-active {
 
         .preview-panel::-webkit-scrollbar {
             display: none;
+        }
+
+        .info-actions-row {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            flex-wrap: wrap;
         }
 
     }
