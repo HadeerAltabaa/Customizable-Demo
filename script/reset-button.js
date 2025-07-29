@@ -1,4 +1,6 @@
 function onResetButtonClick () {
+
+    // Color Reset
     const bgColorInput = document.getElementById('bgColorInput');
     const secondColorInput = document.getElementById('secondColorInput');
     const sectionColorInput = document.getElementById('sectionColorInput');
@@ -20,5 +22,15 @@ function onResetButtonClick () {
     setColor("secBgColor", "--sec-bg-color", baseColors.secBg)
     setColor("sectionColor", "--section-color", baseColors.section)
     setColor("textColor", "--text-color", baseColors.text)
+
+    // Logo Reset
+
+    const previewLogo = document.getElementById('previewLogo');
+    const logoFooter = document.getElementById('logoFooter');
+
+    previewLogo.src = "./images/logo.png"
+    logoFooter.src = "./images/logo.png"
+
+    localStorage.removeItem("logoImage")
 
 }
