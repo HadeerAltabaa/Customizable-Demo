@@ -1,6 +1,19 @@
 const apiURL = "http://localhost:3000/upload" // Used only locally change to an active api url
 
-async function sendAPIRequest(file) {
+async function sendAPIRequest(area) {
+
+    let file = uploadedFiles[0]
+
+    if(!file)
+        return alert("NO FILE")
+
+    console.log({
+        file,
+        area,
+        time: new Date().toTimeString()
+    })
+
+    return // Stops the code here for now
 
     const formData = new FormData();
     formData.append('file', file);
