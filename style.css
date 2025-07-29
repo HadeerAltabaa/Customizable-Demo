@@ -496,6 +496,10 @@ body.edit-mode-active {
     justify-content: space-between;
 }
 
+/* .row-section div :not(:last-child) {
+    background-color: #333333;
+} */
+
 .img-section,
 .graph-section {
     flex: 1 1 45%;
@@ -625,7 +629,7 @@ body.edit-mode-active {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 1;
+    z-index: 9999;
 }
 
 /* #downloadImageBtn i {

@@ -62,6 +62,7 @@ const humanImage = new Image();
 humanImage.src = './images/human1.png'; // Your image path here
 
 canvas.addEventListener('drop', (e) => {
+    resizeCanvas();
     const rect = canvas.getBoundingClientRect();
 
     const relativeX = e.clientX - rect.left;

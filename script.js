@@ -137,9 +137,11 @@ editBtn.addEventListener('click', () => {
     document.body.classList.toggle('edit-mode-active', editMode);
 
     // Select all sections regardless of nesting
-    const allSections = document.querySelectorAll(
-        '.main-body > .doc-section, .row-section > .img-section, .row-section > .graph-section, .row-section > .notes-section, .row-section > .map-section'
-    );
+    // const allSections = document.querySelectorAll(
+    //     '.main-body > .doc-section, .row-section > .img-section, .row-section > .graph-section, .row-section > .notes-section, .row-section > .map-section'
+    // );
+
+    const allSections = document.querySelectorAll(".section-header")
 
     allSections.forEach(section => {
         if (editMode) {
@@ -154,7 +156,7 @@ editBtn.addEventListener('click', () => {
                 delBtn.style.height = '25px';
                 delBtn.style.marginRight = '5px';
                 delBtn.style.cursor = 'pointer';
-                delBtn.addEventListener('click', () => section.remove());
+                delBtn.addEventListener('click', () => section.parentElement.remove());
                 section.prepend(delBtn);
             }
         } else {
@@ -197,6 +199,33 @@ function setColor(key, cssVar, input) {
     document.documentElement.style.setProperty(cssVar, color);
     localStorage.setItem(key, color);
 }
+
+function getColor(key, cssVar) {
+    if(localStorage.getItem(key)) {
+        let color = localStorage.getItem(key)
+        return color
+    }
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const color = rootStyles.getPropertyValue(cssVar).trim();
+
+    return color
+}
+
+// init base colors
+function InitColors() {
+     bgColorInput.value = getColor("bgColor", "--bg-color")
+     secondColorInput.value = getColor("secBgColor", "--sec-bg-color")
+     sectionColorInput.value = getColor("sectionColor", "--section-color")
+     txtColorInput.value = getColor("textColor", "--text-color")
+
+     setColor("bgColor", "--bg-color", bgColorInput)
+     setColor("secBgColor", "--sec-bg-color", secondColorInput)
+     setColor("sectionColor", "--section-color", sectionColorInput)
+     setColor("textColor", "--text-color", txtColorInput)
+}
+
+InitColors()
 
 bgColorInput.addEventListener('input', e => setColor('bgColor', '--bg-color', e.target));
 secondColorInput.addEventListener('input', e => setColor('secBgColor', '--sec-bg-color', e.target));

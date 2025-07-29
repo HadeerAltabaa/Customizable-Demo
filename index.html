@@ -47,7 +47,7 @@
             <h2>Customize Your Web</h2>
             <div class="edit-group">
                 <h3>Colors:</h3>
-                <label>Background Color: <input type="color" id="bgColorInput"></label>
+                <label>Background Color: <input value="#f99ff2" type="color" id="bgColorInput"></label>
                 <label>Second Background Color: <input type="color" id="secondColorInput"></label>
                 <label>Section Color: <input type="color" id="sectionColorInput"></label>
                 <label>Text Color: <input type="color" id="txtColorInput"></label>
@@ -56,11 +56,16 @@
                 <h3>Map Image:</h3>
                 <label class="updateImage" for="imageInput">Upload a map image</label>
             </div>
+            <div class="reset-page-button">
+                <Button onClick="onResetButtonClick()">Reset Page</Button>
+            </div>
         </div>
     </div>
     <div class="main-body">
         <div class="doc-section" id="docSection">
-            <h2 id="editableDoc" contenteditable="true">Documents</h2>
+            <div class="section-header">
+                <h2 id="editableDoc" contenteditable="true">Documents</h2>
+            </div>
             <!-- when no files are uploaded -->
             <div class="no-files-panel" id="noFilesPanel">
                 <p>Please add your excel sheets from here...</p>
@@ -106,7 +111,9 @@
         <div class="row-section">
             <!-- Image Section -->
             <div class="img-section" id="imgSection">
-                <h2 id="editableImage" contenteditable="true">Map</h2>
+                <div class="section-header">
+                    <h2 id="editableImage" contenteditable="true">Map</h2>
+                </div>
                 <div class="img-preview">
                     <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
                         draggable="true" title="Drag Me">
@@ -124,7 +131,9 @@
 
             <!-- Notes Section -->
             <div class="notes-section" id="notesSection">
-                <h2 id="editableNotes" contenteditable="true">Notes</h2>
+                <div class="section-header">
+                    <h2 id="editableNotes" contenteditable="true">Notes</h2>
+                </div>
                 <div class="notes-preview" id="notesContainer"></div>
                 <div class="notes-adding">
                     <textarea id="notesInput" placeholder="Write your notes here..."></textarea>
@@ -134,7 +143,9 @@
 
             <!-- Map Section -->
             <div class="map-section" id="mapSection">
-                <h2 id="editableMap" contenteditable="true">Map</h2>
+                <div class="section-header">
+                    <h2 id="editableMap" contenteditable="true">Map</h2>
+                </div>
                 <div class="map-preview">
                     <div class="map-wrapper">
                         <button type="button" id="downloadMapBtn" title="Download Map">
@@ -150,7 +161,10 @@
 
             <!-- Graph Section -->
             <div class="graph-section" id="graphSection">
-                <h2 id="editableGraph" contenteditable="true">Graph</h2>
+                <div class="section-header">
+                    <h2 id="editableGraph" contenteditable="true">Graph</h2>
+
+                </div>
                 <div class="graph-preview">
                     <div class="graph-wrapper">
                         <button type="button" id="downloadGraphBtn" title="Download Graph">
