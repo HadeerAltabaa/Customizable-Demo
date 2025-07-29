@@ -194,8 +194,8 @@ const sectionColorInput = document.getElementById('sectionColorInput');
 const txtColorInput = document.getElementById('txtColorInput');
 
 // Set and store
-function setColor(key, cssVar, input) {
-    const color = input.value;
+function setColor(key, cssVar, value) {
+    const color = value;
     document.documentElement.style.setProperty(cssVar, color);
     localStorage.setItem(key, color);
 }
@@ -219,18 +219,18 @@ function InitColors() {
      sectionColorInput.value = getColor("sectionColor", "--section-color")
      txtColorInput.value = getColor("textColor", "--text-color")
 
-     setColor("bgColor", "--bg-color", bgColorInput)
-     setColor("secBgColor", "--sec-bg-color", secondColorInput)
-     setColor("sectionColor", "--section-color", sectionColorInput)
-     setColor("textColor", "--text-color", txtColorInput)
+     setColor("bgColor", "--bg-color", bgColorInput.value)
+     setColor("secBgColor", "--sec-bg-color", secondColorInput.value)
+     setColor("sectionColor", "--section-color", sectionColorInput.value)
+     setColor("textColor", "--text-color", txtColorInput.value)
 }
 
 InitColors()
 
-bgColorInput.addEventListener('input', e => setColor('bgColor', '--bg-color', e.target));
-secondColorInput.addEventListener('input', e => setColor('secBgColor', '--sec-bg-color', e.target));
-sectionColorInput.addEventListener('input', e => setColor('sectionColor', '--section-color', e.target));
-txtColorInput.addEventListener('input', e => setColor('textColor', '--text-color', e.target));
+bgColorInput.addEventListener('input', e => setColor('bgColor', '--bg-color', e.target.value));
+secondColorInput.addEventListener('input', e => setColor('secBgColor', '--sec-bg-color', e.target.value));
+sectionColorInput.addEventListener('input', e => setColor('sectionColor', '--section-color', e.target.value));
+txtColorInput.addEventListener('input', e => setColor('textColor', '--text-color', e.target.value));
 
 // Add new section
 document.getElementById('addSectionBtn').addEventListener('click', () => {
