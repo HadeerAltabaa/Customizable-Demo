@@ -66,12 +66,18 @@ const sectionTemplates = {
     </div>
   `,
     "notes-section": `
-    <div class="notes-section custom-section" id="notes_${Date.now()}">
-      <button class="deleteBtn" style="float:right;">🗑️</button>
-      <h2 contenteditable="true">Notes</h2>
-      <p>Notes section content here...</p>
-    </div>
-  `,
+        <!-- Notes Section -->
+        <div class="notes-section" id="notesSection_${Date.now()}">
+            <div class="section-header">
+                <h2 id="editableNotes" contenteditable="true">Notes</h2>
+            </div>
+            <div class="notes-preview" id="notesContainer-notesInput_${Date.now()}"></div>
+            <div class="notes-adding">
+                <textarea id="notesInput_${Date.now()}" placeholder="Write your notes here..."></textarea>
+                <button onClick="addNotes('notesInput_${Date.now()}')" type="button" id="addNotesBtn">Add</button>
+            </div>
+        </div>
+    `,
     "map-section": `
     <div class="map-section custom-section" id="map_${Date.now()}">
       <button class="deleteBtn" style="float:right;">🗑️</button>
@@ -391,20 +397,29 @@ function renderChart(ctx, config) {
 }
 
 // add the notes functionality
-const notesContainer = document.getElementById("notesContainer");
 const notesInput = document.getElementById("notesInput");
 const addBtn = document.getElementById("addNotesBtn");
 
-let notes = JSON.parse(localStorage.getItem('notes')) || [];
-
-function saveNotes() {
-    localStorage.setItem('notes', JSON.stringify(notes));
-    renderNotes();
+function getNotes(id) {
+    const notes = JSON.parse(localStorage.getItem(`notes-${id}`)) || []
+    return notes
 }
 
-function renderNotes() {
+let notes = {}
+notes[notesInput.id] = getNotes(notesInput.id);
+renderNotes(notesInput.id)
+
+console.log(notes)
+
+function saveNotes(notesID) {
+    localStorage.setItem(`notes-${notesID}`, JSON.stringify(notes[notesID]));
+    renderNotes(notesID);
+}
+
+function renderNotes(id) {
+    const notesContainer = document.getElementById(`notesContainer-${id}`);
     notesContainer.innerHTML = '';
-    notes.forEach((note, index) => {
+    notes[id].forEach((note, index) => {
         const noteDiv = document.createElement("div");
         noteDiv.className = "note-item";
 
@@ -413,8 +428,8 @@ function renderNotes() {
         editBtn.onclick = () => {
             const newText = prompt("Edit your note:", note);
             if (newText !== null) {
-                notes[index] = newText;
-                saveNotes();
+                notes[id][index] = newText;
+                saveNotes(id);
             }
         };
 
@@ -426,8 +441,8 @@ function renderNotes() {
         deleteBtn.innerHTML = '🗑️';
         deleteBtn.onclick = () => {
             if (confirm('Delete this note?')) {
-                notes.splice(index, 1);
-                saveNotes();
+                notes[id].splice(index, 1);
+                saveNotes(id);
             }
         };
 
@@ -440,15 +455,32 @@ function renderNotes() {
 }
 
 addBtn.onclick = () => {
-    const note = notesInput.value.trim();
-    if (note) {
-        notes.unshift(note);
-        notesInput.value = '';
-        saveNotes();
-    }
+    addNotes(notesInput)
 };
 
-renderNotes();
+function addNotes(noteInputID) {
+    let noteInput = null
+    if (typeof noteInputID == "string") {
+        noteInput = document.querySelector(`#${noteInputID}`)
+
+        console.log(noteInput)
+    }
+    else {
+        noteInput = noteInputID
+    }
+
+
+
+
+    const note = noteInput.value.trim();
+    if (note) {
+        if (!notes[noteInput.id])
+            notes[noteInput.id] = []
+        notes[noteInput.id].push(note);
+        noteInput.value = '';
+        saveNotes(noteInput.id);
+    }
+}
 
 let previewImage = document.getElementById("previewImage");
 let imageInput = document.getElementById("imageInput");
