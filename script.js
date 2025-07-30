@@ -70,7 +70,6 @@ const sectionTemplates = {
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
 
         return `
-                <!-- Notes Section -->
                 <div class="custom-section notes-section" id="notesSection_${uniqueId}">
                     <div class="section-header">
                         <h2 id="editableNotes" contenteditable="true">Notes</h2>
@@ -94,13 +93,43 @@ const sectionTemplates = {
 
 document.querySelectorAll('#sectionOptions button').forEach(btn => {
     btn.addEventListener('click', () => {
+        const section = document.createElement("div")
         const type = btn.dataset.type;
         const html = sectionTemplates[type]();
         if (!html) return;
 
-        document.querySelector('.main-body').insertAdjacentHTML('beforeend', html);
+        section.innerHTML = html
+
+        if (editMode) {
+            if (!section.querySelector('.deleteBtn')) {
+                const delBtn = document.createElement('img');
+                delBtn.src = 'images/delete.png';
+                delBtn.alt = 'Delete';
+                delBtn.className = 'deleteBtn';
+                delBtn.title = 'Delete this section';
+                delBtn.style.float = 'left';
+                delBtn.style.width = '25px';
+                delBtn.style.height = '25px';
+                delBtn.style.marginRight = '5px';
+                delBtn.style.cursor = 'pointer';
+                delBtn.addEventListener('click', (e) => {
+                    let customSections = JSON.parse(localStorage.getItem("customSections"))
+
+                    if (customSections[section.id]) {
+                        delete customSections[section.id]
+                        localStorage.setItem("customSections", JSON.stringify(customSections))
+                    }
+
+                    document.querySelector(`li#nav-${section.id}`)?.remove();
+                    section.remove(section.id)
+                });
+                section.querySelector(".section-header").prepend(delBtn);
+            }
+        }
+
+        document.querySelector('.main-body').appendChild(section)
         saveCustomSections();
-        enterEditMode()
+        // enterEditMode()
         // attachDeleteLogic();
     });
 });
@@ -171,9 +200,16 @@ function enterEditMode() {
                 delBtn.style.height = '25px';
                 delBtn.style.marginRight = '5px';
                 delBtn.style.cursor = 'pointer';
-                delBtn.addEventListener('click', () => {
-                    document.querySelector(`li#nav-${section.parentElement.id}`).remove();
-                    section.parentElement.remove()
+                delBtn.addEventListener('click', (e) => {
+                    let customSections = JSON.parse(localStorage.getItem("customSections"))
+
+                    if (customSections[section.parentElement.id]) {
+                        delete customSections[section.parentElement.id]
+                        localStorage.setItem("customSections", JSON.stringify(customSections))
+                    }
+
+                    document.querySelector(`li#nav-${section.parentElement.id}`)?.remove();
+                    section.parentElement.remove(section.parentElement.id)
                 });
                 section.prepend(delBtn);
             }
@@ -292,20 +328,24 @@ document.getElementById('addSectionBtn').addEventListener('click', () => {
 
 function saveCustomSections() {
     const sections = document.querySelectorAll('.custom-section');
-    const sectionData = Array.from(sections).map(sec => sec.outerHTML);
+    let sectionData = {}
+    sections.forEach(section => {
+        sectionData[section.id] = section.innerHTML
+    })
     localStorage.setItem('customSections', JSON.stringify(sectionData));
 }
 
 function loadCustomSections() {
-    const sectionData = JSON.parse(localStorage.getItem('customSections') || '[]');
+    const sectionData = JSON.parse(localStorage.getItem('customSections') || '{}');
     const mainBody = document.querySelector('.main-body');
 
-    sectionData.forEach(html => {
+    for (let id in sectionData) {
         const temp = document.createElement('div');
-        temp.innerHTML = html;
-        const section = temp.firstElementChild;
-        mainBody.appendChild(section);
-    });
+        temp.innerHTML = sectionData[id];
+        temp.id = id
+        // const section = temp;
+        mainBody.appendChild(temp);
+    }
 
     // attachDeleteLogic();
 }
