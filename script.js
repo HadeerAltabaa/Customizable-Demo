@@ -15,7 +15,8 @@ const sectionTemplates = {
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
 
         // Return the HTML for the document section
-        return `
+        return {
+            html: `
             <div class="custom-section doc-section" id="docSection_${uniqueId}">
                 <div class="section-header">
                     <h2 id="editableDoc_${uniqueId}" contenteditable="true">Documents Section</h2>
@@ -61,7 +62,8 @@ const sectionTemplates = {
                 </div>
             </div>
             </div>
-        `;
+        `, id: `docSection_${uniqueId}`
+        };
     },
     "img-section": () => {
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
@@ -81,7 +83,8 @@ const sectionTemplates = {
 
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
 
-        return `
+        return {
+            html: `
                 <div class="custom-section notes-section" id="notesSection_${uniqueId}">
                     <div class="section-header">
                         <h2 id="editableNotes" contenteditable="true">Notes</h2>
@@ -92,7 +95,8 @@ const sectionTemplates = {
                         <button onClick="addNotes('notesInput_${uniqueId}')" type="button" id="addNotesBtn">Add</button>
                     </div>
                 </div>
-            `
+            `, id: `notesSection_${uniqueId}`
+        }
     },
     "map-section": `
     <div class="map-section custom-section" id="map_${Date.now()}">
@@ -108,8 +112,9 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
     btn.addEventListener('click', () => {
         const section = document.createElement("div")
         const type = btn.dataset.type;
-        const html = sectionTemplates[type]();
+        const { html, id } = sectionTemplates[type]();
         if (!html) return;
+        section.id = id
 
         section.innerHTML = html
 
@@ -119,6 +124,7 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
                 delBtn.src = 'images/delete.png';
                 delBtn.alt = 'Delete';
                 delBtn.className = 'deleteBtn';
+                delBtn.id = `delBtn-${section.id}`
                 delBtn.title = 'Delete this section';
                 delBtn.style.float = 'left';
                 delBtn.style.width = '25px';
@@ -127,6 +133,8 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
                 delBtn.style.cursor = 'pointer';
                 delBtn.addEventListener('click', (e) => {
                     let customSections = JSON.parse(localStorage.getItem("customSections"))
+
+                    console.log(e.target.id)
 
                     if (customSections[section.id]) {
                         delete customSections[section.id]
