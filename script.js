@@ -1,5 +1,3 @@
-
-
 // Editing Mode
 const editBtn = document.getElementById('editButton');
 const addSectionBtn = document.getElementById('addSectionBtn');
@@ -16,26 +14,27 @@ const sectionTemplates = {
 
         // Return the HTML for the document section
         return {
-            html: `
-            <div class="custom-section doc-section" id="docSection_${uniqueId}">
-                <div class="section-header">
-                    <h2 id="editableDoc_${uniqueId}" contenteditable="true">Documents Section</h2>
+            html: `<div class="doc-section custom-section" id="docSection_${uniqueId}">
+            <div class="section-header">
+                <h2 id="editableDoc" contenteditable="true">Documents</h2>
+            </div>
+            <!-- when no files are uploaded -->
+            <div class="no-files-panel" id="noFilesPanel_${uniqueId}">
+                <p>Please add your excel sheets from here...</p>
+                <div class="upload-box">
+                    <label for="fileInput_${uniqueId}">Select</label>
+                    <input type="file" id="fileInput_${uniqueId}" accept=".xlsx,.xls,.csv" max="1"
+                        onchange="handleFileUpload(this, '${uniqueId}'); loadCommentsFromLocalStorage(this)">
                 </div>
+            </div>
 
-                <!-- This is uploading files panel -->
-                <div class="no-files-panel" id="noFilesPanel_${uniqueId}">
-                    <p>Please add your excel sheets from here...</p>
-                    <div class="upload-box">
-                        <label for="fileInput_${uniqueId}">Select</label>
-                        <input type="file" id="fileInput_${uniqueId}" accept=".xlsx, .xls, .csv" onchange="handleFileUpload(this, '${uniqueId}');">
-                    </div>
-                </div>
-
-                <!-- This is files present panel -->
-                <div class="files-present-panel" id="filesPresentPanel_${uniqueId}" style="display: none;">
+            <!-- when files are uploaded -->
+            <div class="files-present-panel" id="filesPresentPanel_${uniqueId}" style="display: none;">
                 <p class="info-text">This is your document</p>
                 <div class="file-preview-layout">
-                    <div class="file-grid" id="fileGrid_${uniqueId}"></div>
+                    <div class="file-grid" id="fileGrid_${uniqueId}">
+
+                    </div>
 
                     <div class="preview-panel" id="preview_${uniqueId}">
                         <!-- Preview content injected via JS -->
@@ -48,7 +47,7 @@ const sectionTemplates = {
                     <div class="offers-container">
                         <p class="offers-text">ID for customers</p>
                         <div class="offers-preview">
-                            <p name="previewID" id="previewID_${uniqueId}">This part will represent the offers to the customer.</p>
+                            <p name="previewID" id="previewID">This part will represent the offers to the customer.</p>
                         </div>
                     </div>
 
@@ -56,13 +55,12 @@ const sectionTemplates = {
                         <p class="comment-text">Comment</p>
                         <div class="comment-box">
                             <input type="text" id="commentInput_${uniqueId}" placeholder="Write your comment here...">
-                            <button type="button" onClick="addComment('${uniqueId}')" id="addCommentBtn_${uniqueId}">Add</button>
+                            <button onclick="onAddCommentButtonClicked(this)" type="button" id="addCommentBtn_${uniqueId}">Add</button>
                         </div>
                     </div>
                 </div>
             </div>
-            </div>
-        `, id: `docSection_${uniqueId}`
+        </div>`, id: `docSection_${uniqueId}`
         };
     },
     "img-section": () => {
