@@ -65,7 +65,6 @@ function renderFileGrid(sectionId) {
 
     fileGrid.innerHTML = '';
     for (let id in uploadedFiles) {
-        console.log(id)
         if (sectionId != id) continue;
         let fileObj = uploadedFiles[id]
         const wrapper = document.createElement("div");
@@ -92,6 +91,8 @@ function renderFileGrid(sectionId) {
 function previewExcelFile(fileId, sectionId) {
     const fileObj = uploadedFiles[sectionId]
     if (!fileObj) return;
+
+    selectedFile = fileObj
 
     const sheetName = fileObj.workbook.SheetNames[0];
     const worksheet = fileObj.workbook.Sheets[sheetName];
@@ -121,7 +122,7 @@ function previewExcelFile(fileId, sectionId) {
     //preview.appendChild(commentList);
 
     commentsTitle.style.display = commentList.childElementCount > 0 ? 'block' : 'none';
-    updateCommentTitleVisibility();
+    updateCommentTitleVisibility(sectionId, commentList);
 }
 
 // Delete the file

@@ -2,9 +2,9 @@ const apiURL = "http://localhost:3000/upload" // Used only locally change to an 
 
 async function sendAPIRequest(area) {
 
-    let file = uploadedFiles[0]
+    let file = selectedFile;
 
-    if(!file)
+    if (!file)
         return alert("NO FILE")
 
     console.log({
