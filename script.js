@@ -1,10 +1,4 @@
-// Load stored files on page load
-window.addEventListener('DOMContentLoaded', () => {
-    const storedImage = localStorage.getItem('previewImage');
-    if (storedImage) {
-        previewImage.src = storedImage;
-    }
-});
+
 
 // Editing Mode
 const editBtn = document.getElementById('editButton');
@@ -16,41 +10,58 @@ const addSectionContainer = document.getElementById('addSectionContainer');
 let editMode = false;
 
 const sectionTemplates = {
-    "doc-section": `
-    <div class="doc-section custom-section" id="doc_${Date.now()}">
-      <button class="deleteBtn" style="float:right;">🗑️</button>
-      <h2 contenteditable="true">Documents</h2>
-                  <!-- when no files are uploaded -->
-            <div class="no-files-panel" id="noFilesPanel">
-                <p>Please add your excel sheets from here...</p>
-                <div class="upload-box">
-                    <input type="number" min="1" id="fileLimit" value="1">
-                    <label for="fileInput">Select</label>
-                    <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv">
+    "doc-section": () => {
+        // Generate a unique ID for the section
+        const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
+
+        // Return the HTML for the document section
+        return `
+            <div class="custom-section doc-section" id="docSection_${uniqueId}">
+                <div class="section-header">
+                    <h2 id="editableDoc_${uniqueId}" contenteditable="true">Documents Section</h2>
                 </div>
-            </div>
-
-            <!-- when files are uploaded -->
-            <div class="files-present-panel" id="filesPresentPanel" style="display: none;">
-                <p class="info-text">These are your documents</p>
-
-                <div class="file-preview-layout">
-                    <div class="file-grid" id="fileGrid"></div>
-
-                    <div class="preview-panel" id="preview">
-                        <!-- Preview content injected via JS -->
-                        <h2 id="commentsTitle" style="display: none;">Comments</h2>
-                        <div id="commentList" class="comment-list"></div>
+                <!-- This is uploading files panel -->
+                <div class="no-files-panel" id="noFilesPanel_${uniqueId}">
+                    <p>Please add your excel sheets from here...</p>
+                    <div class="upload-box">
+                        <input type="file" id="fileInput_${uniqueId}" accept=".xlsx, .xls, .csv" onchange="handleFileUpload(this)">
+                        <label for="fileInput_${uniqueId}">Select</label>
                     </div>
                 </div>
 
-                <div class="comment-box">
-                    <input type="text" id="commentInput" placeholder="Write your comment here...">
-                    <button id="addCommentBtn">Add</button>
+                <!-- This is files present panel -->
+                <div class="files-present-panel" id="filesPresentPanel_${uniqueId}" style="display: none;">
+                <p class="info-text">This is your document</p>
+                <div class="file-preview-layout">
+                    <div class="file-grid" id="fileGrid_${uniqueId}"></div>
+
+                    <div class="preview-panel" id="preview_${uniqueId}">
+                        <!-- Preview content injected via JS -->
+                        <h2 id="commentsTitle_${uniqueId}" style="display: none;">Comments</h2>
+                        <div id="commentList_${uniqueId}" class="comment-list"></div>
+                    </div>
+                </div>
+
+                <div class="info-actions-row">
+                    <div class="offers-container">
+                        <p class="offers-text">ID for customers</p>
+                        <div class="offers-preview">
+                            <p name="previewID" id="previewID_${uniqueId}">This part will represent the offers to the customer.</p>
+                        </div>
+                    </div>
+
+                    <div class="comment-container">
+                        <p class="comment-text">Comment</p>
+                        <div class="comment-box">
+                            <input type="text" id="commentInput_${uniqueId}" placeholder="Write your comment here...">
+                            <button type="button" id="addCommentBtn_${uniqueId}">Add</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-    </div>
-  `,
+            </div>
+        `;
+    },
     "img-section": `
     <div class="img-section custom-section" id="img_${Date.now()}">
       <button class="deleteBtn" style="float:right;">🗑️</button>
@@ -92,6 +103,7 @@ const sectionTemplates = {
   `
 };
 
+
 document.querySelectorAll('#sectionOptions button').forEach(btn => {
     btn.addEventListener('click', () => {
         const type = btn.dataset.type;
@@ -101,7 +113,7 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
         document.querySelector('.main-body').insertAdjacentHTML('beforeend', html);
         saveCustomSections();
         enterEditMode()
-        // attachDeleteLogic();
+        //attachDeleteLogic();
     });
 });
 
@@ -155,9 +167,6 @@ function enterEditMode() {
     //     '.main-body > .doc-section, .row-section > .img-section, .row-section > .graph-section, .row-section > .notes-section, .row-section > .map-section'
     // );
 
-
-
-
     sectionHeaders.forEach(section => {
         if (editMode) {
             if (!section.querySelector('.deleteBtn')) {
@@ -186,6 +195,7 @@ function enterEditMode() {
 
 editBtn.addEventListener('click', () => enterEditMode());
 
+// Dinamic navigation bar
 const sectionHeaders = document.querySelectorAll(".section-header")
 const sections = []
 
@@ -205,6 +215,7 @@ function createNavElement(id, title) {
     navbar.appendChild(li);
 }
 
+// Save button functionality
 saveBtn.addEventListener('click', () => {
     // Exit edit mode
     editMode = false;
@@ -224,6 +235,7 @@ saveBtn.addEventListener('click', () => {
 
     // Save editable titles (already handled via `input` listeners)
 });
+
 
 // Color picker events + persistence
 const bgColorInput = document.getElementById('bgColorInput');
@@ -270,25 +282,6 @@ secondColorInput.addEventListener('input', e => setColor('secBgColor', '--sec-bg
 sectionColorInput.addEventListener('input', e => setColor('sectionColor', '--section-color', e.target.value));
 txtColorInput.addEventListener('input', e => setColor('textColor', '--text-color', e.target.value));
 
-// Add new section
-document.getElementById('addSectionBtn').addEventListener('click', () => {
-    const sectionName = prompt("Enter section title:");
-    if (!sectionName) return;
-
-    const newId = 'section_' + Date.now();
-    const sectionHTML = `
-    <div class="custom-section" id="${newId}">
-      <button class="deleteBtn" style="float:right;">🗑️</button>
-      <h2 contenteditable="true">${sectionName}</h2>
-      <p>New section content here...</p>
-    </div>
-  `;
-
-    document.querySelector('.main-body').insertAdjacentHTML('beforeend', sectionHTML);
-
-    saveCustomSections(); // store updated sections
-    // attachDeleteLogic();  // make sure delete buttons work
-});
 
 function saveCustomSections() {
     const sections = document.querySelectorAll('.custom-section');

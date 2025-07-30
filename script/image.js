@@ -1,3 +1,13 @@
+// script/image.js
+// Save the uploaded image to the local storage
+window.addEventListener('DOMContentLoaded', () => {
+    const storedImage = localStorage.getItem('previewImage');
+    if (storedImage) {
+        previewImage.src = storedImage;
+    }
+});
+
+// 
 const img = document.querySelector("#previewImage")
 
 function GetArea(x, y) {
@@ -27,7 +37,6 @@ function GetArea(x, y) {
 
     return area
 }
-
 
 const draggedHuman = document.getElementById('draggedHuman');
 const dropArea = document.getElementById('dropArea');
