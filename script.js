@@ -63,13 +63,13 @@ const sectionTemplates = {
             </div>
         `;
     },
-    "img-section": `
-    <div class="img-section custom-section" id="img_${Date.now()}">
-      <button class="deleteBtn" style="float:right;">🗑️</button>
-      <h2 contenteditable="true">Image</h2>
-      <p>Image section content here...</p>
-    </div>
-  `,
+    "img-section": () => {
+        const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
+        return `
+        <div class="custom-section img-section" id="img_${uniqueId}">
+        
+        </div>
+  `},
     "graph-section": `
     <div class="graph-section custom-section" id="graph_${Date.now()}">
       <button class="deleteBtn" style="float:right;">🗑️</button>
