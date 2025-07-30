@@ -14,7 +14,7 @@ const sectionTemplates = {
 
         // Return the HTML for the document section
         return {
-            html: `<div class="doc-section custom-section" id="docSection_${uniqueId}">
+            html: `
             <div class="section-header">
                 <h2 id="editableDoc" contenteditable="true">Documents</h2>
             </div>
@@ -59,8 +59,7 @@ const sectionTemplates = {
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>`, id: `docSection_${uniqueId}`
+            </div>`, id: `docSection_${uniqueId}`
         };
     },
     "img-section": () => {
@@ -83,7 +82,7 @@ const sectionTemplates = {
 
         return {
             html: `
-                <div class="custom-section notes-section" id="notesSection_${uniqueId}">
+                <div id="notesSection_${uniqueId}">
                     <div class="section-header">
                         <h2 id="editableNotes" contenteditable="true">Notes</h2>
                     </div>
@@ -113,6 +112,7 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
         const { html, id } = sectionTemplates[type]();
         if (!html) return;
         section.id = id
+        section.className = `${type} custom-section`
 
         section.innerHTML = html
 
@@ -131,8 +131,6 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
                 delBtn.style.cursor = 'pointer';
                 delBtn.addEventListener('click', (e) => {
                     let customSections = JSON.parse(localStorage.getItem("customSections"))
-
-                    console.log(e.target.id)
 
                     if (customSections[section.id]) {
                         delete customSections[section.id]
@@ -217,7 +215,7 @@ function enterEditMode() {
                 delBtn.style.marginRight = '5px';
                 delBtn.style.cursor = 'pointer';
                 delBtn.addEventListener('click', (e) => {
-                    let customSections = JSON.parse(localStorage.getItem("customSections"))
+                    let customSections = JSON.parse(localStorage.getItem("customSections") || "{}")
 
                     if (customSections[section.parentElement.id]) {
                         delete customSections[section.parentElement.id]
@@ -327,12 +325,15 @@ txtColorInput.addEventListener('input', e => setColor('textColor', '--text-color
 
 
 function saveCustomSections() {
-    const sections = document.querySelectorAll('.custom-section');
-    let sectionData = {}
-    sections.forEach(section => {
-        sectionData[section.id] = section.innerHTML
+    const sectionData = document.querySelectorAll(".custom-section")
+
+    let sections = {}
+
+    sectionData.forEach(section => {
+        sections[section.id] = section.outerHTML
     })
-    localStorage.setItem('customSections', JSON.stringify(sectionData));
+
+    localStorage.setItem('customSections', JSON.stringify(sections));
 }
 
 function loadCustomSections() {
@@ -340,11 +341,12 @@ function loadCustomSections() {
     const mainBody = document.querySelector('.main-body');
 
     for (let id in sectionData) {
-        const temp = document.createElement('div');
-        temp.innerHTML = sectionData[id];
-        temp.id = id
-        // const section = temp;
-        mainBody.appendChild(temp);
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(sectionData[id], "text/html");
+
+        const node = doc.body.firstChild;
+
+        mainBody.appendChild(node);
     }
 
     // attachDeleteLogic();
@@ -454,15 +456,25 @@ notes[notesInput.id] = getNotes(notesInput.id);
 renderNotes(notesInput.id)
 loadCustomSections()
 
+const noteSections = document.querySelectorAll(".notes-section.custom-section textarea")
+
+noteSections.forEach(section => {
+    notes[section.id] = getNotes(section.id)
+    renderNotes(section.id)
+});
+
 function saveNotes(notesID) {
     localStorage.setItem(`notes-${notesID}`, JSON.stringify(notes[notesID]));
     renderNotes(notesID);
 }
 
-function renderNotes(id) {
-    const notesContainer = document.getElementById(`notesContainer-${id}`);
+function renderNotes(uniqueId) {
+
+    const notesContainer = document.getElementById(`notesContainer-${uniqueId}`);
     notesContainer.innerHTML = '';
-    notes[id].forEach((note, index) => {
+
+    for (let index in notes[uniqueId]) {
+        let note = notes[uniqueId][index]
         const noteDiv = document.createElement("div");
         noteDiv.className = "note-item";
 
@@ -471,8 +483,8 @@ function renderNotes(id) {
         editBtn.onclick = () => {
             const newText = prompt("Edit your note:", note);
             if (newText !== null) {
-                notes[id][index] = newText;
-                saveNotes(id);
+                notes[uniqueId][index] = newText;
+                saveNotes(uniqueId);
             }
         };
 
@@ -484,8 +496,8 @@ function renderNotes(id) {
         deleteBtn.innerHTML = '🗑️';
         deleteBtn.onclick = () => {
             if (confirm('Delete this note?')) {
-                notes[id].splice(index, 1);
-                saveNotes(id);
+                notes[uniqueId].splice(index, 1);
+                saveNotes(uniqueId);
             }
         };
 
@@ -494,7 +506,7 @@ function renderNotes(id) {
         noteDiv.appendChild(deleteBtn);
 
         notesContainer.appendChild(noteDiv);
-    });
+    };
 }
 
 addBtn.onclick = () => {

@@ -65,7 +65,6 @@ function renderFileGrid(sectionId) {
 
     fileGrid.innerHTML = '';
     for (let id in uploadedFiles) {
-        console.log(id)
         if (sectionId != id) continue;
         let fileObj = uploadedFiles[id]
         const wrapper = document.createElement("div");

@@ -61,7 +61,7 @@
             </div>
         </div>
     </div>
-    <div class="main-body">
+    <div class="main-body row-section">
         <div class="doc-section" id="docSection_def">
             <div class="section-header">
                 <h2 id="editableDoc" contenteditable="true">Documents</h2>
@@ -71,7 +71,7 @@
                 <p>Please add your excel sheets from here...</p>
                 <div class="upload-box">
                     <label for="fileInput_def">Select</label>
-                    <input type="file" id="fileInput_def" accept=".xlsx,.xls,.csv" max="1"
+                    <input type="file" id="fileInput_def" multiple accept=".xlsx,.xls,.csv" max="1"
                         onchange="handleFileUpload(this, 'def');loadCommentsFromLocalStorage(this)">
                 </div>
             </div>
@@ -103,77 +103,75 @@
                         <p class="comment-text">Comment</p>
                         <div class="comment-box">
                             <input type="text" id="commentInput_def" placeholder="Write your comment here...">
-                            <button onclick="onAddCommentButtonClicked(this)" type="button" id="addCommentBtn_def">Add</button>
+                            <button onclick="onAddCommentButtonClicked(this)" type="button"
+                                id="addCommentBtn_def">Add</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Image Section -->
+        <div class="img-section" id="imgSection">
+            <div class="section-header">
+                <h2 id="editableImage" contenteditable="true">Map</h2>
+            </div>
+            <div class="img-preview">
+                <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
+                    draggable="true" title="Drag Me">
 
-        <div class="row-section">
-            <!-- Image Section -->
-            <div class="img-section" id="imgSection">
-                <div class="section-header">
-                    <h2 id="editableImage" contenteditable="true">Map</h2>
+                <div class="image-wrapper" id="dropArea">
+                    <button type="button" id="downloadImageBtn" title="Download Image">
+                        <i class="fa-solid fa-circle-down"></i>
+                    </button>
+                    <img src="images/map.png" id="previewImage" alt="Preview Image">
+                    <canvas id="imageCanvas"></canvas>
                 </div>
-                <div class="img-preview">
-                    <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
-                        draggable="true" title="Drag Me">
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+        </div>
 
-                    <div class="image-wrapper" id="dropArea">
-                        <button type="button" id="downloadImageBtn" title="Download Image">
-                            <i class="fa-solid fa-circle-down"></i>
-                        </button>
-                        <img src="images/map.png" id="previewImage" alt="Preview Image">
-                        <canvas id="imageCanvas"></canvas>
-                    </div>
-                    <input type="file" id="imageInput" accept="image/*">
+        <!-- Notes Section -->
+        <div class="notes-section" id="notesSection">
+            <div class="section-header">
+                <h2 id="editableNotes" contenteditable="true">Notes</h2>
+            </div>
+            <div class="notes-preview" id="notesContainer-notesInput"></div>
+            <div class="notes-adding">
+                <textarea id="notesInput" placeholder="Write your notes here..."></textarea>
+                <button type="button" id="addNotesBtn">Add</button>
+            </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-section" id="mapSection">
+            <div class="section-header">
+                <h2 id="editableMap" contenteditable="true">Map</h2>
+            </div>
+            <div class="map-preview">
+                <div class="map-wrapper">
+                    <button type="button" id="downloadMapBtn" title="Download Map">
+                        <i class="fa-solid fa-circle-down"></i>
+                    </button>
+                    <iframe id="previewMap"
+                        src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed"
+                        allowfullscreen loading="lazy" title="Google Map showing SAS Saudi Arabia Office"></iframe>
+                    <input type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)...">
                 </div>
             </div>
+        </div>
 
-            <!-- Notes Section -->
-            <div class="notes-section" id="notesSection">
-                <div class="section-header">
-                    <h2 id="editableNotes" contenteditable="true">Notes</h2>
-                </div>
-                <div class="notes-preview" id="notesContainer-notesInput"></div>
-                <div class="notes-adding">
-                    <textarea id="notesInput" placeholder="Write your notes here..."></textarea>
-                    <button type="button" id="addNotesBtn">Add</button>
-                </div>
+        <!-- Graph Section -->
+        <div class="graph-section" id="graphSection">
+            <div class="section-header">
+                <h2 id="editableGraph" contenteditable="true">Graph</h2>
+
             </div>
-
-            <!-- Map Section -->
-            <div class="map-section" id="mapSection">
-                <div class="section-header">
-                    <h2 id="editableMap" contenteditable="true">Map</h2>
-                </div>
-                <div class="map-preview">
-                    <div class="map-wrapper">
-                        <button type="button" id="downloadMapBtn" title="Download Map">
-                            <i class="fa-solid fa-circle-down"></i>
-                        </button>
-                        <iframe id="previewMap"
-                            src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed"
-                            allowfullscreen loading="lazy" title="Google Map showing SAS Saudi Arabia Office"></iframe>
-                        <input type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)...">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Graph Section -->
-            <div class="graph-section" id="graphSection">
-                <div class="section-header">
-                    <h2 id="editableGraph" contenteditable="true">Graph</h2>
-
-                </div>
-                <div class="graph-preview">
-                    <div class="graph-wrapper">
-                        <button type="button" id="downloadGraphBtn" title="Download Graph">
-                            <i class="fa-solid fa-circle-down"></i>
-                        </button>
-                        <canvas id="generatedChart" width="400" height="300"></canvas>
-                    </div>
+            <div class="graph-preview">
+                <div class="graph-wrapper">
+                    <button type="button" id="downloadGraphBtn" title="Download Graph">
+                        <i class="fa-solid fa-circle-down"></i>
+                    </button>
+                    <canvas id="generatedChart" width="400" height="300"></canvas>
                 </div>
             </div>
         </div>
@@ -183,7 +181,7 @@
         <label for="logoInput"></label><img src="images/logo.png" id="logoFooter" alt="Footer Logo"></lable>
         <p>© 2025 Customizable Frontend for Demos | All rights reserved.</p>
     </div>
-    
+
     <script src="script/upload-files.js"></script>
     <script src="script.js"></script>
     <script src="openai.js"></script>

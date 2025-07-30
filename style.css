@@ -258,9 +258,14 @@ body.edit-mode-active {
     background-color: var(--bg-color);
     scroll-behavior: smooth;
 
+    > div:not(.doc-section) {
+        flex: 1 1 40%;
+    }
+
     /* Document section styles */
     .doc-section {
         padding: 10px 20px;
+        flex: 0 0 100%; Take full width
 
         h2 {
             margin-bottom: 10px;
