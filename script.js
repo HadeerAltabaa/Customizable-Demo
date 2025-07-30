@@ -65,11 +65,29 @@ const sectionTemplates = {
     },
     "img-section": () => {
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
-        return `
+        return{ 
+        html: `
         <div class="custom-section img-section" id="img_${uniqueId}">
-        
+            <div class="section-header">
+                <h2 id="editableImage" contenteditable="true">Map</h2>
+            </div>
+            <div class="img-preview">
+                <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
+                    draggable="true" title="Drag Me">
+
+                <div class="image-wrapper" id="dropArea">
+                    <button type="button" id="downloadImageBtn" title="Download Image">
+                        <i class="fa-solid fa-circle-down"></i>
+                    </button>
+                    <img src="images/map.png" id="previewImage" alt="Preview Image">
+                    <canvas id="imageCanvas"></canvas>
+                </div>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
         </div>
-  `},
+        `, id: `img_${uniqueId}`
+        }
+    },
     "graph-section": `
     <div class="graph-section custom-section" id="graph_${Date.now()}">
       <button class="deleteBtn" style="float:right;">🗑️</button>
