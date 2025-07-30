@@ -65,6 +65,8 @@ function renderFileGrid(sectionId) {
 
     fileGrid.innerHTML = '';
     for (let id in uploadedFiles) {
+        console.log(id)
+        if (sectionId != id) continue;
         let fileObj = uploadedFiles[id]
         const wrapper = document.createElement("div");
         wrapper.className = 'file-box';
@@ -138,6 +140,7 @@ function loadFiles() {
         const id = section.id.split('_')[1];
         const saved = localStorage.getItem(`uploadedFile-${id}`);
         if (!saved) return;
+
 
         try {
             const { id: fileId, name, type, data } = JSON.parse(saved);

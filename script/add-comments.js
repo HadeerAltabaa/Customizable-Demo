@@ -50,7 +50,7 @@ function saveCommentsToLocalStorage(id, commentList) {
 
 function loadCommentsFromLocalStorage(section) {
     const id = section.id.split("_")[section.id.split("_").length - 1]
-    const savedComments = JSON.parse(localStorage.getItem(`documentComments-${id}`) || "{}");
+    const savedComments = JSON.parse(localStorage.getItem(`documentComments-${id}`) || "[]");
     const commentList = document.getElementById(`commentList_${id}`);
 
     commentList.innerHTML = "";
