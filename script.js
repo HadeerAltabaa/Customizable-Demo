@@ -20,12 +20,13 @@ const sectionTemplates = {
                 <div class="section-header">
                     <h2 id="editableDoc_${uniqueId}" contenteditable="true">Documents Section</h2>
                 </div>
+
                 <!-- This is uploading files panel -->
                 <div class="no-files-panel" id="noFilesPanel_${uniqueId}">
                     <p>Please add your excel sheets from here...</p>
                     <div class="upload-box">
-                        <input type="file" id="fileInput_${uniqueId}" accept=".xlsx, .xls, .csv" onchange="handleFileUpload(this)">
                         <label for="fileInput_${uniqueId}">Select</label>
+                        <input type="file" id="fileInput_${uniqueId}" accept=".xlsx, .xls, .csv" onchange="handleFileUpload(this, '${uniqueId}');">
                     </div>
                 </div>
 
@@ -54,7 +55,7 @@ const sectionTemplates = {
                         <p class="comment-text">Comment</p>
                         <div class="comment-box">
                             <input type="text" id="commentInput_${uniqueId}" placeholder="Write your comment here...">
-                            <button type="button" id="addCommentBtn_${uniqueId}">Add</button>
+                            <button type="button" onClick="addComment('${uniqueId}')" id="addCommentBtn_${uniqueId}">Add</button>
                         </div>
                     </div>
                 </div>

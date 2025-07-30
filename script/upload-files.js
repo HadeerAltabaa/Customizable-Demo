@@ -5,15 +5,16 @@ const fileInput = document.getElementById('fileInput');
 const noFilesPanel = document.getElementById('noFilesPanel');
 const filesPresentPanel = document.getElementById('filesPresentPanel');
 
-let uploadedFiles = [];
+//let uploadedFiles = [];
+const uploadedFiles = {};
 
 // Upload files
-function handleFileUpload(input) {
+function handleFileUpload(input, sectionId) {
     const file = input.files[0];
     if (!file) return;
 
     const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-    const fileExt = file.name.split('.').pop().toLowerCase();
+    const fileExt = file.name.split('.')[file.name.split(".").length - 1].toLowerCase();
 
     const reader = new FileReader();
 
@@ -29,17 +30,20 @@ function handleFileUpload(input) {
             }
 
             // Clear previous uploads
-            uploadedFiles = [{ id: fileId, file, workbook }];
-            renderFileGrid();
-            noFilesPanel.style.display = 'none';
-            filesPresentPanel.style.display = 'block';
+            //uploadedFiles = [{ id: fileId, file, workbook }];
+            uploadedFiles[sectionId] = { id: fileId, file, workbook };
 
-            localStorage.setItem("uploadedFile", JSON.stringify({
-                id:fileId,
+            localStorage.setItem(`uploadedFile-${sectionId}`, JSON.stringify({
+                id: fileId,
                 name: file.name,
                 type: fileExt,
                 data: fileExt === 'csv' ? e.target.result : Array.from(new Uint8Array(e.target.result))
             }));
+
+            renderFileGrid(sectionId);
+            document.getElementById(`noFilesPanel_${sectionId}`).style.display = 'none';
+            document.getElementById(`filesPresentPanel_${sectionId}`).style.display = 'block';
+
         } catch (err) {
             alert("Error reading file. Please make sure the format is correct.");
             console.error(err);
@@ -56,20 +60,26 @@ function handleFileUpload(input) {
 }
 
 // Render individual file 
-function renderFileGrid() {
+function renderFileGrid(sectionId) {
+    const fileGrid = document.getElementById(`fileGrid_${sectionId}`);
+    const files = uploadedFiles[sectionId] || [];
+
     fileGrid.innerHTML = '';
     uploadedFiles.forEach(({ id, file }) => {
         const wrapper = document.createElement("div");
         wrapper.className = 'file-box';
         wrapper.innerHTML = `
-            <div class='file-icon' onclick="previewExcelFile('${id}')">
-                <button class='delete-btn' title="Delete" onclick="deleteFile('${id}')">&times;</button>
+            <div class='file-icon' onclick="previewExcelFile('${id}', '${sectionId}')">
+                <button class='delete-btn' title="Delete" onclick="deleteFile('${id}', '${sectionId}')">&times;</button>
                 <img src="https://img.icons8.com/color/48/000000/ms-excel.png" alt="Excel" />
                 <p>${file.name}</p>
             </div>
         `;
         fileGrid.appendChild(wrapper);
     });
+
+    const noFilesPanel = document.getElementById(`noFilesPanel_${sectionId}`);
+    const filesPresentPanel = document.getElementById(`filesPresentPanel_${sectionId}`);
 
     if (uploadedFiles.length === 0) {
         noFilesPanel.style.display = 'block';
@@ -81,13 +91,17 @@ function renderFileGrid() {
 const commentsTitle = document.getElementById("commentsTitle");
 const currentComments = commentList;
 
-function previewExcelFile(fileId) {
-    const fileObj = uploadedFiles.find(f => f.id === fileId);
+function previewExcelFile(fileId, sectionId) {
+    const fileObj = uploadedFiles[sectionId].find(f => f.id === fileId);
     if (!fileObj) return;
 
     const sheetName = fileObj.workbook.SheetNames[0];
     const worksheet = fileObj.workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+
+    const preview = document.getElementById(`preview_${sectionId}`);
+    const commentsTitle = document.getElementById(`commentsTitle_${sectionId}`);
+    const commentList = document.getElementById(`commentList_${sectionId}`);
 
     let htmlTable = `<table class="excel-table" border="1" cellspacing="0" cellpadding="5">`;
     jsonData.forEach((row, rowIndex) => {
@@ -104,26 +118,31 @@ function previewExcelFile(fileId) {
 
 
     preview.appendChild(commentsTitle);
-    preview.appendChild(currentComments);
+    preview.appendChild(commentList);
 
     //preview.appendChild(commentList);
 
+    commentsTitle.style.display = commentList.childElementCount > 0 ? 'block' : 'none';
     updateCommentTitleVisibility();
 }
 
 // Delete the file
-function deleteFile(fileId) {
-    uploadedFiles = uploadedFiles.filter(f => f.id !== fileId);
-    renderFileGrid();
-    preview.innerHTML = '';
+function deleteFile(fileId, sectionId) {
+    uploadedFiles[sectionId] = uploadedFiles[sectionId].filter(f => f.id !== fileId);
+    renderFileGrid(sectionId);
+    document.getElementById(`preview_${sectionId}`).innerHTML = '';
+    localStorage.removeItem("uploadedFile-${sectionId}");
+    //preview.innerHTML = '';
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-    const saved = localStorage.getItem("uploadedFile");
+    document.querySelectorAll('.no-files-panel').forEach(section => {
+        const id = section.id.split('_')[1];
+        const saved = localStorage.getItem("uploadedFile-${id}");
     if (!saved) return;
 
     try {
-        const {id, name, type, data} = JSON.parse(saved);
+        const {id: fileId, name, type, data} = JSON.parse(saved);
         let workbook;
 
         if (type === 'csv') {
@@ -133,12 +152,13 @@ window.addEventListener('DOMContentLoaded', () => {
             workbook = XLSX.read(buffer, {type: 'array'});
         }
 
-        uploadedFiles = [{id, file:{name}, workbook}];
-        renderFileGrid();
-        noFilesPanel.style.display = 'none';
-        filesPresentPanel.style.display = 'block';
+        uploadedFiles = [{id: fileId, file:{name}, workbook}];
+        renderFileGrid(id);
+        document.getElementById(`noFilesPanel_${id}`).style.display = 'none';
+        document.getElementById(`filesPresentPanel_${id}`).style.display = 'block';
     } catch (err) {
-        console.error("Failed to reload file: ", err);
-        localStorage.removeItem('uploadedFile');
+        console.error(`Failed to reload file ${id}: `, err);
+        //localStorage.removeItem('uploadedFile');
     }
+    })
 })
