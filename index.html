@@ -67,25 +67,27 @@
                 <h2 id="editableDoc" contenteditable="true">Documents</h2>
             </div>
             <!-- when no files are uploaded -->
-            <div class="no-files-panel" id="noFilesPanel">
+            <div class="no-files-panel" id="noFilesPanel_def">
                 <p>Please add your excel sheets from here...</p>
                 <div class="upload-box">
-                    <label for="fileInput">Select</label>
-                    <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv" max="1"
-                        onchange="handleFileUpload(this, 'def');">
+                    <label for="fileInput_def">Select</label>
+                    <input type="file" id="fileInput_def" multiple accept=".xlsx,.xls,.csv" max="1"
+                        onchange="handleFileUpload(this, 'def');loadCommentsFromLocalStorage(this)">
                 </div>
             </div>
 
             <!-- when files are uploaded -->
-            <div class="files-present-panel" id="filesPresentPanel" style="display: none;">
+            <div class="files-present-panel" id="filesPresentPanel_def" style="display: none;">
                 <p class="info-text">This is your document</p>
                 <div class="file-preview-layout">
-                    <div class="file-grid" id="fileGrid"></div>
+                    <div class="file-grid" id="fileGrid_def">
 
-                    <div class="preview-panel" id="preview">
+                    </div>
+
+                    <div class="preview-panel" id="preview_def">
                         <!-- Preview content injected via JS -->
-                        <h2 id="commentsTitle" style="display: none;">Comments</h2>
-                        <div id="commentList" class="comment-list"></div>
+                        <h2 id="commentsTitle_def" style="display: none;">Comments</h2>
+                        <div id="commentList_def" class="comment-list"></div>
                     </div>
                 </div>
 
@@ -100,8 +102,8 @@
                     <div class="comment-container">
                         <p class="comment-text">Comment</p>
                         <div class="comment-box">
-                            <input type="text" id="commentInput" placeholder="Write your comment here...">
-                            <button type="button" id="addCommentBtn">Add</button>
+                            <input type="text" id="commentInput_def" placeholder="Write your comment here...">
+                            <button onclick="onAddCommentButtonClicked(this)" type="button" id="addCommentBtn_def">Add</button>
                         </div>
                     </div>
                 </div>

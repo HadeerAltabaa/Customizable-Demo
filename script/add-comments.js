@@ -1,9 +1,11 @@
 // Add comments to the documents
-const commentInput = document.getElementById("commentInput");
-const addCommentBtn = document.getElementById("addCommentBtn");
-const commentList = document.getElementById("commentList");
 
-addCommentBtn.addEventListener("click", () => {
+function onAddCommentButtonClicked(btn) {
+    const id = btn.id.split("_")[btn.id.split("_").length - 1]
+
+    const commentInput = document.getElementById(`commentInput_${id}`);
+    const commentList = document.getElementById(`commentList_${id}`);
+
     const commentText = commentInput.value.trim();
 
     if (commentText !== "") {
@@ -19,34 +21,37 @@ addCommentBtn.addEventListener("click", () => {
         deleteBtn.title = "Delete this Comment";
         deleteBtn.onclick = () => {
             comment.remove();
-            updateCommentTitleVisibility();
-            saveCommentsToLocalStorage();
+            updateCommentTitleVisibility(id, commentList);
+            saveCommentsToLocalStorage(id, commentList);
         };
 
         comment.appendChild(textSpan);
         comment.appendChild(deleteBtn);
 
         commentList.appendChild(comment);
-        saveCommentsToLocalStorage();
+        saveCommentsToLocalStorage(id, commentList);
         commentInput.value = "";
 
-        updateCommentTitleVisibility();
+        updateCommentTitleVisibility(id, commentList);
     }
-});
+}
 
-function updateCommentTitleVisibility() {
-    const title = document.getElementById("commentsTitle");
+
+function updateCommentTitleVisibility(id, commentList) {
+    const title = document.getElementById(`commentsTitle_${id}`);
     const hasComments = commentList.querySelectorAll(".comment").length > 0;
     title.style.display = hasComments ? "block" : "none";
 }
 
-function saveCommentsToLocalStorage() {
+function saveCommentsToLocalStorage(id, commentList) {
     const comments = Array.from(commentList.querySelectorAll(".comment span")).map(span => span.textContent);
-    localStorage.setItem("documentComments", JSON.stringify(comments));
+    localStorage.setItem(`documentComments-${id}`, JSON.stringify(comments));
 }
 
-function loadCommentsFromLocalStorage() {
-    const savedComments = JSON.parse(localStorage.getItem("documentComments") || "[]");
+function loadCommentsFromLocalStorage(section) {
+    const id = section.id.split("_")[section.id.split("_").length - 1]
+    const savedComments = JSON.parse(localStorage.getItem(`documentComments-${id}`) || "{}");
+    const commentList = document.getElementById(`commentList_${id}`);
 
     commentList.innerHTML = "";
 
@@ -63,8 +68,8 @@ function loadCommentsFromLocalStorage() {
         deleteBtn.title = "Delete this Comment";
         deleteBtn.onclick = () => {
             comment.remove();
-            updateCommentTitleVisibility();
-            saveCommentsToLocalStorage();
+            updateCommentTitleVisibility(id, commentList);
+            saveCommentsToLocalStorage(id, commentList);
         };
 
         comment.appendChild(textSpan);
@@ -73,7 +78,7 @@ function loadCommentsFromLocalStorage() {
         commentList.appendChild(comment);
     });
 
-    updateCommentTitleVisibility();
+    updateCommentTitleVisibility(id, commentList);
 }
 
-window.addEventListener("DOMContentLoaded", loadCommentsFromLocalStorage);
+// window.addEventListener("DOMContentLoaded", loadCommentsFromLocalStorage);
