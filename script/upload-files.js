@@ -92,6 +92,8 @@ function previewExcelFile(fileId, sectionId) {
     const fileObj = uploadedFiles[sectionId]
     if (!fileObj) return;
 
+    selectedFile = fileObj
+
     const sheetName = fileObj.workbook.SheetNames[0];
     const worksheet = fileObj.workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
@@ -120,7 +122,7 @@ function previewExcelFile(fileId, sectionId) {
     //preview.appendChild(commentList);
 
     commentsTitle.style.display = commentList.childElementCount > 0 ? 'block' : 'none';
-    updateCommentTitleVisibility();
+    updateCommentTitleVisibility(sectionId, commentList);
 }
 
 // Delete the file
