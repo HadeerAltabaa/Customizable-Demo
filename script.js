@@ -47,7 +47,7 @@ const sectionTemplates = {
                     <div class="offers-container">
                         <p class="offers-text">ID for customers</p>
                         <div class="offers-preview">
-                            <p name="previewID" id="previewID">This part will represent the offers to the customer.</p>
+                            <p name="previewID" id="previewID-${uniqueId}">This part will represent the offers to the customer.</p>
                         </div>
                     </div>
 
@@ -627,7 +627,6 @@ const mapSections = document.querySelectorAll(".map-section")
 function renderMaps() {
     mapSections.forEach(section => {
         // Update map preview and Persist the map URL
-        console.log(section.id)
         const previewMap = document.querySelector(`.previewMap_${section.id}`);
         const mapInput = document.getElementById(`mapInput_${section.id}`);
         const downloadMapBtn = document.querySelector(`.downloadMapBtn_${section.id}`);
