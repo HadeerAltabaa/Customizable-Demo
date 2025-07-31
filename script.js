@@ -66,22 +66,20 @@ const sectionTemplates = {
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
         return{ 
         html: `
-        <div class="custom-section img-section" id="img_${uniqueId}">
+        <div class="custom-section image-section" id="image_${uniqueId}">
             <div class="section-header">
-                <h2 id="editableImage" contenteditable="true">Map</h2>
+                <h2 id="editableImage" contenteditable="true">Image</h2>
             </div>
             <div class="img-preview">
-                <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
-                    draggable="true" title="Drag Me">
-
-                <div class="image-wrapper" id="dropArea">
-                    <button type="button" id="downloadImageBtn" title="Download Image">
+                <div class="image-wrapper">
+                    <button type="button" id="downloadImageBtn" title="Download an Image">
                         <i class="fa-solid fa-circle-down"></i>
                     </button>
-                    <img src="images/map.png" id="previewImage" alt="Preview Image">
-                    <canvas id="imageCanvas"></canvas>
+                    <label for="imageInput_${uniqueId}">
+                        <img src="images/map.png" id="previewImage_${uniqueId}" alt="Preview an Image">
+                    </label>
                 </div>
-                <input type="file" id="imageInput" accept="image/*">
+                <input type="file" id="imageInput_${uniqueId}" accept="image/*" onchange="handleImageUpload('${uniqueId}');">
             </div>
         </div>
         `, id: `img_${uniqueId}`
@@ -122,6 +120,7 @@ const sectionTemplates = {
   `
 };
 
+console.log(sectionTemplates["img-section"]);
 
 document.querySelectorAll('#sectionOptions button').forEach(btn => {
     btn.addEventListener('click', () => {
