@@ -56,6 +56,11 @@
                 <h3>Map Image:</h3>
                 <label class="updateImage" for="imageInput">Upload a map image</label>
             </div>
+            <div class="edit-map-url">
+                <h3>Map URL:</h3>
+                <!-- <label class="updateMap" for="mapInput">Upload the map emped link</label> -->
+                <input class="mapInput" type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)...">
+            </div>
             <div class="reset-page-button">
                 <button type="button" onClick="onResetButtonClick()">Reset Page</button>
             </div>
@@ -113,7 +118,7 @@
         <!-- Image Section -->
         <div class="img-section" id="imgSection">
             <div class="section-header">
-                <h2 id="editableImage" contenteditable="true">Map</h2>
+                <h2 id="editableImage" contenteditable="true">Customer Location</h2>
             </div>
             <div class="img-preview">
                 <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
@@ -155,7 +160,7 @@
                     <iframe id="previewMap"
                         src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed"
                         allowfullscreen loading="lazy" title="Google Map showing SAS Saudi Arabia Office"></iframe>
-                    <input type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)...">
+                    
                 </div>
             </div>
         </div>
@@ -164,7 +169,6 @@
         <div class="graph-section" id="graphSection">
             <div class="section-header">
                 <h2 id="editableGraph" contenteditable="true">Graph</h2>
-
             </div>
             <div class="graph-preview">
                 <div class="graph-wrapper">
