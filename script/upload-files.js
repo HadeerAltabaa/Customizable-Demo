@@ -111,7 +111,7 @@ function previewExcelFile(fileId, sectionId) {
         htmlTable += `<tr>`;
         (row || []).forEach(cell => {
             const cellTag = rowIndex === 0 ? 'th' : 'td';
-            const content = cell !== undefined || cell !== null || cell !== '' ? cell : '&#9251;'; // Unicode Character 'OPEN BOX' (U+2423)
+            const content = (cell !== undefined && cell !== null && cell !== '') ? cell : '---';
             htmlTable += `<${cellTag} contenteditable="false">${content}</${cellTag}>`;
         });
         htmlTable += `</tr>`;
