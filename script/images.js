@@ -6,8 +6,26 @@ function handleImageUpload(sectionId) {
 
     const file = input.files[0];
     if (file) {
-        const imageUrl = URL.createObjectURL(file);
-        previewImage.src = imageUrl;
-        localStorage.setItem(`storedImage_${sectionId}`, imageUrl);
+        const reader = new FileReader();
+
+        reader.onload = function (event) {
+            let storedImages = JSON.parse(localStorage.getItem("storedImages")) || {};
+            const base64Image = event.target.result;
+
+            previewImage.src = base64Image;
+
+            storedImages[sectionId] = base64Image;
+            localStorage.setItem("storedImages", JSON.stringify(storedImages));
+        };
+
+        reader.readAsDataURL(file); // Converts to Base64
     }
+}
+
+const storedImages = JSON.parse(localStorage.getItem("storedImages")) || {}
+
+for (let sectionId in storedImages) {
+    const previewImage = document.getElementById(`previewImage_${sectionId}`);
+
+    previewImage.src = storedImages[sectionId]
 }

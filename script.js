@@ -64,8 +64,8 @@ const sectionTemplates = {
     },
     "img-section": () => {
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
-        return{ 
-        html: `
+        return {
+            html: `
         <div class="custom-section image-section" id="image_${uniqueId}">
             <div class="section-header">
                 <h2 id="editableImage" contenteditable="true">Image</h2>
