@@ -103,7 +103,6 @@ const sectionTemplates = {
         }
     },
     "notes-section": () => {
-
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
 
         return {
@@ -123,23 +122,29 @@ const sectionTemplates = {
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
 
         return {
-            html: `
-                <div class="map-section custom-section" id="mapSection_${uniqueId}">
+            _html: `
+                <div class="map-section custom-section" id="${uniqueId}">
                     <div class="section-header">
                         <h2 id="editableMap" contenteditable="true">Map</h2>
                     </div>
                     <div class="map-preview">
                         <div class="map-wrapper">
-                            <button type="button" id="downloadMapBtn" title="Download Map">
+                            <button class="downloadMapBtn_${uniqueId}" type="button" id="downloadMapBtn" title="Download Map">
                                 <i class="fa-solid fa-circle-down"></i>
                             </button>
-                            <iframe id="previewMap_${uniqueId}" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed" 
+                            <iframe class="previewMap_${uniqueId}" id="previewMap" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed" 
                             allowfullscreen loading="lazy"></iframe>
                             <input type="url" id="mapInput_${uniqueId}" placeholder="Enter Google Maps URL (embed link)...">
                         </div>
                     </div>
                 </div>
-            `, id: `mapSection_${uniqueId}`
+            `, get html() {
+                return this._html;
+            },
+            set html(value) {
+                this._html = value;
+            },
+            id: `${uniqueId}`
         }
     }
 };
@@ -617,35 +622,57 @@ downloadGraphBtn.addEventListener("click", () => {
     document.body.removeChild(link);
 });
 
-// Update map preview and Persist the map URL
-const previewMap = document.getElementById("previewMap");
-const mapInput = document.getElementById("mapInput");
-const downloadMapBtn = document.getElementById("downloadMapBtn");
+const mapSections = document.querySelectorAll(".map-section")
 
-// Load saved map URL on page load
-const savedMapURL = localStorage.getItem('mapURL');
-if (savedMapURL) {
-    previewMap.src = savedMapURL;
-    mapInput.value = savedMapURL;
+function renderMaps() {
+    mapSections.forEach(section => {
+        // Update map preview and Persist the map URL
+        console.log(section.id)
+        const previewMap = document.querySelector(`.previewMap_${section.id}`);
+        const mapInput = document.getElementById(`mapInput_${section.id}`);
+        const downloadMapBtn = document.querySelector(`.downloadMapBtn_${section.id}`);
+        // Load saved map URL on page load
+        const savedMapURL = localStorage.getItem(`mapURL-${section.id}`);
+        if (savedMapURL) {
+            previewMap.src = savedMapURL;
+            mapInput.value = savedMapURL;
+        }
+
+        // Update map preview when user enters a new URL
+        mapInput.addEventListener("input", () => {
+            const url = mapInput.value.trim();
+            if (url) {
+                previewMap.src = url;
+                localStorage.setItem(`mapURL-${section.id}`, url);
+            } else {
+                alert("Please enter a valid Google Maps embed URL.");
+            }
+        });
+
+        // Download map preview as an image
+        downloadMapBtn.addEventListener("click", () => {
+            alert("Due to browser limitations, downloading maps directly as images is not supported. Please use the Google Maps interface to save the map image.");
+        })
+    })
 }
-
-// Update map preview when user enters a new URL
-mapInput.addEventListener("input", () => {
-    const url = mapInput.value.trim();
-    if (url) {
-        previewMap.src = url;
-        localStorage.setItem('mapURL', url);
-    } else {
-        alert("Please enter a valid Google Maps embed URL.");
-    }
-});
-
-// Download map preview as an image
-downloadMapBtn.addEventListener("click", () => {
-    alert("Due to browser limitations, downloading maps directly as images is not supported. Please use the Google Maps interface to save the map image.");
-})
 
 window.addEventListener("DOMContentLoaded", () => {
     const btns = document.querySelectorAll('.deleteBtn');
     btns.forEach((btn) => btn.remove())
+
+
+
+    const mapContainer = document.querySelector(".edit-map-url")
+
+    mapSections.forEach(section => {
+        const temp = document.createElement("div")
+        temp.innerHTML = `
+            <h3>Map URL:</h3>
+            <input class="mapInput" type="url" id="mapInput_${section.id}" placeholder="Enter Google Maps URL (embed link)...">
+        `
+        mapContainer.appendChild(temp)
+    })
+
+
+    renderMaps()
 })

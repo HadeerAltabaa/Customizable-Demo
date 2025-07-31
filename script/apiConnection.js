@@ -1,12 +1,10 @@
 const apiURL = "http://localhost:3000/upload" // Used only locally change to an active api url
 
 async function sendAPIRequest(id) {
-    const file = document.querySelector(`#${id}`).files[0]
-
-    console.log(selectedFile.file)
+    const file = allFiles[id]
 
     const formData = new FormData();
-    formData.append("file", selectedFile.file); // ✅ raw File object
+    formData.append("file", file); // ✅ raw File object
 
     const res = await fetch(apiURL, {
         method: "POST",
