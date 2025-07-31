@@ -117,17 +117,13 @@ function previewExcelFile(fileId, sectionId) {
     const commentsTitle = document.getElementById(`commentsTitle_${sectionId}`);
     const commentList = document.getElementById(`commentList_${sectionId}`);
 
-    let htmlTable = `<table class="excel-table" border="1" cellspacing="0" cellpadding="5">`;
+    let htmlTable = `<table class="excel-table" border="1" cellspacing="0" cellpadding="12">`;
     normalizedData.forEach((row, rowIndex) => {
-        htmlTable += `<tr>`;
+        htmlTable += `<tr style="background-color: ${rowIndex % 2 === 0 ? '#f0f0f0' : '#ffffff'};">`;
         (row || []).forEach(cell => {
             const cellTag = rowIndex === 0 ? 'th' : 'td';
-<<<<<<< HEAD
             const content = (cell !== undefined && cell !== null && cell !== '') ? cell : '---';
-=======
-            const content = (cell ?? '') === '' ? '&ZeroWidthSpace;' : cell;
->>>>>>> d0ddf5867e3e1d3cac82daaf3f427a69a32b492b
-            htmlTable += `<${cellTag} contenteditable="false">${content}</${cellTag}>`;
+            htmlTable += `<${cellTag} contenteditable="false" style="padding: 2px 4px; font-size: 14px;">${content}</${cellTag}>`;
         });
         htmlTable += `</tr>`;
     });
