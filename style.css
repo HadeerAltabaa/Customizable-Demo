@@ -184,6 +184,15 @@ body {
             cursor: pointer;
         }
 
+        .mapInput {
+            width: 100%;
+            height: 40px;
+            border-radius: 5px;
+            padding: 5px;
+            border: 2px solid #333333;
+            font-size: 14px;
+        }
+
         label[for="imageInput"] {
             margin-top: auto !important;
             display: flex !important;
@@ -200,7 +209,7 @@ body {
             text-align: center !important;
         }
 
-        .edit-map-img {
+        .edit-map-img, .edit-map-url {
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -807,6 +816,13 @@ input[type=number] {
     background-color: var(--bg-color);
     border-radius: 12px;
     box-sizing: border-box;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
 }
 
 #downloadMapBtn {

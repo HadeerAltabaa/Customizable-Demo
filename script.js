@@ -123,7 +123,7 @@ const sectionTemplates = {
 
         return {
             html: `
-                <div class="map-section custom-section" id="map_${uniqueId}">
+                <div class="map-section custom-section" id="mapSection_${uniqueId}">
                     <div class="section-header">
                         <h2 id="editableMap" contenteditable="true">Map</h2>
                     </div>
@@ -132,12 +132,13 @@ const sectionTemplates = {
                             <button type="button" id="downloadMapBtn" title="Download Map">
                                 <i class="fa-solid fa-circle-down"></i>
                             </button>
-                            <iframe id="previewMap_${uniqueId}" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.123456789012!2d-122.419415684681!3d37.774929279759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sSan%20Francisco%2C%20CA%2094105%2C%20USA!5e0!3m2!1sen!2sin!4v1616161616161" allowfullscreen="" loading="lazy"></iframe>
-                            <input type="url" id="mapInput_${uniqueId}" placeholder="Search for a location...">
+                            <iframe id="previewMap_${uniqueId}" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed" 
+                            allowfullscreen loading="lazy"></iframe>
+                            <input type="url" id="mapInput_${uniqueId}" placeholder="Enter Google Maps URL (embed link)...">
                         </div>
                     </div>
                 </div>
-            `, id: `map_${uniqueId}`
+            `, id: `mapSection_${uniqueId}`
         }
     }
 };
