@@ -55,8 +55,6 @@ function handleFileUpload(input, sectionId) {
     } else {
         reader.readAsArrayBuffer(file);
     }
-
-    input.value = '';
 }
 
 // Render individual file 

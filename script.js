@@ -64,8 +64,8 @@ const sectionTemplates = {
     },
     "img-section": () => {
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
-        return{ 
-        html: `
+        return {
+            html: `
         <div class="custom-section image-section" id="image_${uniqueId}">
             <div class="section-header">
                 <h2 id="editableImage" contenteditable="true">Image</h2>
@@ -82,7 +82,7 @@ const sectionTemplates = {
                 <input type="file" id="imageInput_${uniqueId}" accept="image/*" onchange="handleImageUpload('${uniqueId}');">
             </div>
         </div>
-        `, id: `img_${uniqueId}`
+        `, id: `image_${uniqueId}`
         }
     },
     "graph-section": `
@@ -119,8 +119,6 @@ const sectionTemplates = {
     </div>
   `
 };
-
-console.log(sectionTemplates["img-section"]);
 
 document.querySelectorAll('#sectionOptions button').forEach(btn => {
     btn.addEventListener('click', () => {
