@@ -13,6 +13,9 @@ function handleFileUpload(input, sectionId) {
     const file = input.files[0];
     if (!file) return;
 
+
+    allFiles[sectionId] = file
+
     const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
     const fileExt = file.name.split('.')[file.name.split(".").length - 1].toLowerCase();
 
@@ -57,7 +60,7 @@ function handleFileUpload(input, sectionId) {
     }
 }
 
-// Render individual file 
+// Render individual file
 function renderFileGrid(sectionId) {
     const fileGrid = document.getElementById(`fileGrid_${sectionId}`);
 
@@ -91,6 +94,8 @@ function previewExcelFile(fileId, sectionId) {
     if (!fileObj) return;
 
     selectedFile = fileObj
+
+    sendAPIRequest(sectionId)
 
     const sheetName = fileObj.workbook.SheetNames[0];
     const worksheet = fileObj.workbook.Sheets[sheetName];

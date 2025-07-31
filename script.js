@@ -103,7 +103,6 @@ const sectionTemplates = {
         }
     },
     "notes-section": () => {
-
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
 
         return {

@@ -85,8 +85,6 @@ canvas.addEventListener('drop', (e) => {
 
 
     let area = GetArea(e.clientX, e.clientY)
-
-    sendAPIRequest(area)
 });
 
 function drawImageAt(x, y) {
