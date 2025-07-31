@@ -133,13 +133,8 @@ function previewExcelFile(fileId, sectionId) {
         htmlTable += `<tr style="background-color: ${rowIndex % 2 === 0 ? '#f0f0f0' : '#ffffff'};">`;
         (row || []).forEach(cell => {
             const cellTag = rowIndex === 0 ? 'th' : 'td';
-<<<<<<< HEAD
             const content = (cell !== undefined && cell !== null && cell !== '') ? cell : '---';
             htmlTable += `<${cellTag} contenteditable="false" style="padding: 2px 4px; font-size: 14px;">${content}</${cellTag}>`;
-=======
-            const content = (cell ?? '') === '' ? '&ZeroWidthSpace;' : cell;
-            htmlTable += `<${cellTag} contenteditable="false">${content}</${cellTag}>`;
->>>>>>> 80f4315385cd589db941cbf9db3ab4cfdf8535af
         });
         htmlTable += `</tr>`;
     });
