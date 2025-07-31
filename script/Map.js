@@ -20,8 +20,6 @@ function GetArea(x, y) {
     let isBottom = !isTop;
     let isRight = !isLeft;
 
-    let area = 0;
-
     if (isTop && isLeft) area = 1;
     if (isTop && isRight) area = 2;
     if (isBottom && isLeft) area = 3;
@@ -34,8 +32,6 @@ function GetArea(x, y) {
     //     isBottom,
     //     isRight
     // })
-
-    return area
 }
 
 const draggedHuman = document.getElementById('draggedHuman');
@@ -84,7 +80,7 @@ canvas.addEventListener('drop', (e) => {
     }
 
 
-    let area = GetArea(e.clientX, e.clientY)
+    GetArea(e.clientX, e.clientY)
 });
 
 function drawImageAt(x, y) {

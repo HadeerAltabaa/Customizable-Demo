@@ -9,7 +9,7 @@ app.use(cors())
 app.use(express.json({ limit: "20mb" }));
 
 app.post("/upload", (req, res) => {
-  const { name, type, data } = req.body;
+  const { name, type, data, area } = req.body;
 
   try {
     const buffer = Buffer.from(data);
@@ -20,7 +20,7 @@ app.post("/upload", (req, res) => {
     res.json({
       content: `
         <div style="font-family: Arial, sans-serif;">
-            <strong>Processed file:</strong> ${name}
+            <strong>Processed file in area: ${area}</strong> ${name}
             <div style="font-size: 12px; color: gray; margin-top: 4px;">
                 (This response was sent via API)
             </div>

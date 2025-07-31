@@ -5,13 +5,15 @@ async function sendAPIRequest(id) {
     const fileData = allFiles[id];
 
     if (!fileData) return;
+    if (area == 0) return alert("Please selecte an area before sending an API Request")
 
     // ✅ Convert to a JSON payload
     const payload = {
         id: fileData.id,
         name: fileData.name,
         type: fileData.type,
-        data: fileData.data, // Already an Array<number> or string
+        data: fileData.data, // Already an Array<number> or string,
+        area
     };
 
     try {
