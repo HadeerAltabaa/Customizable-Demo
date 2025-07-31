@@ -82,16 +82,30 @@ const sectionTemplates = {
                 <input type="file" id="imageInput_${uniqueId}" accept="image/*" onchange="handleImageUpload('${uniqueId}');">
             </div>
         </div>
-        `, id: `img_${uniqueId}`
+        `, id: `image_${uniqueId}`
         }
     },
-    "graph-section": `
-    <div class="graph-section custom-section" id="graph_${Date.now()}">
-      <button class="deleteBtn" style="float:right;">🗑️</button>
-      <h2 contenteditable="true">Graph</h2>
-      <p>Graph section content here...</p>
-    </div>
-  `,
+    "graph-section": () => {
+        const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
+
+        return {
+            html: `
+            <div class="custom-section graph-section" id="graph_${uniqueId}">
+                <div class="section-header">
+                    <h2 id="editableGraph" contenteditable="true">Graph</h2>
+                </div>
+                <div class="graph-preview">
+                    <div class="graph-wrapper">
+                        <button type="button" id="downloadGraphBtn" title="Download Graph">
+                            <i class="fa-solid fa-circle-down"></i>
+                        </button>
+                        <canvas id="generatedChart_${uniqueId}" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            `, id: `graph_${uniqueId}`
+        }
+    },
     "notes-section": () => {
 
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
@@ -111,16 +125,29 @@ const sectionTemplates = {
             `, id: `notesSection_${uniqueId}`
         }
     },
-    "map-section": `
-    <div class="map-section custom-section" id="map_${Date.now()}">
-      <button class="deleteBtn" style="float:right;">🗑️</button>
-      <h2 contenteditable="true">Map</h2>
-      <p>Map section content here...</p>
-    </div>
-  `
-};
+    "map-section": () => {
+        const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
 
-console.log(sectionTemplates["img-section"]);
+        return {
+            html: `
+                <div class="map-section custom-section" id="map_${uniqueId}">
+                    <div class="section-header">
+                        <h2 id="editableMap" contenteditable="true">Map</h2>
+                    </div>
+                    <div class="map-preview">
+                        <div class="map-wrapper">
+                            <button type="button" id="downloadMapBtn" title="Download Map">
+                                <i class="fa-solid fa-circle-down"></i>
+                            </button>
+                            <iframe id="previewMap_${uniqueId}" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.123456789012!2d-122.419415684681!3d37.774929279759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c8b8b8b8b%3A0x8b8b8b8b8b8b8b8b!2sSan%20Francisco%2C%20CA%2094105%2C%20USA!5e0!3m2!1sen!2sin!4v1616161616161" allowfullscreen="" loading="lazy"></iframe>
+                            <input type="url" id="mapInput_${uniqueId}" placeholder="Search for a location...">
+                        </div>
+                    </div>
+                </div>
+            `, id: `map_${uniqueId}`
+        }
+    }
+};
 
 document.querySelectorAll('#sectionOptions button').forEach(btn => {
     btn.addEventListener('click', () => {

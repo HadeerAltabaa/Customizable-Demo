@@ -265,8 +265,9 @@ body.edit-mode-active {
     /* Document section styles */
     .doc-section {
         padding: 10px 20px;
-        flex: 0 0 100%; Take full width
-
+        flex: 0 0 100%;
+        /* Take full width */
+        /* margin-bottom: 15px; */
         h2 {
             margin-bottom: 10px;
             color: var(--text-color);
@@ -530,7 +531,7 @@ body.edit-mode-active {
     background-color: #333333;
 } */
 
-.img-section,
+.img-section, image-section,
 .graph-section {
     flex: 1 1 45%;
     padding: 20px;
@@ -540,7 +541,7 @@ body.edit-mode-active {
     box-sizing: border-box;
 }
 
-.img-section h2,
+.img-section h2, image-section h2,
 .graph-section h2 {
     margin-bottom: 10px;
     color: var(--text-color);
