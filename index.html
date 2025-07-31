@@ -57,9 +57,8 @@
                 <label class="updateImage" for="imageInput">Upload a map image</label>
             </div>
             <div class="edit-map-url">
-                <h3>Map URL:</h3>
-                <!-- <label class="updateMap" for="mapInput">Upload the map emped link</label> -->
-                <input class="mapInput" type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)...">
+                <!-- <h3>Map URL:</h3>
+                <input class="mapInput" type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)..."> -->
             </div>
             <div class="reset-page-button">
                 <button type="button" onClick="onResetButtonClick()">Reset Page</button>
@@ -154,10 +153,10 @@
             </div>
             <div class="map-preview">
                 <div class="map-wrapper">
-                    <button type="button" id="downloadMapBtn" title="Download Map">
+                    <button class="downloadMapBtn_mapSection" type="button" id="downloadMapBtn" title="Download Map">
                         <i class="fa-solid fa-circle-down"></i>
                     </button>
-                    <iframe id="previewMap"
+                    <iframe class="previewMap_mapSection" id="previewMap"
                         src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed"
                         allowfullscreen loading="lazy" title="Google Map showing SAS Saudi Arabia Office"></iframe>
                     
