@@ -66,7 +66,6 @@ const sectionTemplates = {
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
         return {
             html: `
-        <div class="custom-section image-section" id="image_${uniqueId}">
             <div class="section-header">
                 <h2 id="editableImage" contenteditable="true">Image</h2>
             </div>
@@ -81,7 +80,6 @@ const sectionTemplates = {
                 </div>
                 <input type="file" id="imageInput_${uniqueId}" accept="image/*" onchange="handleImageUpload('${uniqueId}');">
             </div>
-        </div>
         `, id: `image_${uniqueId}`
         }
     },
@@ -90,7 +88,6 @@ const sectionTemplates = {
 
         return {
             html: `
-            <div class="custom-section graph-section" id="graph_${uniqueId}">
                 <div class="section-header">
                     <h2 id="editableGraph" contenteditable="true">Graph</h2>
                 </div>
@@ -102,7 +99,6 @@ const sectionTemplates = {
                         <canvas id="generatedChart_${uniqueId}" width="400" height="200"></canvas>
                     </div>
                 </div>
-            </div>
             `, id: `graph_${uniqueId}`
         }
     },
@@ -112,7 +108,6 @@ const sectionTemplates = {
 
         return {
             html: `
-                <div id="notesSection_${uniqueId}">
                     <div class="section-header">
                         <h2 id="editableNotes" contenteditable="true">Notes</h2>
                     </div>
@@ -121,7 +116,6 @@ const sectionTemplates = {
                         <textarea id="notesInput_${uniqueId}" placeholder="Write your notes here..."></textarea>
                         <button onClick="addNotes('notesInput_${uniqueId}')" type="button" id="addNotesBtn">Add</button>
                     </div>
-                </div>
             `, id: `notesSection_${uniqueId}`
         }
     },
@@ -648,4 +642,9 @@ mapInput.addEventListener("input", () => {
 // Download map preview as an image
 downloadMapBtn.addEventListener("click", () => {
     alert("Due to browser limitations, downloading maps directly as images is not supported. Please use the Google Maps interface to save the map image.");
+})
+
+window.addEventListener("DOMContentLoaded", () => {
+    const btns = document.querySelectorAll('.deleteBtn');
+    btns.forEach((btn) => btn.remove())
 })
