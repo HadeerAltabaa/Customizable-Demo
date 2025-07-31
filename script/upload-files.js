@@ -122,7 +122,7 @@ function previewExcelFile(fileId, sectionId) {
         htmlTable += `<tr>`;
         (row || []).forEach(cell => {
             const cellTag = rowIndex === 0 ? 'th' : 'td';
-            const content = (cell ?? '') === '' ? '&#9251;' : cell;
+            const content = (cell ?? '') === '' ? '&ZeroWidthSpace;' : cell;
             htmlTable += `<${cellTag} contenteditable="false">${content}</${cellTag}>`;
         });
         htmlTable += `</tr>`;
