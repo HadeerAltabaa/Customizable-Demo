@@ -100,7 +100,7 @@ function previewExcelFile(fileId, sectionId) {
     const sheetName = fileObj.workbook.SheetNames[0];
     const worksheet = fileObj.workbook.Sheets[sheetName];
     // limit the number of rows to 10 rows
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1}).slice(0, 11);
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }).slice(0, 11);
 
     const preview = document.getElementById(`preview_${sectionId}`);
     const commentsTitle = document.getElementById(`commentsTitle_${sectionId}`);
@@ -111,7 +111,8 @@ function previewExcelFile(fileId, sectionId) {
         htmlTable += `<tr>`;
         (row || []).forEach(cell => {
             const cellTag = rowIndex === 0 ? 'th' : 'td';
-            htmlTable += `<${cellTag} contenteditable="false">${cell !== undefined ? cell : ''}</${cellTag}>`;
+            const content = cell !== undefined || cell !== null || cell !== '' ? cell : '&#9251;'; // Unicode Character 'OPEN BOX' (U+2423)
+            htmlTable += `<${cellTag} contenteditable="false">${content}</${cellTag}>`;
         });
         htmlTable += `</tr>`;
     });
