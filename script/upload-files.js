@@ -101,17 +101,32 @@ function previewExcelFile(fileId, sectionId) {
     const worksheet = fileObj.workbook.Sheets[sheetName];
     // limit the number of rows to 10 rows
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }).slice(0, 11);
+    const maxCols = Math.max(...jsonData.map(row => row.length));
+
+    const normalizedData = jsonData.map(row => {
+        const filled = [];
+        for (let i = 0; i < maxCols; i++) {
+            filled[i] = (row[i] !== undefined && row[i] !== null && row[i] !== '')
+                ? row[i]
+                : '&ZeroWidthSpace;';
+        }
+        return filled;
+    });
 
     const preview = document.getElementById(`preview_${sectionId}`);
     const commentsTitle = document.getElementById(`commentsTitle_${sectionId}`);
     const commentList = document.getElementById(`commentList_${sectionId}`);
 
     let htmlTable = `<table class="excel-table" border="1" cellspacing="0" cellpadding="5">`;
-    jsonData.forEach((row, rowIndex) => {
+    normalizedData.forEach((row, rowIndex) => {
         htmlTable += `<tr>`;
         (row || []).forEach(cell => {
             const cellTag = rowIndex === 0 ? 'th' : 'td';
+<<<<<<< HEAD
             const content = (cell !== undefined && cell !== null && cell !== '') ? cell : '---';
+=======
+            const content = (cell ?? '') === '' ? '&ZeroWidthSpace;' : cell;
+>>>>>>> d0ddf5867e3e1d3cac82daaf3f427a69a32b492b
             htmlTable += `<${cellTag} contenteditable="false">${content}</${cellTag}>`;
         });
         htmlTable += `</tr>`;
