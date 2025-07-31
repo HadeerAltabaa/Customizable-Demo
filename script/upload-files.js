@@ -13,17 +13,18 @@ function handleFileUpload(input, sectionId) {
     const file = input.files[0];
     if (!file) return;
 
-
-    allFiles[sectionId] = file
+    // Retrieve previous files or initialize empty object
+    let allFiles = JSON.parse(localStorage.getItem("allFiles") || "{}");
 
     const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
-    const fileExt = file.name.split('.')[file.name.split(".").length - 1].toLowerCase();
+    const fileExt = file.name.split('.').pop().toLowerCase();
 
     const reader = new FileReader();
 
     reader.onload = function (e) {
-        let workbook;
         try {
+            let workbook;
+
             if (fileExt === 'csv') {
                 const csvText = e.target.result;
                 workbook = XLSX.read(csvText, { type: 'string', raw: true });
@@ -32,17 +33,27 @@ function handleFileUpload(input, sectionId) {
                 workbook = XLSX.read(data, { type: 'array' });
             }
 
-            // Clear previous uploads
-            //uploadedFiles = [{ id: fileId, file, workbook }];
+            // Store the uploaded file in memory for immediate use
             uploadedFiles[sectionId] = { id: fileId, file, workbook };
 
-            localStorage.setItem(`uploadedFile-${sectionId}`, JSON.stringify({
+            // Convert to serializable object for localStorage
+            const storedFile = {
                 id: fileId,
                 name: file.name,
                 type: fileExt,
-                data: fileExt === 'csv' ? e.target.result : Array.from(new Uint8Array(e.target.result))
-            }));
+                data: fileExt === 'csv'
+                    ? e.target.result
+                    : Array.from(new Uint8Array(e.target.result))
+            };
 
+            // Save per-section file
+            localStorage.setItem(`uploadedFile-${sectionId}`, JSON.stringify(storedFile));
+
+            // Save to "allFiles" list
+            allFiles[sectionId] = storedFile;
+            localStorage.setItem("allFiles", JSON.stringify(allFiles));
+
+            // Update UI
             renderFileGrid(sectionId);
             document.getElementById(`noFilesPanel_${sectionId}`).style.display = 'none';
             document.getElementById(`filesPresentPanel_${sectionId}`).style.display = 'block';
@@ -122,11 +133,7 @@ function previewExcelFile(fileId, sectionId) {
         htmlTable += `<tr>`;
         (row || []).forEach(cell => {
             const cellTag = rowIndex === 0 ? 'th' : 'td';
-<<<<<<< HEAD
-            const content = (cell !== undefined && cell !== null && cell !== '') ? cell : '---';
-=======
             const content = (cell ?? '') === '' ? '&ZeroWidthSpace;' : cell;
->>>>>>> d0ddf5867e3e1d3cac82daaf3f427a69a32b492b
             htmlTable += `<${cellTag} contenteditable="false">${content}</${cellTag}>`;
         });
         htmlTable += `</tr>`;
