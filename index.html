@@ -99,15 +99,18 @@
                     <div class="offers-container">
                         <p class="offers-text">ID for customers</p>
                         <div class="offers-preview">
-                            <p name="previewID" id="previewID-def">This part will represent the offers to the customer.</p>
+                            <p name="previewID" id="previewID-def">This part will represent the offers to the customer.
+                            </p>
                         </div>
                     </div>
 
                     <div class="actions-container">
                         <p class="actions-text">Actions</p>
                         <div class="actions-box">
-                            <input type="text" id="actionsInput_def" placeholder="Write a customer action. (Ex.Id, Name, Action, Amount...)">
-                            <button type="button" onClick="onAddActionButtonClick()" id="addActionBtn_def">Add Action</button>
+                            <input type="text" id="actionsInput_def"
+                                placeholder="Write a customer action. (Ex.Id, Name, Action, Amount...)">
+                            <button type="button" onClick="onAddActionButtonClick()" id="addActionBtn_def">Add
+                                Action</button>
                         </div>
                     </div>
 
@@ -128,17 +131,19 @@
                 <h2 id="editableImage" contenteditable="true">Customer Location</h2>
             </div>
             <div class="img-preview">
-                <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
-                    draggable="true" title="Drag Me">
+                <div class="row-img-section">
+                    <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
+                        draggable="true" title="Drag Me">
 
-                <div class="customer-action-container">
-                    <label for="">Choose an action:</label>
-                    <select name="customer-actions-choices" id="customer-actions-choices">
-                        <option value="deposit">Deposit Money</option>
-                        <option value="withdraw">Withdraw Money</option>
-                        <option value="transfare">Transfare Funds</option>
-                        <option value="pay">Pay Pills</option>
-                    </select>
+                    <div class="customer-action-container">
+                        <label for="">Choose an action:</label>
+                        <select name="customer-actions-choices" id="customer-actions-choices">
+                            <option value="deposit">Deposit Money</option>
+                            <option value="withdraw">Withdraw Money</option>
+                            <option value="transfare">Transfare Funds</option>
+                            <option value="pay">Pay Pills</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="image-wrapper" id="dropArea">
@@ -177,7 +182,7 @@
                     <iframe class="previewMap_mapSection" id="previewMap"
                         src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed"
                         allowfullscreen loading="lazy" title="Google Map showing SAS Saudi Arabia Office"></iframe>
-                    
+
                 </div>
             </div>
         </div>

@@ -209,13 +209,14 @@ body {
             text-align: center !important;
         }
 
-        .edit-map-img, .edit-map-url {
+        .edit-map-img,
+        .edit-map-url {
             display: flex;
             flex-direction: column;
             gap: 10px;
             margin-top: 20px;
         }
-        
+
         .reset-page-button {
             display: flex;
             justify-content: center;
@@ -263,11 +264,11 @@ body.edit-mode-active {
 /* Main Body Styles */
 .main-body {
     min-height: 400px;
-    padding: 20px;
+    padding: 5px 20px;
     background-color: var(--bg-color);
     scroll-behavior: smooth;
 
-    > div:not(.doc-section) {
+    >div:not(.doc-section) {
         flex: 1 1 40%;
     }
 
@@ -275,6 +276,7 @@ body.edit-mode-active {
     .doc-section {
         padding: 10px 20px;
         flex: 0 0 100%;
+
         /* Take full width */
         /* margin-bottom: 15px; */
         h2 {
@@ -287,8 +289,8 @@ body.edit-mode-active {
             background-color: var(--section-color);
             color: white;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 10px;
+            /* margin-bottom: 10px; */
         }
 
         .no-files-panel p,
@@ -538,7 +540,7 @@ body.edit-mode-active {
 .row-section {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 0;
     justify-content: space-between;
 }
 
@@ -546,17 +548,66 @@ body.edit-mode-active {
     background-color: #333333;
 } */
 
-.img-section, image-section,
+.img-section,
+.image-section,
 .graph-section {
     flex: 1 1 45%;
-    padding: 20px;
+    padding: 10px 20px;
     display: flex;
     flex-direction: column;
     align-items: left;
     box-sizing: border-box;
+    /*the sections must start from appove*/
 }
 
-.img-section h2, image-section h2,
+.row-img-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.customer-action-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    #customer-actions-choices {
+        padding: 5px 20px;
+        border: none;
+        border-radius: 20px;
+        font-size: 12px;
+        color: var(--text-color);
+        background-color: var(--bg-color);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        width: 180px;
+    }
+
+    #customer-actions-choices:hover,
+    #customer-actions-choices:focus {
+        border-color: var(--section-color);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    }
+
+    #customer-actions-choices option {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+
+    /* select {
+        padding: 5px 20px;
+        border: none;
+        border-radius: 20px;
+    } */
+}
+
+.img-section h2,
+.image-section h2,
 .graph-section h2 {
     margin-bottom: 10px;
     color: var(--text-color);
@@ -724,7 +775,7 @@ input[type=number] {
 .notes-section,
 .map-section {
     flex: 1 1 45%;
-    padding: 20px;
+    padding: 10px 20px;
     display: flex;
     flex-direction: column;
     align-items: left;
