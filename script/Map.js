@@ -78,8 +78,7 @@ canvas.addEventListener('drop', (e) => {
     } else {
         humanImage.onload = () => drawImageAt(relativeX, relativeY);
     }
-
-
+    
     GetArea(e.clientX, e.clientY)
 });
 

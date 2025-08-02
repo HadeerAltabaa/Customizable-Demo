@@ -103,14 +103,22 @@
                         </div>
                     </div>
 
-                    <div class="comment-container">
+                    <div class="actions-container">
+                        <p class="actions-text">Actions</p>
+                        <div class="actions-box">
+                            <input type="text" id="actionsInput_def" placeholder="Write a customer action. (Ex.Id, Name, Action, Amount...)">
+                            <button type="button" onClick="onAddActionButtonClick()" id="addActionBtn_def">Add Action</button>
+                        </div>
+                    </div>
+
+                    <!-- <div class="comment-container">
                         <p class="comment-text">Comment</p>
                         <div class="comment-box">
                             <input type="text" id="commentInput_def" placeholder="Write your comment here...">
                             <button onclick="onAddCommentButtonClicked(this)" type="button"
                                 id="addCommentBtn_def">Add</button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -122,6 +130,16 @@
             <div class="img-preview">
                 <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
                     draggable="true" title="Drag Me">
+
+                <div class="customer-action-container">
+                    <label for="">Choose an action:</label>
+                    <select name="customer-actions-choices" id="customer-actions-choices">
+                        <option value="deposit">Deposit Money</option>
+                        <option value="withdraw">Withdraw Money</option>
+                        <option value="transfare">Transfare Funds</option>
+                        <option value="pay">Pay Pills</option>
+                    </select>
+                </div>
 
                 <div class="image-wrapper" id="dropArea">
                     <button type="button" id="downloadImageBtn" title="Download Image">

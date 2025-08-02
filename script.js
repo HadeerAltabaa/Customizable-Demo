@@ -659,8 +659,6 @@ window.addEventListener("DOMContentLoaded", () => {
     const btns = document.querySelectorAll('.deleteBtn');
     btns.forEach((btn) => btn.remove())
 
-
-
     const mapContainer = document.querySelector(".edit-map-url")
 
     mapSections.forEach(section => {
@@ -671,7 +669,6 @@ window.addEventListener("DOMContentLoaded", () => {
         `
         mapContainer.appendChild(temp)
     })
-
 
     renderMaps()
 })

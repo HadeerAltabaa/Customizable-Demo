@@ -303,7 +303,8 @@ body.edit-mode-active {
             width: 3/4;
         }
 
-        .comment-container {
+        /*.comment-container,*/
+        .actions-container {
             flex: 1;
             width: 3/4;
         }
@@ -457,14 +458,16 @@ body.edit-mode-active {
     justify-content: center;
 }
 
-.comment-text {
+/* .comment-text,  */
+.actions-text {
     margin-bottom: 5px;
     margin-top: 20px;
     font-size: 1.1rem;
     font-weight: bold;
 }
 
-.comment-box {
+/* .comment-box, */
+.actions-box {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -473,11 +476,13 @@ body.edit-mode-active {
     border-radius: 12px;
 }
 
-.comment-box input {
+/* .comment-box input, */
+.actions-box input {
     flex: 3;
     border: none;
     border-radius: 10px;
     padding: 10px;
+    font-size: 10px;
 }
 
 .delete-comment-btn {
@@ -495,14 +500,15 @@ body.edit-mode-active {
     text-align: center;
 }
 
-.comment-box button {
+/* .comment-box button, */
+.actions-box button {
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     background-color: var(--section-color);
     color: var(--bg-color);
     cursor: pointer;
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
 }
 

@@ -111,7 +111,7 @@ function previewExcelFile(fileId, sectionId) {
     const sheetName = fileObj.workbook.SheetNames[0];
     const worksheet = fileObj.workbook.Sheets[sheetName];
     // limit the number of rows to 10 rows
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }).slice(0, 11);
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })/*.slice(0, 11)*/;
     const maxCols = Math.max(...jsonData.map(row => row.length));
 
     const normalizedData = jsonData.map(row => {
