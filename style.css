@@ -157,7 +157,6 @@ body {
         }
 
         h3 {
-            display: block;
             font-size: 15px;
             margin-bottom: 5px;
             color: #333333;
@@ -171,29 +170,38 @@ body {
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
-            padding: 5px;
             border-bottom: 1px solid #f0f0f0;
         }
 
-        input {
+        input[type="color"] {
+            width: 30px;
+            height: 30px;
+            border: none;
+            background: none;
+            /* box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15); */
+            cursor: pointer;
+        }
+
+        /* input {
             width: 30px;
             height: 30px;
             border-style: hidden;
             background: none;
             box-shadow: 2px 0 4px rgba(0, 0, 0, 0.15);
             cursor: pointer;
-        }
+        } */
 
-        .mapInput {
+        .mapInput,
+        #option-input {
             width: 100%;
             height: 40px;
             border-radius: 5px;
-            padding: 5px;
+            padding: 5px 10px;
             border: 2px solid #333333;
             font-size: 14px;
         }
 
-        label[for="imageInput"] {
+        /* label[for="imageInput"] {
             margin-top: auto !important;
             display: flex !important;
             align-items: center !important;
@@ -207,21 +215,57 @@ body {
             font-size: 14px !important;
             font-weight: bold !important;
             text-align: center !important;
+        } */
+
+        label[for="imageInput"] {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background-color: var(--section-color);
+            color: var(--bg-color);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            transition: background-color 0.3s ease;
         }
 
         .edit-map-img,
         .edit-map-url,
-        .edit-img-options {
+        .edit-actions-options {
             display: flex;
             flex-direction: column;
             gap: 10px;
             margin-top: 20px;
         }
 
+        /* #option-input {
+            width: 100%;
+            height: 40px;
+            border-radius: 5px;
+            padding: 5px;
+            border: 2px solid #333333;
+            font-size: 14px;
+        } */
+
+        .controls button {
+            padding: 10px 20px;
+            background-color: var(--section-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
         .reset-page-button {
             display: flex;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: auto;
         }
 
         .reset-page-button button {
@@ -233,23 +277,14 @@ body {
             border-radius: 50px;
             font-weight: bold;
             font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
+            cursor: pointer;            
             position: fixed;
             bottom: 20px;
+            transition: background-color 0.3s ease;
         }
 
         .reset-page-button button:hover {
             background-color: #e24446 !important;
-        }
-
-        #editableActionsInput {
-            width: 100%;
-            height: 40px;
-            border-radius: 5px;
-            padding: 5px;
-            border: 2px solid #333333;
-            font-size: 14px;
         }
     }
 

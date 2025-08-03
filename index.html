@@ -44,31 +44,38 @@
             <button type="button" id="saveBtn" style="display: none;">Save</button>
         </div>
         <div class="edit-sidebar" id="editControls" style="display: none;">
-            <h2>Customize Your Web</h2>
-            <div class="edit-group">
-                <h3>Colors:</h3>
-                <label>Background Color: <input value="#f99ff2" type="color" id="bgColorInput"></label>
-                <label>Second Background Color: <input type="color" id="secondColorInput"></label>
-                <label>Section Color: <input type="color" id="sectionColorInput"></label>
-                <label>Text Color: <input type="color" id="txtColorInput"></label>
-            </div>
-            <div class="edit-map-img">
-                <h3>Map Image:</h3>
-                <label class="updateImage" for="imageInput">Upload a map image</label>
-            </div>
-            <div class="edit-map-url">
-                <!-- <h3>Map URL:</h3>
+            <div class="edit-containers">
+                <h2>Customize Your Web</h2>
+                <div class="edit-group">
+                    <h3>Colors:</h3>
+                    <label>Background Color: <input value="#f99ff2" type="color" id="bgColorInput"></label>
+                    <label>Second Background Color: <input type="color" id="secondColorInput"></label>
+                    <label>Section Color: <input type="color" id="sectionColorInput"></label>
+                    <label>Text Color: <input type="color" id="txtColorInput"></label>
+                </div>
+                <div class="edit-map-img">
+                    <h3>Map Image:</h3>
+                    <label class="updateImage" for="imageInput">Upload a map image</label>
+                </div>
+                <div class="edit-map-url">
+                    <!-- <h3>Map URL:</h3>
                 <input class="mapInput" type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)..."> -->
+                </div>
+                <!-- Edit the actions choices -->
+                <div class="edit-actions-options">
+                    <h3>Action Options:</h3>
+                    <div class="controls">
+                        <input type="text" id="option-input" placeholder="Type new or edit existing action...">
+                        <button type="button" onclick="addOption()" id="addOptionBtn">Add</button>
+                        <button type="button" onclick="editOption()" id="editOptionBtn">Edit</button>
+                        <button type="button" onclick="deleteOption()" id="deleteOptionBtn">Delete</button>
+                    </div>
+                </div>
             </div>
-            <!-- Edit the actions choices -->
-            <div class="edit-img-options">
-                <h3>Action Options:</h3>
-                <input type="text" id="editableActionsInput" placeholder="Enter actions (comma separated)">
-            </div>
+
             <div class="reset-page-button">
                 <button type="button" onClick="onResetButtonClick()">Reset Page</button>
             </div>
-            
         </div>
     </div>
     <div class="main-body row-section">
@@ -112,7 +119,7 @@
                         <p class="actions-text">Actions</p>
                         <div class="actions-box">
                             <input type="text" id="actionsInput_def"
-                                placeholder="Write a customer action. (Ex.Id, Name, Action, Amount...)">
+                                placeholder="Write a customer action. (Ex.ID: Id, Name: Customer , Action, Amount...)">
                             <button type="button" onClick="" id="addActionBtn_def">Add Action</button>
                         </div>
                     </div>
@@ -138,13 +145,13 @@
                     <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
                         draggable="true" title="Drag Me">
 
-                    <div class="customer-action-container">
+                    <div class="customer-action-container" data-edit-mode="false">
                         <label for="customer-actions-choices">Choose an action:</label>
                         <select name="customer-actions-choices" id="customer-actions-choices">
-                            <option value="deposit">Deposit Money</option>
+                            <!-- <option value="deposit">Deposit Money</option>
                             <option value="withdraw">Withdraw Money</option>
                             <option value="transfare">Transfare Funds</option>
-                            <option value="pay">Pay Pills</option>
+                            <option value="pay">Pay Pills</option> -->
                         </select>
 
                         <div class="amount-input-container">
@@ -153,6 +160,14 @@
                                 step="0.01" required>
                             <button type="button" id="addAmountBtn_def">Apply</button>
                         </div>
+
+                        <!-- This is only visible in edit mode -->
+                        <!-- <div class="edit-options-ui" style="display: none; margin-top: 10px;">
+                            <input type="text" class="new-option-label" placeholder="New option label">
+                            <input type="text" class="new-option-value" placeholder="New option value">
+                            <button type="button" class="add-option-btn">Add Option</button>
+                            <button type="button" class="remove-selected-btn">Delete Selected</button>
+                        </div> -->
                     </div>
                 </div>
 

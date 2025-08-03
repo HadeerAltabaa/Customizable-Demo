@@ -679,3 +679,54 @@ window.addEventListener("DOMContentLoaded", () => {
 
     renderMaps()
 })
+
+// function initializeEditableSelects() {
+//   const containers = document.querySelectorAll('.customer-action-container');
+
+//   containers.forEach(container => {
+//     const select = container.querySelector('.customer-actions-choices');
+//     const addBtn = container.querySelector('.add-option-btn');
+//     const removeBtn = container.querySelector('.remove-selected-btn');
+//     const newLabelInput = container.querySelector('.new-option-label');
+//     const newValueInput = container.querySelector('.new-option-value');
+//     const editUI = container.querySelector('.edit-options-ui');
+
+//     // Add new option
+//     addBtn?.addEventListener('click', () => {
+//       const label = newLabelInput.value.trim();
+//       const value = newValueInput.value.trim();
+
+//       if (label && value) {
+//         const newOption = document.createElement('option');
+//         newOption.text = label;
+//         newOption.value = value;
+//         select.add(newOption);
+
+//         newLabelInput.value = '';
+//         newValueInput.value = '';
+//       }
+//     });
+
+//     // Remove selected option
+//     removeBtn?.addEventListener('click', () => {
+//       const selectedIndex = select.selectedIndex;
+//       if (selectedIndex >= 0) {
+//         select.remove(selectedIndex);
+//       }
+//     });
+
+//     // Utility: Set edit mode programmatically
+//     container.setEditMode = function (enabled) {
+//       container.dataset.editMode = enabled;
+//       editUI.style.display = enabled ? 'block' : 'none';
+//     };
+//   });
+// }
+
+// // Initialize the selects on load
+// initializeEditableSelects();
+
+// // Example: Enable edit mode for all containers (you can customize this)
+// document.querySelectorAll('.customer-action-container').forEach(container => {
+//   container.setEditMode(true); // Set to false to hide again
+// });
