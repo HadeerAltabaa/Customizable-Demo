@@ -561,15 +561,19 @@ body.edit-mode-active {
 }
 
 .row-img-section {
-    display: flex;
+    /* display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; */
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
 }
 
 .customer-action-container {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    margin-left: 100%; */
+    float: right;
 
     label {
         font-weight: bold;
@@ -577,15 +581,15 @@ body.edit-mode-active {
     }
 
     #customer-actions-choices {
-        padding: 5px 20px;
+        padding: 10px 20px;
         border: none;
-        border-radius: 20px;
+        border-radius: 12px;
         font-size: 12px;
         color: var(--text-color);
         background-color: var(--bg-color);
         cursor: pointer;
         transition: all 0.3s ease;
-        width: 180px;
+        width: 100%;
     }
 
     #customer-actions-choices:hover,
@@ -604,6 +608,38 @@ body.edit-mode-active {
         border: none;
         border-radius: 20px;
     } */
+
+    .amount-input-container {
+        display: flex;
+        flex-direction: row;
+        margin-top: 10px;
+        align-items: center;
+        width: 100%;
+        background-color: var(--bg-color);
+        padding: 5px;
+        border-radius: 12px;
+
+        #amount_def {
+            flex: 1;
+            border: none;
+            font-size: 12px;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin-left: 10px;
+            padding: 5px 10px;
+        }
+
+        #addAmountBtn_def {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--section-color);
+            color: var(--bg-color);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+    }
 }
 
 .img-section h2,

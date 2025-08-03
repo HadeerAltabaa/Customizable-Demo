@@ -51,13 +51,22 @@ const sectionTemplates = {
                         </div>
                     </div>
 
-                    <div class="comment-container">
+                    <div class="actions-container">
+                        <p class="actions-text">Actions</p>
+                        <div class="actions-box">
+                            <input type="text" id="actionsInput_${uniqueId}"
+                                placeholder="Write a customer action. (Ex.Id, Name, Action, Amount...)">
+                            <button type="button" onClick="" id="addActionBtn_${uniqueId}">Add Action</button>
+                        </div>
+                    </div>
+
+                    <!-- <div class="comment-container">
                         <p class="comment-text">Comment</p>
                         <div class="comment-box">
                             <input type="text" id="commentInput_${uniqueId}" placeholder="Write your comment here...">
                             <button onclick="onAddCommentButtonClicked(this)" type="button" id="addCommentBtn_${uniqueId}">Add</button>
                         </div>
-                    </div>
+                    </div> --> 
                 </div>
             </div>`, id: `docSection_${uniqueId}`
         };

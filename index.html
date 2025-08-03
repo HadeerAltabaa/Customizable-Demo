@@ -109,8 +109,7 @@
                         <div class="actions-box">
                             <input type="text" id="actionsInput_def"
                                 placeholder="Write a customer action. (Ex.Id, Name, Action, Amount...)">
-                            <button type="button" onClick="onAddActionButtonClick()" id="addActionBtn_def">Add
-                                Action</button>
+                            <button type="button" onClick="" id="addActionBtn_def">Add Action</button>
                         </div>
                     </div>
 
@@ -136,13 +135,20 @@
                         draggable="true" title="Drag Me">
 
                     <div class="customer-action-container">
-                        <label for="">Choose an action:</label>
+                        <label for="customer-actions-choices">Choose an action:</label>
                         <select name="customer-actions-choices" id="customer-actions-choices">
                             <option value="deposit">Deposit Money</option>
                             <option value="withdraw">Withdraw Money</option>
                             <option value="transfare">Transfare Funds</option>
                             <option value="pay">Pay Pills</option>
                         </select>
+
+                        <div class="amount-input-container">
+                            <!-- <label for=""></label> -->
+                            <input type="number" name="amount" id="amount_def" placeholder="Amount in SAR" min="0"
+                                step="0.01" required>
+                            <button type="button" id="addAmountBtn_def">Apply</button>
+                        </div>
                     </div>
                 </div>
 
