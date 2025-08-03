@@ -326,8 +326,6 @@ saveBtn.addEventListener('click', () => {
 
     // Save custom sections
     saveCustomSections();
-
-    // Save editable titles (already handled via `input` listeners)
 });
 
 

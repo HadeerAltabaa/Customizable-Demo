@@ -60,9 +60,15 @@
                 <!-- <h3>Map URL:</h3>
                 <input class="mapInput" type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)..."> -->
             </div>
+            <!-- Edit the actions choices -->
+            <div class="edit-img-options">
+                <h3>Action Options:</h3>
+                <input type="text" id="editableActionsInput" placeholder="Enter actions (comma separated)">
+            </div>
             <div class="reset-page-button">
                 <button type="button" onClick="onResetButtonClick()">Reset Page</button>
             </div>
+            
         </div>
     </div>
     <div class="main-body row-section">
@@ -84,9 +90,7 @@
             <div class="files-present-panel" id="filesPresentPanel_def" style="display: none;">
                 <p class="info-text">This is your document</p>
                 <div class="file-preview-layout">
-                    <div class="file-grid" id="fileGrid_def">
-
-                    </div>
+                    <div class="file-grid" id="fileGrid_def"></div>
 
                     <div class="preview-panel" id="preview_def">
                         <!-- Preview content injected via JS -->
@@ -225,6 +229,7 @@
     <script src="script/add-comments.js"></script>
     <script src="script/reset-button.js"></script>
     <script src="script/images.js"></script>
+    <script src="script/editableActions.js"></script>
 </body>
 
 </html>

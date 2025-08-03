@@ -210,7 +210,8 @@ body {
         }
 
         .edit-map-img,
-        .edit-map-url {
+        .edit-map-url,
+        .edit-img-options {
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -241,12 +242,22 @@ body {
         .reset-page-button button:hover {
             background-color: #e24446 !important;
         }
+
+        #editableActionsInput {
+            width: 100%;
+            height: 40px;
+            border-radius: 5px;
+            padding: 5px;
+            border: 2px solid #333333;
+            font-size: 14px;
+        }
     }
 
     #editControls label {
         margin-right: 1em;
     }
 }
+
 
 body.edit-mode-active {
     margin-right: 300px;
