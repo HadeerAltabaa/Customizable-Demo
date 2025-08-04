@@ -71,6 +71,16 @@
                         <button type="button" onclick="deleteOption()" id="deleteOptionBtn">Delete</button>
                     </div>
                 </div>
+                <div class="edit-actions-input">
+                    <h3>Actions Input:</h3>
+                    <div class="edit-actions-config">
+                        <input type="text" id="inputType" placeholder="Enter input type (e.g, text, number)">
+                        <input type="text" id="inputPlaceholder" placeholder="Enter placeholder text">
+                        <button type="button" onclick="addCustomInput()">Add</button>
+                    </div>
+
+                    <div class="sidebar-input-list" id="sidebarInputList"></div>
+                </div>
             </div>
 
             <div class="reset-page-button">
@@ -154,12 +164,14 @@
                             <option value="pay">Pay Pills</option> -->
                         </select>
 
-                        <div class="amount-input-container">
+                        <div class="custom-input-container" id="custom-input-container">
                             <!-- <label for=""></label> -->
-                            <input type="number" name="amount" id="amount_def" placeholder="Amount in SAR" min="0"
+                            <!-- <input type="number" name="amount" id="amount_def" placeholder="Amount in SAR" min="0"
                                 step="0.01" required>
-                            <button type="button" id="addAmountBtn_def">Apply</button>
+                            <button type="button" id="addAmountBtn_def">Apply</button> -->
                         </div>
+
+
 
                         <!-- This is only visible in edit mode -->
                         <!-- <div class="edit-options-ui" style="display: none; margin-top: 10px;">
@@ -245,6 +257,7 @@
     <script src="script/reset-button.js"></script>
     <script src="script/images.js"></script>
     <script src="script/editableActions.js"></script>
+    <script src="script/customInputs.js"></script>
 </body>
 
 </html>

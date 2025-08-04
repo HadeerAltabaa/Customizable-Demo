@@ -192,13 +192,24 @@ body {
         } */
 
         .mapInput,
-        #option-input {
+        #option-input,
+        #inputType {
             width: 100%;
             height: 40px;
             border-radius: 5px;
             padding: 5px 10px;
             border: 2px solid #333333;
             font-size: 14px;
+        }
+
+        #inputPlaceholder {
+            width: 100%;
+            height: 40px;
+            border-radius: 5px;
+            padding: 5px 10px;
+            border: 2px solid #333333;
+            font-size: 14px;
+            margin-top: 4px;
         }
 
         /* label[for="imageInput"] {
@@ -234,11 +245,23 @@ body {
 
         .edit-map-img,
         .edit-map-url,
-        .edit-actions-options {
+        .edit-actions-options,
+        .edit-actions-input {
             display: flex;
             flex-direction: column;
-            gap: 10px;
             margin-top: 20px;
+        }
+
+        .edit-actions-input button {
+            padding: 10px 20px;
+            background-color: var(--section-color);
+            color: var(--bg-color);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
         }
 
         /* #option-input {
@@ -263,9 +286,9 @@ body {
         }
 
         .reset-page-button {
-            display: flex;
+            display: block;
             justify-content: center;
-            margin-top: auto;
+            margin-top: 20px;
         }
 
         .reset-page-button button {
@@ -277,8 +300,7 @@ body {
             border-radius: 50px;
             font-weight: bold;
             font-size: 16px;
-            cursor: pointer;            
-            position: fixed;
+            cursor: pointer;
             bottom: 20px;
             transition: background-color 0.3s ease;
         }
@@ -292,6 +314,41 @@ body {
         margin-right: 1em;
     }
 }
+
+.edit-sidebar::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar-input-list {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.sidebar-input-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f0f0f0;
+    padding: 6px 10px;
+    border-radius: 5px;
+    color: #333333;
+}
+
+.sidebar-input-item button {
+    background-color: crimson;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.sidebar-input-item button:hover {
+    background-color: darkred;
+}
+
 
 
 body.edit-mode-active {
@@ -627,7 +684,7 @@ body.edit-mode-active {
     }
 
     #customer-actions-choices {
-        padding: 10px 20px;
+        padding: 8px 20px;
         border: none;
         border-radius: 12px;
         font-size: 12px;
@@ -655,17 +712,23 @@ body.edit-mode-active {
         border-radius: 20px;
     } */
 
-    .amount-input-container {
+    .custom-input-container {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
         margin-top: 10px;
-        align-items: center;
         width: 100%;
         background-color: var(--bg-color);
         padding: 5px;
         border-radius: 12px;
 
-        #amount_def {
+        .input-wrapper {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            margin-bottom: 5px;
+        }
+
+        input {
             flex: 1;
             border: none;
             font-size: 12px;
@@ -675,7 +738,7 @@ body.edit-mode-active {
             padding: 5px 10px;
         }
 
-        #addAmountBtn_def {
+        button {
             padding: 5px 10px;
             border: none;
             border-radius: 10px;
@@ -684,7 +747,29 @@ body.edit-mode-active {
             cursor: pointer;
             font-size: 12px;
             font-weight: bold;
+            right: 0;
         }
+
+        /* #amount_def {
+            flex: 1;
+            border: none;
+            font-size: 12px;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin-left: 10px;
+            padding: 5px 10px;
+        } */
+
+        /* #addAmountBtn_def {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--section-color);
+            color: var(--bg-color);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        } */
     }
 }
 
