@@ -1,5 +1,6 @@
 const select = document.getElementById('customer-actions-choices');
 const input = document.getElementById('option-input');
+const optionListContainer = document.getElementById('sidebarOptionList');
 const STORAGE_KEY = 'dynamic-select-options';
 
 // Load options from localStorage
@@ -13,12 +14,14 @@ function loadOptions() {
         option.text = text;
         select.appendChild(option);
     });
+    renderOptionList();
 }
 
 // Save options to localStorage
 function saveOptions() {
     const options = Array.from(select.options).map(opt => opt.text);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(options));
+    renderOptionList();
 }
 
 // Add a new option
@@ -53,6 +56,40 @@ function deleteOption() {
         select.remove(index);
         saveOptions(); // Save changes
     }
+}
+
+function renderOptionList() {
+    const options = Array.from(select.options).map(opt => opt.text);
+    optionListContainer.innerHTML = ''; // Clear sidebar list
+
+    options.forEach((text, index) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'sidebar-option-item';
+        // onChange="saveEditedOption(${index})"
+        wrapper.innerHTML = `
+            <input type="text" value="${text}" data-index="${index}" class="sidebar-edit-input">
+            <button onclick="saveEditedOption(${index})">&#x2713</button>
+            <button onclick="deleteSidebarOption(${index})">&#x1F5D1;</button>
+        `;
+        optionListContainer.appendChild(wrapper);
+    });
+}
+
+// ✅ NEW: Save edited option text
+function saveEditedOption(index) {
+    const inputFields = document.querySelectorAll('.sidebar-edit-input');
+    const newValue = inputFields[index].value.trim();
+    if (newValue) {
+        select.options[index].text = newValue;
+        select.options[index].value = newValue.toLowerCase().replace(/\s+/g, '-');
+        saveOptions();
+    }
+}
+
+// ✅ NEW: Delete from sidebar list
+function deleteSidebarOption(index) {
+    select.remove(index);
+    saveOptions();
 }
 
 loadOptions();

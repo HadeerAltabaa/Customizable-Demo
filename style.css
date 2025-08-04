@@ -319,6 +319,30 @@ body {
     display: none;
 }
 
+.sidebar-option-item {
+
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    margin-bottom: 5px;
+
+    input {
+        border: 1px solid #333333;
+        border-radius: 5px;
+        padding: 1px 4px;
+        height: 30px;
+    }
+    button {
+        background-color: #057bc6;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border: none;
+        border-radius: 8px;
+        font-size: 20px;
+    }
+}
+
 .sidebar-input-list {
     margin-top: 10px;
     display: flex;
