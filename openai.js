@@ -1,8 +1,8 @@
 // openai.js
 async function getChartInstructionFromOpenAI(sheetData) {
-    const apiKey = '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';
+    const apiKey = 'Here you should add api key';
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    const response = await fetch("Link", {
         method: "POST",
         headers: {
             "Authorization": `Bearer ${apiKey}`,
