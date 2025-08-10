@@ -17,6 +17,8 @@ body {
     margin: 0;
     background-color: var(--sec-bg-color);
     color: var(--text-color);
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 /* Header styles */
@@ -403,7 +405,7 @@ body.edit-mode-active {
     /* Document section styles */
     .doc-section {
         padding: 10px 20px;
-        flex: 0 0 100%;
+        max-width: 100%;
 
         /* Take full width */
         /* margin-bottom: 15px; */
@@ -418,6 +420,7 @@ body.edit-mode-active {
             color: white;
             border-radius: 12px;
             padding: 10px;
+            
             /* margin-bottom: 10px; */
         }
 
