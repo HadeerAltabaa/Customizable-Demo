@@ -69,9 +69,9 @@
 window.onload = function () {
     const savedInputs = JSON.parse(localStorage.getItem('customInputs')) || [];
 
-    const defaultInput = { type: 'number', placeholder: 'Amount in SAR' };
+    const defaultInput = { type: 'number', placeholder: 'Amount in SAR', name: 'Amount' };
     const hasDefault = savedInputs.some(
-        input => input.type === defaultInput.type && input.placeholder === defaultInput.placeholder
+        input => input.type === defaultInput.type && input.placeholder === defaultInput.placeholder && input.name === defaultInput.name
     );
 
     if (!hasDefault) {
@@ -80,47 +80,49 @@ window.onload = function () {
     }
 
     savedInputs.forEach(input => {
-        createMainInput(input.type, input.placeholder);
-        createSidebarItem(input.type, input.placeholder);
+        createMainInput(input.type, input.placeholder, input.name);
+        createSidebarItem(input.type, input.placeholder, input.name);
     });
 };
 
 function addCustomInput() {
     const type = document.getElementById('inputType').value.trim() || 'text';
+    const name = document.getElementById('inputName').value.trim() || '';
     const placeholder = document.getElementById('inputPlaceholder').value.trim() || '';
 
-    const exists = checkInputExists(type, placeholder);
+    const exists = checkInputExists(type, name, placeholder);
     if (exists) return;
 
-    saveToLocalStorage(type, placeholder);
-    createMainInput(type, placeholder);
-    createSidebarItem(type, placeholder);
+    saveToLocalStorage(type, name, placeholder);
+    createMainInput(type, name, placeholder);
+    createSidebarItem(type, name, placeholder);
 }
 
-function checkInputExists(type, placeholder) {
+function checkInputExists(type, name, placeholder) {
     const inputs = JSON.parse(localStorage.getItem('customInputs')) || [];
-    return inputs.some(input => input.type === type && input.placeholder === placeholder);
+    return inputs.some(input => input.type === type && input.placeholder === placeholder && input.name === name);
 }
 
-function saveToLocalStorage(type, placeholder) {
+function saveToLocalStorage(type, name, placeholder) {
     const inputs = JSON.parse(localStorage.getItem('customInputs')) || [];
-    inputs.push({ type, placeholder });
+    inputs.push({ type, name, placeholder });
     localStorage.setItem('customInputs', JSON.stringify(inputs));
 }
 
-function removeFromLocalStorage(type, placeholder) {
+function removeFromLocalStorage(type, name, placeholder) {
     let inputs = JSON.parse(localStorage.getItem('customInputs')) || [];
-    inputs = inputs.filter(input => input.type !== type || input.placeholder !== placeholder);
+    inputs = inputs.filter(input => input.type !== type || input.placeholder !== placeholder || input.name !== name);
     localStorage.setItem('customInputs', JSON.stringify(inputs));
 }
 
-function createMainInput(type, placeholder) {
+function createMainInput(type, name, placeholder) {
     const wrapper = document.createElement('div');
     wrapper.className = 'input-wrapper';
 
     const input = document.createElement('input');
     input.className = "action-input";
     input.type = type;
+    input.name = name;
     input.placeholder = placeholder;
     input.min = '0';
     input.step = '0.01';
@@ -139,31 +141,32 @@ function createMainInput(type, placeholder) {
     document.getElementById('custom-input-container').appendChild(applyBtn);
 }
 
-function createSidebarItem(type, placeholder) {
+function createSidebarItem(type, name, placeholder) {
     const sidebarList = document.getElementById('sidebarInputList');
 
     const item = document.createElement('div');
     item.className = 'sidebar-input-item';
     item.dataset.type = type;
+    item.dataset.name = name;
     item.dataset.placeholder = placeholder;
 
     item.innerHTML = `
         <span>${type}: ${placeholder}</span>
-        <button onclick="deleteInput('${type}', '${placeholder}')">&times;</button>
+        <button onclick="deleteInput('${type}', '${name}', '${placeholder}')">&times;</button>
     `;
 
     sidebarList.appendChild(item);
 }
 
-function deleteInput(type, placeholder) {
+function deleteInput(type, name, placeholder) {
     // Remove from localStorage
-    removeFromLocalStorage(type, placeholder);
+    removeFromLocalStorage(type, name, placeholder);
 
     // Remove from main input container
     const mainInputs = document.querySelectorAll('#custom-input-container .input-wrapper');
     mainInputs.forEach(wrapper => {
         const input = wrapper.querySelector('input');
-        if (input && input.type === type && input.placeholder === placeholder) {
+        if (input && input.type === type && input.placeholder === placeholder && input.name === name) {
             wrapper.remove();
         }
     });
@@ -171,7 +174,7 @@ function deleteInput(type, placeholder) {
     // Remove from sidebar
     const sidebarItems = document.querySelectorAll('#sidebarInputList .sidebar-input-item');
     sidebarItems.forEach(item => {
-        if (item.dataset.type === type && item.dataset.placeholder === placeholder) {
+        if (item.dataset.type === type && item.dataset.placeholder === placeholder && item.dataset.name === name) {
             item.remove();
         }
     });
