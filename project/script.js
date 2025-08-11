@@ -8,6 +8,58 @@ const addSectionContainer = document.getElementById('addSectionContainer');
 let editMode = false;
 
 const sectionTemplates = {
+    "area-img-section": {
+        html: `
+        <div class="img-section" id="imgSection">
+            <div class="section-header">
+                <h2 id="editableImage" contenteditable="true">Customer Location</h2>
+            </div>
+            <div class="img-preview">
+                <div class="row-img-section">
+                    <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
+                        draggable="true" title="Drag Me">
+
+                    <div class="customer-action-container" data-edit-mode="false">
+                        <label for="customer-actions-choices">Choose an action:</label>
+                        <select name="customer-actions-choices" id="customer-actions-choices">
+                            <!-- <option value="deposit">Deposit Money</option>
+                            <option value="withdraw">Withdraw Money</option>
+                            <option value="transfare">Transfare Funds</option>
+                            <option value="pay">Pay Pills</option> -->
+                        </select>
+
+                        <div class="custom-input-container" id="custom-input-container">
+                            <!-- <label for=""></label> -->
+                            <!-- <input type="number" name="amount" id="amount_def" placeholder="Amount in SAR" min="0"
+                                step="0.01" required>
+                            <button type="button" id="addAmountBtn_def">Apply</button> -->
+                        </div>
+
+
+
+                        <!-- This is only visible in edit mode -->
+                        <!-- <div class="edit-options-ui" style="display: none; margin-top: 10px;">
+                            <input type="text" class="new-option-label" placeholder="New option label">
+                            <input type="text" class="new-option-value" placeholder="New option value">
+                            <button type="button" class="add-option-btn">Add Option</button>
+                            <button type="button" class="remove-selected-btn">Delete Selected</button>
+                        </div> -->
+                    </div>
+                </div>
+
+                <div class="image-wrapper" id="dropArea">
+                    <button type="button" id="downloadImageBtn" title="Download Image">
+                        <i class="fa-solid fa-circle-down"></i>
+                    </button>
+                    <img src="images/map.png" id="previewImage" alt="Preview Image">
+                    <canvas id="imageCanvas"></canvas>
+                </div>
+                <input type="file" id="imageInput" accept="image/*">
+            </div>
+        </div>
+        `,
+        id: "img-section"
+    },
     "doc-section": () => {
         // Generate a unique ID for the section
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);
@@ -158,8 +210,12 @@ const sectionTemplates = {
 
 document.querySelectorAll('#sectionOptions button').forEach(btn => {
     btn.addEventListener('click', () => {
-        const section = document.createElement("div")
-        const type = btn.dataset.type;
+        createCustomSection(btn.dataset.type)
+    });
+});
+
+function createCustomSection(type) {
+    const section = document.createElement("div")
         const { html, id } = sectionTemplates[type]();
         if (!html) return;
         section.id = id
@@ -181,11 +237,11 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
                 delBtn.style.marginRight = '5px';
                 delBtn.style.cursor = 'pointer';
                 delBtn.addEventListener('click', (e) => {
-                    let customSections = JSON.parse(localStorage.getItem("customSections"))
+                    let customSections = JSON.parse(localStorage.getItem(`${projectID}-customSections`))
 
                     if (customSections[section.id]) {
                         delete customSections[section.id]
-                        localStorage.setItem("customSections", JSON.stringify(customSections))
+                        localStorage.setItem(`${projectID}-customSections`, JSON.stringify(customSections))
                     }
 
                     document.querySelector(`li#nav-${section.id}`)?.remove();
@@ -199,8 +255,9 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
         saveCustomSections();
         //enterEditMode()
         // attachDeleteLogic();
-    });
-});
+}
+
+
 
 /* editBtn.addEventListener('click', () => {
     editMode = !editMode;
@@ -266,11 +323,11 @@ function enterEditMode() {
                 delBtn.style.marginRight = '5px';
                 delBtn.style.cursor = 'pointer';
                 delBtn.addEventListener('click', (e) => {
-                    let customSections = JSON.parse(localStorage.getItem("customSections") || "{}")
+                    let customSections = JSON.parse(localStorage.getItem(`${projectID}-customSections`) || "{}")
 
                     if (customSections[section.parentElement.id]) {
                         delete customSections[section.parentElement.id]
-                        localStorage.setItem("customSections", JSON.stringify(customSections))
+                        localStorage.setItem(`${projectID}-customSections`, JSON.stringify(customSections))
                     }
 
                     document.querySelector(`li#nav-${section.parentElement.id}`)?.remove();
@@ -337,12 +394,12 @@ const txtColorInput = document.getElementById('txtColorInput');
 function setColor(key, cssVar, value) {
     const color = value;
     document.documentElement.style.setProperty(cssVar, color);
-    localStorage.setItem(key, color);
+    localStorage.setItem(`${projectID}-${key}`, color);
 }
 
 function getColor(key, cssVar) {
-    if (localStorage.getItem(key)) {
-        let color = localStorage.getItem(key)
+    if (localStorage.getItem(`${projectID}-${key}`)) {
+        let color = localStorage.getItem(`${projectID}-${key}`)
         return color
     }
 
@@ -382,11 +439,11 @@ function saveCustomSections() {
         sections[section.id] = section.outerHTML
     })
 
-    localStorage.setItem('customSections', JSON.stringify(sections));
+    localStorage.setItem(`${projectID}-customSections`, JSON.stringify(sections));
 }
 
 function loadCustomSections() {
-    const sectionData = JSON.parse(localStorage.getItem('customSections') || '{}');
+    const sectionData = JSON.parse(localStorage.getItem(`${projectID}-customSections`) || '{}');
     const mainBody = document.querySelector('.main-body');
 
     for (let id in sectionData) {
@@ -411,7 +468,7 @@ function applyStoredColors() {
     };
 
     for (const key in colors) {
-        const savedColor = localStorage.getItem(key);
+        const savedColor = localStorage.getItem(`${projectID}-${key}`);
         if (savedColor) {
             document.documentElement.style.setProperty(colors[key], savedColor);
             const inputId = {
@@ -432,14 +489,14 @@ editableTitles.forEach((el) => {
     const key = 'tempTitle_' + el.id;
 
     // Load saved title (if any)
-    const saved = localStorage.getItem(key);
+    const saved = localStorage.getItem(`${projectID}-${key}`);
     if (saved) {
         el.textContent = saved;
     }
 
     // Save on edit
     el.addEventListener('input', () => {
-        localStorage.setItem(key, el.textContent.trim());
+        localStorage.setItem(`${projectID}-${key}`, el.textContent.trim());
     });
 });
 
@@ -448,7 +505,7 @@ async function generateChartFromExcel(file) {
     const graphCanvas = document.getElementById("generatedChart");
     const context = graphCanvas.getContext("2d");
     const chartKey = `chart_${file.name}`;
-    const storedChart = localStorage.getItem(chartKey);
+    const storedChart = localStorage.getItem(`${projectID}-${chartKey}`);
 
     if (storedChart) {
         const config = JSON.parse(storedChart);
@@ -464,7 +521,7 @@ async function generateChartFromExcel(file) {
     const chartConfig = await getChartInstructionFromOpenAI(plainText);
 
     if (chartConfig) {
-        localStorage.setItem(chartKey, JSON.stringify(chartConfig));
+        localStorage.setItem(`${projectID}-${chartKey}`, JSON.stringify(chartConfig));
         renderChart(context, chartConfig);
     } else {
         context.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
@@ -596,7 +653,7 @@ imageInput.onchange = function () {
     reader.onload = function (e) {
         const base64Image = e.target.result;
         previewImage.src = base64Image;
-        localStorage.setItem('previewImage', base64Image);
+        localStorage.setItem(`${projectID}-previewImage`, base64Image);
     };
     reader.readAsDataURL(file);
 }

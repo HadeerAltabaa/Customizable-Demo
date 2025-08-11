@@ -67,7 +67,7 @@
 // }
 
 window.onload = function () {
-    const savedInputs = JSON.parse(localStorage.getItem('customInputs')) || [];
+    const savedInputs = JSON.parse(localStorage.getItem(`${projectID}-customInputs`)) || [];
 
     const defaultInput = { type: 'number', placeholder: 'Amount in SAR', name: 'Amount' };
     const hasDefault = savedInputs.some(
@@ -76,7 +76,7 @@ window.onload = function () {
 
     if (!hasDefault) {
         savedInputs.unshift(defaultInput);
-        localStorage.setItem('customInputs', JSON.stringify(savedInputs));
+        localStorage.setItem(`${projectID}-customInputs`, JSON.stringify(savedInputs));
     }
 
     savedInputs.forEach(input => {
@@ -99,20 +99,20 @@ function addCustomInput() {
 }
 
 function checkInputExists(type, name, placeholder) {
-    const inputs = JSON.parse(localStorage.getItem('customInputs')) || [];
+    const inputs = JSON.parse(localStorage.getItem(`${projectID}-customInputs`)) || [];
     return inputs.some(input => input.type === type && input.placeholder === placeholder && input.name === name);
 }
 
 function saveToLocalStorage(type, name, placeholder) {
-    const inputs = JSON.parse(localStorage.getItem('customInputs')) || [];
+    const inputs = JSON.parse(localStorage.getItem(`${projectID}-customInputs`)) || [];
     inputs.push({ type, name, placeholder });
-    localStorage.setItem('customInputs', JSON.stringify(inputs));
+    localStorage.setItem(`${projectID}-customInputs`, JSON.stringify(inputs));
 }
 
 function removeFromLocalStorage(type, name, placeholder) {
-    let inputs = JSON.parse(localStorage.getItem('customInputs')) || [];
+    let inputs = JSON.parse(localStorage.getItem(`${projectID}-customInputs`)) || [];
     inputs = inputs.filter(input => input.type !== type || input.placeholder !== placeholder || input.name !== name);
-    localStorage.setItem('customInputs', JSON.stringify(inputs));
+    localStorage.setItem(`${projectID}-customInputs`, JSON.stringify(inputs));
 }
 
 function createInput(type, name, placeholder) {

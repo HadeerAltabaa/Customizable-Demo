@@ -26,7 +26,7 @@ function sendMockData(id) {
 }
 
 async function sendAPIRequest(id, data) {
-    let allFiles = JSON.parse(localStorage.getItem("allFiles")) || {};
+    let allFiles = JSON.parse(localStorage.getItem(`${projectID}-allFiles`)) || {};
     const fileData = allFiles[id];
     
     // if (!fileData) return;

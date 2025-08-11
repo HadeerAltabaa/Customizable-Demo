@@ -14,7 +14,7 @@ function handleFileUpload(input, sectionId) {
     if (!file) return;
 
     // Retrieve previous files or initialize empty object
-    let allFiles = JSON.parse(localStorage.getItem("allFiles") || "{}");
+    let allFiles = JSON.parse(localStorage.getItem(`${projectID}-allFiles`) || "{}");
 
     const fileId = `file_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`;
     const fileExt = file.name.split('.').pop().toLowerCase();
@@ -51,7 +51,7 @@ function handleFileUpload(input, sectionId) {
 
             // Save to "allFiles" list
             allFiles[sectionId] = storedFile;
-            localStorage.setItem("allFiles", JSON.stringify(allFiles));
+            localStorage.setItem(`${projectID}-allFiles`, JSON.stringify(allFiles));
 
             // Update UI
             renderFileGrid(sectionId);

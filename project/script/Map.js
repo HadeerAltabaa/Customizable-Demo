@@ -1,7 +1,7 @@
 // script/image.js
 // Save the uploaded image to the local storage
 window.addEventListener('DOMContentLoaded', () => {
-    const storedImage = localStorage.getItem('previewImage');
+    const storedImage = localStorage.getItem(`${projectID}-previewImage`);
     if (storedImage) {
         previewImage.src = storedImage;
     }
@@ -89,4 +89,58 @@ function drawImageAt(x, y) {
 
     // Draw centered at click location
     ctx.drawImage(humanImage, x - scaledWidth / 2, y - scaledHeight / 2, scaledWidth, scaledHeight);
+}
+
+let isDrawing = false
+let startX = 0
+let startY = 0
+let currentX = 0
+let currentY = 0
+
+function getCanvasCoords(e) {
+    const rect = canvas.getBoundingClientRect();
+    // map from client coords to canvas internal pixels (handles CSS scaling / DPR)
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+    };
+}
+
+canvas.addEventListener("mousedown", (e) => {
+    isDrawing = false;
+    const pos = getCanvasCoords(e);
+    startX = pos.x;
+    startY = pos.y;
+});
+
+// attach move/up to window so dragging outside the canvas still works
+window.addEventListener("mousemove", (e) => {
+    if (!isDrawing) return;
+    const pos = getCanvasCoords(e);
+    currentX = pos.x;
+    currentY = pos.y;
+    drawAreaBox(ctx, startX, startY, currentX, currentY);
+});
+
+window.addEventListener("mouseup", (e) => {
+    if (!isDrawing) return;
+    isDrawing = false;
+    // final draw (already done in mousemove) — if you want to persist the box,
+    // push it into an array here before clearing on next draw.
+});
+
+function drawAreaBox(ctx, x1, y1, x2, y2) {
+    // clear the whole canvas (use canvas.width/height - that's internal pixel size)
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
+    const x = Math.min(x1, x2);
+    const y = Math.min(y1, y2);
+    const w = Math.abs(x2 - x1);
+    const h = Math.abs(y2 - y1);
+
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(x, y, w, h);
 }

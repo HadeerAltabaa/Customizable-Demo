@@ -5,7 +5,7 @@ const STORAGE_KEY = 'dynamic-select-options';
 
 // Load options from localStorage
 function loadOptions() {
-    const stored = localStorage.getItem(STORAGE_KEY);
+    const stored = localStorage.getItem(`${projectID}-${STORAGE_KEY}`);
     const options = stored ? JSON.parse(stored) : ["Deposit Money", "Withdraw Money", "Transfer Funds", "Pay Bills"];
     select.innerHTML = ''; // Clear existing options
     options.forEach(text => {
@@ -20,7 +20,7 @@ function loadOptions() {
 // Save options to localStorage
 function saveOptions() {
     const options = Array.from(select.options).map(opt => opt.text);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(options));
+    localStorage.setItem(`${projectID}-${STORAGE_KEY}`, JSON.stringify(options));
     renderOptionList();
 }
 

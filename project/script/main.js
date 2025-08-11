@@ -30,6 +30,10 @@ let mockDataDefualtInputs = [
     }
 ]
 
+const projectID = localStorage.getItem("currentProject")
+
+if(!projectID) window.location = `${window.location.protocol}//${window.location.host}/`
+
 document.addEventListener('mousemove', (event) => {
     mouseX = event.clientX;
     mouseY = event.clientY;
