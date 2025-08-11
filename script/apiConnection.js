@@ -32,7 +32,6 @@ async function sendAPIRequest(id, data) {
     // if (!fileData) return;
     // if (area == 0) return alert("Please selecte an area before sending an API Request")
 
-    console.table(data)
 
     if(!data) return
     
