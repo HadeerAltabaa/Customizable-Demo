@@ -53,10 +53,8 @@ const sectionTemplates = {
 
                     <div class="actions-container">
                         <p class="actions-text">Actions</p>
-                        <div class="actions-box">
-                            <input type="text" id="actionsInput_${uniqueId}"
-                                placeholder="Write a customer action. (Ex.Id, Name, Action, Amount...)">
-                            <button type="button" onClick="" id="addActionBtn_${uniqueId}">Add Action</button>
+                        <div id="action-box-${uniqueId}" class="actions-box">
+                            
                         </div>
                     </div>
 

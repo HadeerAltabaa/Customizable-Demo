@@ -80,7 +80,7 @@ window.onload = function () {
     }
 
     savedInputs.forEach(input => {
-        createMainInput(input.type, input.placeholder, input.name);
+        createInput(input.type, input.placeholder, input.name);
         createSidebarItem(input.type, input.placeholder, input.name);
     });
 };
@@ -94,7 +94,7 @@ function addCustomInput() {
     if (exists) return;
 
     saveToLocalStorage(type, name, placeholder);
-    createMainInput(type, name, placeholder);
+    createInput(type, name, placeholder);
     createSidebarItem(type, name, placeholder);
 }
 
@@ -115,7 +115,7 @@ function removeFromLocalStorage(type, name, placeholder) {
     localStorage.setItem('customInputs', JSON.stringify(inputs));
 }
 
-function createMainInput(type, name, placeholder) {
+function createInput(type, name, placeholder) {
     const wrapper = document.createElement('div');
     wrapper.className = 'input-wrapper';
 

@@ -1,5 +1,11 @@
-function onResetButtonClick() {
+function onResetButtonClickReload() {
+    onResetButtonClick()
+    window.location.reload()
+}
 
+
+function onResetButtonClick() {
+    localStorage.clear();
     // Color Reset
     const bgColorInput = document.getElementById('bgColorInput');
     const secondColorInput = document.getElementById('secondColorInput');
@@ -23,8 +29,10 @@ function onResetButtonClick() {
     setColor("sectionColor", "--section-color", baseColors.section)
     setColor("textColor", "--text-color", baseColors.text)
 
-    localStorage.clear();
+    // const defaultInput = { type: 'number', placeholder: 'Amount in SAR', name: 'Amount' };
 
-    window.location.reload()
+    // saveToLocalStorage(defaultInput.type, defaultInput.name, defaultInput.placeholder);
+    // createInput(defaultInput.type, defaultInput.name, defaultInput.placeholder)
+    // createSidebarItem(defaultInput.type, defaultInput.name, defaultInput.placeholder);
 
 }

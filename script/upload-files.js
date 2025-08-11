@@ -111,7 +111,7 @@ function previewExcelFile(fileId, sectionId) {
     const sheetName = fileObj.workbook.SheetNames[0];
     const worksheet = fileObj.workbook.Sheets[sheetName];
     // limit the number of rows to 10 rows
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })/*.slice(0, 11)*/;
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }).slice(0, 11);
     const maxCols = Math.max(...jsonData.map(row => row.length));
 
     const normalizedData = jsonData.map(row => {
@@ -129,18 +129,39 @@ function previewExcelFile(fileId, sectionId) {
     const commentList = document.getElementById(`commentList_${sectionId}`);
 
     let htmlTable = `<table class="excel-table" border="1" cellspacing="0" cellpadding="12">`;
+
+    // Assuming normalizedData[0] contains column headers (for name attribute)
+    const headers = normalizedData[0] || [];
+
     normalizedData.forEach((row, rowIndex) => {
         htmlTable += `<tr style="background-color: ${rowIndex % 2 === 0 ? '#f0f0f0' : '#ffffff'};">`;
-        (row || []).forEach(cell => {
+
+        if (rowIndex > 0) {
+            // Add button as the first cell in the row (for data rows)
+            htmlTable += `<td><button onclick="sendRowData('${sectionId}', ${rowIndex})">Send Row</button></td>`;
+        } else {
+            // For header row, add an empty header cell for the button column
+            htmlTable += `<th>Send Data</th>`;
+        }
+
+        (row || []).forEach((cell, colIndex) => {
             const cellTag = rowIndex === 0 ? 'th' : 'td';
             const content = (cell !== undefined && cell !== null && cell !== '') ? cell : '---';
-            htmlTable += `<${cellTag} contenteditable="false" style="padding: 2px 4px; font-size: 14px;">${content}</${cellTag}>`;
+
+            if (rowIndex > 0) {
+                const colName = headers[colIndex] || `col${colIndex}`;
+                htmlTable += `<${cellTag} contenteditable="false" class="cell_${rowIndex}" name="${colName}" style="padding: 2px 4px; font-size: 14px;">${content}</${cellTag}>`;
+            } else {
+                htmlTable += `<${cellTag} contenteditable="false" style="padding: 2px 4px; font-size: 14px;">${content}</${cellTag}>`;
+            }
         });
+
         htmlTable += `</tr>`;
     });
+
     htmlTable += `</table>`;
 
-    preview.innerHTML = `<h3 style="padding-bottom: 10px">${fileObj.file.name}</h3>` + htmlTable;
+    preview.innerHTML = `<h3 style="padding-bottom: 10px">${fileObj.file.name.split(".")[0]}</h3>` + htmlTable;
 
 
     preview.appendChild(commentsTitle);

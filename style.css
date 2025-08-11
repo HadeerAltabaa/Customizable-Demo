@@ -616,6 +616,7 @@ body.edit-mode-active {
     border: none;
     border-radius: 10px;
     padding: 10px;
+    outline: none;
 }
 
 .delete-comment-btn {
@@ -635,6 +636,7 @@ body.edit-mode-active {
 
 /* .comment-box button, */
 .actions-box button {
+    flex: 0 0 100%;
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
