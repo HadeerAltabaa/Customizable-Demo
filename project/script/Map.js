@@ -15,6 +15,27 @@ function GetArea(x, y) {
     const relativeX = x - rect.left;
     const relativeY = y - rect.top;
 
+
+    const areas = JSON.parse(localStorage.getItem(`${projectID}-areas`)) || []
+    let isInArea = false
+
+    areas.forEach(_area => {
+        // Normalize box coordinates to handle any order of points
+        const left = Math.min(_area.x1, _area.x2);
+        const right = Math.max(_area.x1, _area.x2);
+        const top = Math.min(_area.y1, _area.y2);
+        const bottom = Math.max(_area.y1, _area.y2);
+
+        if (relativeX >= left && relativeX <= right && relativeY >= top && relativeY <= bottom) {
+            area = _area.title
+            isInArea = true
+        }
+    });
+
+    if(isInArea)
+        return area
+
+
     let isTop = relativeY < rect.height / 2;
     let isLeft = relativeX < rect.width / 2;
     let isBottom = !isTop;
@@ -32,6 +53,8 @@ function GetArea(x, y) {
     //     isBottom,
     //     isRight
     // })
+
+    return area
 }
 
 const draggedHuman = document.getElementById('draggedHuman');
@@ -89,58 +112,179 @@ function drawImageAt(x, y) {
 
     // Draw centered at click location
     ctx.drawImage(humanImage, x - scaledWidth / 2, y - scaledHeight / 2, scaledWidth, scaledHeight);
+    loadAreaBoxes()
 }
 
-let isDrawing = false
-let startX = 0
-let startY = 0
-let currentX = 0
-let currentY = 0
-
-function getCanvasCoords(e) {
-    const rect = canvas.getBoundingClientRect();
-    // map from client coords to canvas internal pixels (handles CSS scaling / DPR)
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    return {
-        x: (e.clientX - rect.left) * scaleX,
-        y: (e.clientY - rect.top) * scaleY
-    };
-}
+let isDrawing = false;
+let startX = 0;
+let startY = 0;
+let currentX = 0;
+let currentY = 0;
 
 canvas.addEventListener("mousedown", (e) => {
-    isDrawing = false;
-    const pos = getCanvasCoords(e);
-    startX = pos.x;
-    startY = pos.y;
+    if(editMode) isDrawing = true;
+    const rect = canvas.getBoundingClientRect();
+    startX = e.clientX - rect.left;
+    startY = e.clientY - rect.top;
 });
 
-// attach move/up to window so dragging outside the canvas still works
-window.addEventListener("mousemove", (e) => {
+canvas.addEventListener("mousemove", (e) => {
     if (!isDrawing) return;
-    const pos = getCanvasCoords(e);
-    currentX = pos.x;
-    currentY = pos.y;
-    drawAreaBox(ctx, startX, startY, currentX, currentY);
+    if(!editMode) isDrawing = false
+
+    const rect = canvas.getBoundingClientRect();
+    currentX = e.clientX - rect.left;
+    currentY = e.clientY - rect.top;
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
+    loadAreaBoxes()
+    drawAreaBox("#000000", "", ctx, startX, startY, currentX, currentY);
 });
 
-window.addEventListener("mouseup", (e) => {
-    if (!isDrawing) return;
+canvas.addEventListener("mouseup", () => {
+    if(!editMode) return
     isDrawing = false;
-    // final draw (already done in mousemove) — if you want to persist the box,
-    // push it into an array here before clearing on next draw.
+    showAreaPopup(({ title, color }) => {
+        saveAreaBox(title, color, startX, startY, currentX, currentY)
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
+        loadAreaBoxes()
+    }, () => {
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
+        loadAreaBoxes()
+    })
 });
 
-function drawAreaBox(ctx, x1, y1, x2, y2) {
-    // clear the whole canvas (use canvas.width/height - that's internal pixel size)
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-
+function drawAreaBox(color, title, ctx, x1, y1, x2, y2) {
     const x = Math.min(x1, x2);
     const y = Math.min(y1, y2);
     const w = Math.abs(x2 - x1);
     const h = Math.abs(y2 - y1);
 
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 1;
+    // Fill with 30% opacity
+    console.log(color)
+    ctx.fillStyle = hexToRgba(color, 0.3);
+    ctx.fillRect(x, y, w, h);
+
+    // Stroke outline
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
     ctx.strokeRect(x, y, w, h);
+
+    if (title) {
+        ctx.fillStyle = color;
+        ctx.font = '16px sans-serif';
+        ctx.textBaseline = 'bottom';  // Align text baseline to bottom for placement above box
+        ctx.fillText(title, x, y - 5); // 5px above the box top-left corner
+    }
 }
+
+// Helper function to convert hex color to rgba with alpha
+function hexToRgba(hex, alpha) {
+    // Remove '#' if present
+    hex = hex.replace('#', '');
+
+    // Parse r,g,b
+    let r, g, b;
+    if (hex.length === 3) {
+        r = parseInt(hex[0] + hex[0], 16);
+        g = parseInt(hex[1] + hex[1], 16);
+        b = parseInt(hex[2] + hex[2], 16);
+    } else if (hex.length === 6) {
+        r = parseInt(hex.slice(0,2), 16);
+        g = parseInt(hex.slice(2,4), 16);
+        b = parseInt(hex.slice(4,6), 16);
+    } else {
+        // fallback to black
+        r = g = b = 0;
+    }
+
+    return `rgba(${r},${g},${b},${alpha})`;
+}
+
+
+function saveAreaBox(title, color, x1, y1, x2, y2) {
+    const areaBoxes = JSON.parse(localStorage.getItem(`${projectID}-areas`)) || []
+
+    areaBoxes.push({
+        title,
+        color,
+        x1,
+        y1,
+        x2,
+        y2,
+    })
+
+    localStorage.setItem(`${projectID}-areas`, JSON.stringify(areaBoxes))
+}
+
+function loadAreaBoxes() {
+    let areaBoxes = JSON.parse(localStorage.getItem(`${projectID}-areas`)) || []
+    const sidebarAreaList = document.getElementById('sidebarAreaList');
+
+    
+    areaBoxes.forEach(area => {
+        drawAreaBox(area.color, area.title, ctx, area.x1, area.y1, area.x2, area.y2);
+        const item = document.createElement('div');
+        item.className = 'sidebar-input-item';
+
+        deleteArea = (areaTitle) => {
+            areaBoxes = areaBoxes.filter((area) => area.title != areaTitle)
+            localStorage.setItem(`${projectID}-areas`, JSON.stringify(areaBoxes))
+            item.remove()
+            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
+            loadAreaBoxes()
+        }
+    
+        item.innerHTML = `
+            <span>${area.title}</span>
+            <button onclick="deleteArea('${area.title}')">&times;</button>
+        `;
+    
+        sidebarAreaList.appendChild(item);
+    });
+}
+
+function showAreaPopup(onConfirm, onCancel) {
+    // Remove existing popup if any
+    const existing = document.getElementById("area-popup");
+    if (existing) existing.remove();
+
+    // Create popup container
+    const popup = document.createElement("div");
+    popup.id = "area-popup";
+
+    popup.innerHTML = `
+        <div>
+            <h2>Create Area</h2>
+            <label>Title</label>
+            <input type="text" id="area-title" placeholder="Enter title">
+            <label>Color</label>
+            <input type="color" id="area-color">
+            <div class="buttons">
+            <button id="cancel-btn">Cancel</button>
+            <button id="confirm-btn">Confirm</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    // Event listeners
+    document.getElementById("cancel-btn").addEventListener("click", () => {
+        onCancel()
+        popup.remove();
+    });
+
+    document.getElementById("confirm-btn").addEventListener("click", () => {
+        const title = document.getElementById("area-title").value.trim();
+        const color = document.getElementById("area-color").value;
+        if (!title) {
+            alert("Please enter a title");
+            return;
+        }
+        onConfirm({ title, color });
+        popup.remove();
+    });
+}
+
+loadAreaBoxes()

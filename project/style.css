@@ -361,19 +361,20 @@ body {
     padding: 6px 10px;
     border-radius: 5px;
     color: #333333;
+    margin: 5px;
 }
 
 .sidebar-input-item button {
-    background-color: crimson;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
-    cursor: pointer;
+    background-color: crimson !important;
+    color: white !important;
+    border: none !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    cursor: pointer !important;
 }
 
 .sidebar-input-item button:hover {
-    background-color: darkred;
+    background-color: darkred !important;
 }
 
 
@@ -949,7 +950,7 @@ input[type=number] {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1000;
+    z-index: 5;
 }
 
 #downloadGraphBtn {
@@ -1180,4 +1181,93 @@ iframe {
   white-space: nowrap;
   width: 1%;
   padding: 10px;
+}
+
+#area-popup {
+  position: fixed;
+  inset: 0; /* top:0; right:0; bottom:0; left:0; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999999;
+}
+
+#area-popup > div {
+  background-color: white;
+  padding: 1.5rem; /* 24px */
+  border-radius: 0.5rem; /* 8px */
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1),
+              0 4px 6px rgba(0, 0, 0, 0.05);
+  width: 20rem; /* 80 * 0.25rem */
+}
+
+#area-popup h2 {
+  font-size: 1.25rem; /* text-xl */
+  font-weight: 700;
+  margin-bottom: 1rem; /* 16px */
+}
+
+#area-popup label {
+  display: block;
+  margin-bottom: 0.5rem; /* 8px */
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500;
+}
+
+#area-popup input[type="text"] {
+  width: 100%;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.375rem; /* 6px */
+  padding: 0.5rem; /* 8px */
+  margin-bottom: 1rem; /* 16px */
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#area-popup input[type="text"]:focus {
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
+}
+
+#area-popup input[type="color"] {
+  width: 100%;
+  height: 2.5rem; /* 40px */
+  padding: 0.25rem; /* 4px */
+  margin-bottom: 1rem; /* 16px */
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 0.375rem; /* 6px */
+  cursor: pointer;
+}
+
+#area-popup .buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem; /* 8px */
+}
+
+#area-popup button {
+  padding: 0.5rem 1rem; /* 8px 16px */
+  border-radius: 0.375rem; /* 6px */
+  cursor: pointer;
+  border: none;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+#cancel-btn {
+  background-color: #e5e7eb; /* gray-200 */
+}
+
+#cancel-btn:hover {
+  background-color: #d4d4d8; /* gray-300 */
+}
+
+#confirm-btn {
+  background-color: #2563eb; /* blue-600 */
+  color: white;
+}
+
+#confirm-btn:hover {
+  background-color: #1e40af; /* blue-700 */
 }

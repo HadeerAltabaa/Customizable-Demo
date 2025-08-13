@@ -8,58 +8,60 @@ const addSectionContainer = document.getElementById('addSectionContainer');
 let editMode = false;
 
 const sectionTemplates = {
-    "area-img-section": {
-        html: `
-        <div class="img-section" id="imgSection">
-            <div class="section-header">
-                <h2 id="editableImage" contenteditable="true">Customer Location</h2>
-            </div>
-            <div class="img-preview">
-                <div class="row-img-section">
-                    <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
-                        draggable="true" title="Drag Me">
+    "area-img-section": () => (
+        {
+            html: `
+            <div class="img-section" id="imgSection">
+                <div class="section-header">
+                    <h2 id="editableImage" contenteditable="true">Customer Location</h2>
+                </div>
+                <div class="img-preview">
+                    <div class="row-img-section">
+                        <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
+                            draggable="true" title="Drag Me">
 
-                    <div class="customer-action-container" data-edit-mode="false">
-                        <label for="customer-actions-choices">Choose an action:</label>
-                        <select name="customer-actions-choices" id="customer-actions-choices">
-                            <!-- <option value="deposit">Deposit Money</option>
-                            <option value="withdraw">Withdraw Money</option>
-                            <option value="transfare">Transfare Funds</option>
-                            <option value="pay">Pay Pills</option> -->
-                        </select>
+                        <div class="customer-action-container" data-edit-mode="false">
+                            <label for="customer-actions-choices">Choose an action:</label>
+                            <select name="customer-actions-choices" id="customer-actions-choices">
+                                <!-- <option value="deposit">Deposit Money</option>
+                                <option value="withdraw">Withdraw Money</option>
+                                <option value="transfare">Transfare Funds</option>
+                                <option value="pay">Pay Pills</option> -->
+                            </select>
 
-                        <div class="custom-input-container" id="custom-input-container">
-                            <!-- <label for=""></label> -->
-                            <!-- <input type="number" name="amount" id="amount_def" placeholder="Amount in SAR" min="0"
-                                step="0.01" required>
-                            <button type="button" id="addAmountBtn_def">Apply</button> -->
+                            <div class="custom-input-container" id="custom-input-container">
+                                <!-- <label for=""></label> -->
+                                <!-- <input type="number" name="amount" id="amount_def" placeholder="Amount in SAR" min="0"
+                                    step="0.01" required>
+                                <button type="button" id="addAmountBtn_def">Apply</button> -->
+                            </div>
+
+
+
+                            <!-- This is only visible in edit mode -->
+                            <!-- <div class="edit-options-ui" style="display: none; margin-top: 10px;">
+                                <input type="text" class="new-option-label" placeholder="New option label">
+                                <input type="text" class="new-option-value" placeholder="New option value">
+                                <button type="button" class="add-option-btn">Add Option</button>
+                                <button type="button" class="remove-selected-btn">Delete Selected</button>
+                            </div> -->
                         </div>
-
-
-
-                        <!-- This is only visible in edit mode -->
-                        <!-- <div class="edit-options-ui" style="display: none; margin-top: 10px;">
-                            <input type="text" class="new-option-label" placeholder="New option label">
-                            <input type="text" class="new-option-value" placeholder="New option value">
-                            <button type="button" class="add-option-btn">Add Option</button>
-                            <button type="button" class="remove-selected-btn">Delete Selected</button>
-                        </div> -->
                     </div>
-                </div>
 
-                <div class="image-wrapper" id="dropArea">
-                    <button type="button" id="downloadImageBtn" title="Download Image">
-                        <i class="fa-solid fa-circle-down"></i>
-                    </button>
-                    <img src="images/map.png" id="previewImage" alt="Preview Image">
-                    <canvas id="imageCanvas"></canvas>
+                    <div class="image-wrapper" id="dropArea">
+                        <button type="button" id="downloadImageBtn" title="Download Image">
+                            <i class="fa-solid fa-circle-down"></i>
+                        </button>
+                        <img src="images/map.png" id="previewImage" alt="Preview Image">
+                        <canvas id="imageCanvas"></canvas>
+                    </div>
+                    <input type="file" id="imageInput" accept="image/*">
                 </div>
-                <input type="file" id="imageInput" accept="image/*">
             </div>
-        </div>
-        `,
-        id: "img-section"
-    },
+            `,
+            id: "img-section"
+        }
+    ),
     "doc-section": () => {
         // Generate a unique ID for the section
         const uniqueId = Date.now() + Math.floor(Math.random() * 1000);

@@ -29,9 +29,10 @@ function loadProjects() {
         card.className = 'relative rounded-lg shadow-md';
         card.id = p.id
         card.style.backgroundColor = p.color;
+        const image = localStorage.getItem(`${p.id}-logoImage`)
         card.innerHTML = `
             <div class="flex-1 w-full justify-center items-center p-5">
-                <img src="${p.image}" alt="${p.title}" class="w-fit object-cover rounded-t-lg" />  
+                <img src="${image}" alt="${p.title}" class="w-fit object-cover rounded-t-lg" />  
             </div>
             <div class="px-5 pt-3">
                 <h2 class="text-white font-bold text-xl">${p.title}</h2>
@@ -61,12 +62,13 @@ function loadProjects() {
         id: Date.now().toString(),
         title,
         color,
-        image
     };
 
     const projects = JSON.parse(localStorage.getItem('projects') || '{}');
     projects[newProject.id] = newProject;
     localStorage.setItem('projects', JSON.stringify(projects));
+
+    changeProjectLogoHandler(imageInput, newProject.id)
 
     form.reset();
     document.getElementById('projectColor').value = '#3b82f6';
@@ -88,6 +90,18 @@ function deleteProject(id) {
     delete projects[id]
     localStorage.setItem('projects', JSON.stringify(projects));
     document.getElementById(id).remove()
+}
+
+function changeProjectLogoHandler(input, projectID) {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        const base64Image = e.target.result;
+        localStorage.setItem(`${projectID}-logoImage`, base64Image);
+    };
+    reader.readAsDataURL(file);
 }
 
 loadProjects();
