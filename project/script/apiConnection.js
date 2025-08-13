@@ -1,24 +1,40 @@
 const apiURL = "http://localhost:8080/send"; // Used only locally, change to an active API URL
 
-async function sendAPIRequest(id) {
-    let allFiles = JSON.parse(localStorage.getItem("allFiles")) || {};
-    const fileData = allFiles[id];
+function sendRowData(id, rowId) {
+    const rowCells = document.querySelectorAll(`.cell_${rowId}`);
+    const rowData = {};
 
+    rowCells.forEach(cell => {
+        const key = cell.getAttribute('name');
+        const value = cell.textContent || cell.innerText || '';
+        rowData[key] = value;
+    });
+
+    sendAPIRequest(id, rowData)
+}
+
+function sendMockData(id) {
+    const inputs = document.querySelectorAll(`.mockdata-${id}`)
+
+    data = {}
+
+    inputs.forEach(input => {
+        data[input.getAttribute("name")] = input.value
+    })
+
+    sendAPIRequest(id, data)
+}
+
+async function sendAPIRequest(id, data) {
+    let allFiles = JSON.parse(localStorage.getItem(`${projectID}-allFiles`)) || {};
+    const fileData = allFiles[id];
     
     // if (!fileData) return;
     // if (area == 0) return alert("Please selecte an area before sending an API Request")
 
-    const data = {
-        id: "",
-        name: "",
-        area: 0,
-        action: "",
-        actionData: {
-            amount: ""
-        },
-        segment: ""
-    }
-        
+
+    if(!data) return
+    
     try {
         const res = await fetch(apiURL, {
             method: "POST",

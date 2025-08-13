@@ -1,269 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Customizable Demo Landing</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customizable Frontend for Demos</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+        <!-- Header -->
+        <header class="w-full flex justify-between items-center mb-6 max-w-6xl">
+            <h1 class="text-3xl font-bold">Customizable Demo Landing</h1>
+            <button id="openModalBtn" 
+            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md font-semibold">
+            Create Project
+            </button>
+        </header>
 
-</head>
-
-<body>
-    <div class="head">
-        <div class="logo">
-            <label for="logoInput"><img src="images/logo.png" id="previewLogo" alt="Company Logo"></label>
-            <input type="file" id="logoInput" accept="image/*" style="display: none;"
-                onchange="changeLogoHandler(this)">
+        <!-- Projects Grid -->
+        <div id="projectsContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+            <!-- Dynamic content here -->
         </div>
-        <div class="nav-bar">
-            <ul>
-                <!-- <li><a href="#docSection">Documents</a></li>
-                <li><a href="#imgSection">Image</a></li>
-                <li><a href="#graphSection">Graph</a></li>
-                <li><a href="#notesSection">Notes</a></li>
-                <li><a href="#mapSection">Map</a></li> -->
-            </ul>
-        </div>
-        <div class="edit">
-            <button type="button" id="editButton">Edit</button>
-            <div class="dropdown" id="addSectionContainer" style="display: none;">
-                <button type="button" id="addSectionBtn" style="display: none;">+</button>
-                <div class="dropdown-content" id="sectionOptions">
-                    <button type="button" data-type="doc-section">Documents</button>
-                    <button type="button" data-type="img-section">Image</button>
-                    <button type="button" data-type="graph-section">Graph</button>
-                    <button type="button" data-type="notes-section">Notes</button>
-                    <button type="button" data-type="map-section">Map</button>
-                </div>
-            </div>
-            <button type="button" id="saveBtn" style="display: none;">Save</button>
-        </div>
-        <div class="edit-sidebar" id="editControls" style="display: none;">
-            <div class="edit-containers">
-                <h2>Customize Your Web</h2>
-                <div class="edit-group">
-                    <h3>Colors:</h3>
-                    <label>Background Color: <input value="#f99ff2" type="color" id="bgColorInput"></label>
-                    <label>Second Background Color: <input type="color" id="secondColorInput"></label>
-                    <label>Section Color: <input type="color" id="sectionColorInput"></label>
-                    <label>Text Color: <input type="color" id="txtColorInput"></label>
-                </div>
-                <div class="edit-map-img">
-                    <h3>Map Image:</h3>
-                    <label class="updateImage" for="imageInput">Upload a map image</label>
-                </div>
-                <div class="edit-map-url">
-                    <!-- <h3>Map URL:</h3>
-                <input class="mapInput" type="url" id="mapInput" placeholder="Enter Google Maps URL (embed link)..."> -->
-                </div>
-                <!-- Edit the actions choices -->
-                <div class="edit-actions-options">
-                    <h3>Action Options:</h3>
-                    <div class="controls">
-                        <input type="text" id="option-input" placeholder="Type new or edit existing action...">
-                        <button type="button" onclick="addOption()" id="addOptionBtn">Add</button>
-                        <!-- <button type="button" onclick="editOption()" id="editOptionBtn">Edit</button>
-                        <button type="button" onclick="deleteOption()" id="deleteOptionBtn">Delete</button> -->
-                    </div>
-                    <h3 style="margin-top: 10px;">Options:</h3>
-                    <div class="sidebar-option-list" id="sidebarOptionList"></div>
-                </div>
 
-                <div class="edit-actions-input">
-                    <h3>Actions Input:</h3>
-                    <div class="edit-actions-config">
-                        <input type="text" id="inputType" placeholder="Enter input type (e.g, text, number)">
-                        <input type="text" id="inputName" placeholder="Enter input name">
-                        <input type="text" id="inputPlaceholder" placeholder="Enter placeholder text">
-                        <button type="button" onclick="addCustomInput()">Add</button>
-                    </div>
-                    <h3 style="margin-top: 10px;">Inputs:</h3>
-                    <div class="sidebar-input-list" id="sidebarInputList"></div>
+        <!-- Modal -->
+        <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-md relative">
+            <button id="closeModalBtn" 
+                class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+            
+            <h2 class="text-xl font-bold mb-4">Create New Project</h2>
+            <form id="projectForm">
+                <div class="w-full flex justify-center">
+                    <label class="cursor-pointer" for="projectImage">
+                        <img class="!max-w-[150px]" id="preview" alt="Image Preview" src="/project/images/logo.png">
+                    </label>
                 </div>
-            </div>
-
-            <div class="reset-page-button">
-                <button type="button" onClick="onResetButtonClick()">Reset Page</button>
-            </div>
-        </div>
-    </div>
-    <div class="main-body row-section">
-        <div class="doc-section" id="docSection_def">
-            <div class="section-header">
-                <h2 id="editableDoc" contenteditable="true">Documents</h2>
-            </div>
-            <!-- when no files are uploaded -->
-            <div class="no-files-panel" id="noFilesPanel_def">
-                <p>Please add your excel sheets from here...</p>
-                <div class="upload-box">
-                    <label for="fileInput_def">Select</label>
-                    <input type="file" id="fileInput_def" multiple accept=".xlsx,.xls,.csv" max="1"
-                        onchange="handleFileUpload(this, 'def');loadCommentsFromLocalStorage(this)">
+                <div class="mb-4">
+                    <label class="block font-semibold mb-1">Project Title</label>
+                    <input type="text" id="projectTitle" required placeholder="Enter project title" 
+                class="w-full border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
                 </div>
-            </div>
-
-            <!-- when files are uploaded -->
-            <div class="files-present-panel" id="filesPresentPanel_def" style="display: none;">
-                <p class="info-text">This is your document</p>
-                <div class="file-preview-layout">
-                    <div class="file-grid" id="fileGrid_def"></div>
-
-                    <div class="preview-panel" id="preview_def">
-                        <!-- Preview content injected via JS -->
-                        <h2 id="commentsTitle_def" style="display: none;">Comments</h2>
-                        <div id="commentList_def" class="comment-list"></div>
+                
+                <div class="mb-4">
+                    <label class="block font-semibold mb-1">Main Color</label>
+                    <input type="color" id="projectColor" value="#3b82f6" 
+                    class="w-16 h-10 border rounded cursor-pointer" />
+                    <div class="hidden">
+                        <input type="file" id="projectImage" accept="image/*" 
+                        class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 
+                        file:rounded-full file:border-0 file:text-sm file:font-semibold 
+                        file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" onchange="document.getElementById('preview').src = window.URL.createObjectURL(this.files[0])" />
                     </div>
                 </div>
 
-                <div class="info-actions-row">
-                    <div class="offers-container">
-                        <p class="offers-text">ID for customers</p>
-                        <div class="offers-preview">
-                            <p name="previewID" id="previewID-def">This part will represent the offers to the customer.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="actions-container">
-                        <p class="actions-text">Mock Data Box</p>
-                        <div class="actions-box">
-                            <input type="text" id="actionsInput_def"
-                                placeholder="Enter a mock data. (Ex.ID: Id, Name: Customer , Action, Amount...)">
-                            <button type="button" onClick="" id="addActionBtn_def">Add</button>
-                        </div>
-                    </div>
-
-                    <!-- <div class="comment-container">
-                        <p class="comment-text">Comment</p>
-                        <div class="comment-box">
-                            <input type="text" id="commentInput_def" placeholder="Write your comment here...">
-                            <button onclick="onAddCommentButtonClicked(this)" type="button"
-                                id="addCommentBtn_def">Add</button>
-                        </div>
-                    </div> -->
-                </div>
-            </div>
-        </div>
-        <!-- Image Section -->
-        <div class="img-section" id="imgSection">
-            <div class="section-header">
-                <h2 id="editableImage" contenteditable="true">Customer Location</h2>
-            </div>
-            <div class="img-preview">
-                <div class="row-img-section">
-                    <img src="images/human.png" id="draggedHuman" class="dragged-human" alt="Human In a Map"
-                        draggable="true" title="Drag Me">
-
-                    <div class="customer-action-container" data-edit-mode="false">
-                        <label for="customer-actions-choices">Choose an action:</label>
-                        <select name="customer-actions-choices" id="customer-actions-choices">
-                            <!-- <option value="deposit">Deposit Money</option>
-                            <option value="withdraw">Withdraw Money</option>
-                            <option value="transfare">Transfare Funds</option>
-                            <option value="pay">Pay Pills</option> -->
-                        </select>
-
-                        <div class="custom-input-container" id="custom-input-container">
-                            <!-- <label for=""></label> -->
-                            <!-- <input type="number" name="amount" id="amount_def" placeholder="Amount in SAR" min="0"
-                                step="0.01" required>
-                            <button type="button" id="addAmountBtn_def">Apply</button> -->
-                        </div>
-
-
-
-                        <!-- This is only visible in edit mode -->
-                        <!-- <div class="edit-options-ui" style="display: none; margin-top: 10px;">
-                            <input type="text" class="new-option-label" placeholder="New option label">
-                            <input type="text" class="new-option-value" placeholder="New option value">
-                            <button type="button" class="add-option-btn">Add Option</button>
-                            <button type="button" class="remove-selected-btn">Delete Selected</button>
-                        </div> -->
-                    </div>
-                </div>
-
-                <div class="image-wrapper" id="dropArea">
-                    <button type="button" id="downloadImageBtn" title="Download Image">
-                        <i class="fa-solid fa-circle-down"></i>
-                    </button>
-                    <img src="images/map.png" id="previewImage" alt="Preview Image">
-                    <canvas id="imageCanvas"></canvas>
-                </div>
-                <input type="file" id="imageInput" accept="image/*">
+                <button type="submit" 
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md font-semibold">
+                Create Project
+                </button>
+            </form>
             </div>
         </div>
 
-        <!-- Notes Section -->
-        <div class="notes-section" id="notesSection">
-            <div class="section-header">
-                <h2 id="editableNotes" contenteditable="true">Notes</h2>
-            </div>
-            <div class="notes-preview" id="notesContainer-notesInput"></div>
-            <div class="notes-adding">
-                <textarea id="notesInput" placeholder="Write your notes here..."></textarea>
-                <button type="button" id="addNotesBtn">Add</button>
-            </div>
-        </div>
-
-        <!-- Map Section -->
-        <div class="map-section" id="mapSection">
-            <div class="section-header">
-                <h2 id="editableMap" contenteditable="true">Map</h2>
-            </div>
-            <div class="map-preview">
-                <div class="map-wrapper">
-                    <button class="downloadMapBtn_mapSection" type="button" id="downloadMapBtn" title="Download Map">
-                        <i class="fa-solid fa-circle-down"></i>
-                    </button>
-                    <iframe class="previewMap_mapSection" id="previewMap"
-                        src="https://maps.google.com/maps?width=600&height=400&hl=en&q=SAS%20Saudi%20Arabia%20Office&t=&z=14&ie=UTF8&iwloc=B&output=embed"
-                        allowfullscreen loading="lazy" title="Google Map showing SAS Saudi Arabia Office"></iframe>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- Graph Section -->
-        <div class="graph-section" id="graphSection">
-            <div class="section-header">
-                <h2 id="editableGraph" contenteditable="true">Graph</h2>
-            </div>
-            <div class="graph-preview">
-                <div class="graph-wrapper">
-                    <button type="button" id="downloadGraphBtn" title="Download Graph">
-                        <i class="fa-solid fa-circle-down"></i>
-                    </button>
-                    <canvas id="generatedChart" width="400" height="300"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class=" footer">
-        <label for="logoInput"></label><img src="images/logo.png" id="logoFooter" alt="Footer Logo"></lable>
-        <p>© 2025 Customizable Frontend for Demos | All rights reserved.</p>
-    </div>
-
-    <script src="script/wsConnection.js"></script>
-    <script src="script/upload-files.js"></script>
-    <script src="script.js"></script>
-    <script src="openai.js"></script>
-    <script src="script/main.js"></script>
-    <script src="script/Map.js"></script>
-    <script src="script/apiConnection.js"></script>
-    <script src="script/logo.js"></script>
-    <script src="script/edit-headers.js"></script>
-    <script src="script/add-comments.js"></script>
-    <script src="script/reset-button.js"></script>
-    <script src="script/images.js"></script>
-    <script src="script/editableActions.js"></script>
-    <script src="script/customInputs.js"></script>
-</body>
-
+        <script src="index.js" />
+    </body>
 </html>

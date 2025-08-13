@@ -12,14 +12,14 @@ function changeLogoHandler(input) {
         const base64Image = e.target.result;
         previewLogo.src = base64Image;
         logoFooter.src = base64Image;
-        localStorage.setItem('logoImage', base64Image);
+        localStorage.setItem(`${projectID}-logoImage`, base64Image);
     };
     reader.readAsDataURL(file);
 }
 
 // Load stored files on page load
 window.addEventListener('DOMContentLoaded', () => {
-    const storedLogo = localStorage.getItem('logoImage');
+    const storedLogo = localStorage.getItem(`${projectID}-logoImage`);
     if (storedLogo) {
         previewLogo.src = storedLogo;
         logoFooter.src = storedLogo;

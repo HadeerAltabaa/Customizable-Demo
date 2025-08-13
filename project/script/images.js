@@ -9,20 +9,20 @@ function handleImageUpload(sectionId) {
         const reader = new FileReader();
 
         reader.onload = function (event) {
-            let storedImages = JSON.parse(localStorage.getItem("storedImages")) || {};
+            let storedImages = JSON.parse(localStorage.getItem(`${projectID}-storedImages`)) || {};
             const base64Image = event.target.result;
 
             previewImage.src = base64Image;
 
             storedImages[sectionId] = base64Image;
-            localStorage.setItem("storedImages", JSON.stringify(storedImages));
+            localStorage.setItem(`${projectID}-storedImages`, JSON.stringify(storedImages));
         };
 
         reader.readAsDataURL(file); // Converts to Base64
     }
 }
 
-const storedImages = JSON.parse(localStorage.getItem("storedImages")) || {}
+const storedImages = JSON.parse(localStorage.getItem(`${projectID}-storedImages`)) || {}
 
 for (let sectionId in storedImages) {
     const previewImage = document.getElementById(`previewImage_${sectionId}`);
