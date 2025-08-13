@@ -405,6 +405,7 @@ body.edit-mode-active {
     /* Document section styles */
     .doc-section {
         padding: 10px 20px;
+        flex: 0 0 100%;
         max-width: 100%;
 
         /* Take full width */
