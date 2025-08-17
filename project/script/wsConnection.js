@@ -3,11 +3,12 @@ const waitlist = {}
 const ws = new WebSocket("ws://localhost:8080");
 
 ws.onmessage = (event) => {
-    let data = JSON.parse(event.data)
-    if(data.id in waitlist) {
-        document.querySelector(`#previewID-${waitlist[data.id].elementId}`).innerHTML = JSON.stringify(data, null, 4);
-        delete waitlist[data.id]
+    let content = JSON.parse(event.data)
+    content.data = JSON.parse(content.data)
 
+    if(waitlist[content.data.id]) {
+        document.getElementById(content.data.id).innerText = content.message
+        delete waitlist[content.data.id]
     }
 };
 

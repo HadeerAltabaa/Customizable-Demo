@@ -100,18 +100,24 @@ function renderFileGrid(sectionId) {
     }
 }
 
+const previewSettings = {};
+
 function previewExcelFile(fileId, sectionId) {
-    const fileObj = uploadedFiles[sectionId]
+    const fileObj = uploadedFiles[sectionId];
     if (!fileObj) return;
 
-    selectedFile = fileObj
-
-    sendAPIRequest(sectionId)
+    // If first time, set default maxRows
+    if (!previewSettings[sectionId]) {
+        previewSettings[sectionId] = { maxRows: 11 };
+    }
 
     const sheetName = fileObj.workbook.SheetNames[0];
     const worksheet = fileObj.workbook.Sheets[sheetName];
-    // limit the number of rows to 10 rows
-    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }).slice(0, 11);
+
+    let maxRows = previewSettings[sectionId].maxRows;
+
+    const allRows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    const jsonData = allRows.slice(0, maxRows);
     const maxCols = Math.max(...jsonData.map(row => row.length));
 
     const normalizedData = jsonData.map(row => {
@@ -124,23 +130,53 @@ function previewExcelFile(fileId, sectionId) {
         return filled;
     });
 
+    const dictData = allRows.slice(1).map(row => {
+        const obj = {};
+        normalizedData[0].forEach((header, i) => {
+            obj[header] = row[i];
+        });
+        return obj;
+    });
+
     const preview = document.getElementById(`preview_${sectionId}`);
-    const commentsTitle = document.getElementById(`commentsTitle_${sectionId}`);
-    const commentList = document.getElementById(`commentList_${sectionId}`);
+    // const commentsTitle = document.getElementById(`commentsTitle_${sectionId}`);
+    // const commentList = document.getElementById(`commentList_${sectionId}`);
 
+    // === Slider UI in the header ===
+    const sliderHTML = `
+            <label>
+                Rows to Show: 
+                <span id="rowCount_${sectionId}">${maxRows - 1}</span>
+            </label>
+            <input type="range" 
+                   min="1" 
+                   max="${allRows.length < 100 ? allRows.length : 100}" 
+                   value="${maxRows}" 
+                   style="margin-left:10px;"
+                   oninput="
+                        document.getElementById('rowCount_${sectionId}').innerText = this.value - 1;
+                        previewSettings['${sectionId}'].maxRows = parseInt(this.value, 10);
+                   "
+                   onchange="previewExcelFile(null, '${sectionId}')"
+            >
+    `;
+
+    // === Table building ===
     let htmlTable = `<table class="excel-table" border="1" cellspacing="0" cellpadding="12">`;
-
-    // Assuming normalizedData[0] contains column headers (for name attribute)
     const headers = normalizedData[0] || [];
+
+    const sendAllRows = () => {
+        dictData.slice(0, 999).forEach(data => {
+            sendAPIRequest(sectionId, data)
+        })
+    }
 
     normalizedData.forEach((row, rowIndex) => {
         htmlTable += `<tr style="background-color: ${rowIndex % 2 === 0 ? '#f0f0f0' : '#ffffff'};">`;
 
         if (rowIndex > 0) {
-            // Add button as the first cell in the row (for data rows)
-            htmlTable += `<td><button onclick="sendRowData('${sectionId}', ${rowIndex})">Send Row</button></td>`;
+            htmlTable += `<td><button class="sendRowButton" onclick="sendRowData('${sectionId}', ${rowIndex})">Send Row</button></td>`;
         } else {
-            // For header row, add an empty header cell for the button column
             htmlTable += `<th>Send Data</th>`;
         }
 
@@ -161,17 +197,32 @@ function previewExcelFile(fileId, sectionId) {
 
     htmlTable += `</table>`;
 
-    preview.innerHTML = `<h3 style="padding-bottom: 10px">${fileObj.file.name.split(".")[0]}</h3>` + htmlTable;
+    // === Final output ===
+    preview.innerHTML = `
+        <div class="doc-header">
+            <div>
+                <h3 style="padding-bottom: 10px">${fileObj.file.name.split(".")[0]}</h3>
+                <button id="sendAllRows">Send all</button>
+            </div>
+            <div>
+                ${sliderHTML}
+            </div>
+        </div>
+        ${htmlTable}
+    `;
 
+    // Append comments
+    // preview.appendChild(commentsTitle);
+    // preview.appendChild(commentList);
 
-    preview.appendChild(commentsTitle);
-    preview.appendChild(commentList);
+    document.getElementById("sendAllRows").addEventListener("click", (e) => {
+        sendAllRows()
+    })
 
-    //preview.appendChild(commentList);
-
-    commentsTitle.style.display = commentList.childElementCount > 0 ? 'block' : 'none';
-    updateCommentTitleVisibility(sectionId, commentList);
+    // commentsTitle.style.display = commentList.childElementCount > 0 ? 'block' : 'none';
+    // updateCommentTitleVisibility(sectionId, commentList);
 }
+
 
 // Delete the file
 function deleteFile(fileId, id) {

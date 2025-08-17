@@ -80,7 +80,7 @@ window.onload = function () {
     }
 
     savedInputs.forEach(input => {
-        createInput(input.type, input.placeholder, input.name);
+        createInput(input.type, input.name, input.placeholder);
         createSidebarItem(input.type, input.placeholder, input.name);
     });
 };
@@ -128,17 +128,28 @@ function createInput(type, name, placeholder) {
     input.step = '0.01';
     input.required = true;
 
-    const applyBtn = document.createElement('button');
-    applyBtn.textContent = 'Apply';
-    applyBtn.type = 'button';
-    applyBtn.id = 'actionApplyButton'
+    const editMapBtn = document.createElement('button');
+    editMapBtn.textContent = 'Edit Map';
+    editMapBtn.id = 'editMapButton'
+
+    editMapBtn.addEventListener("click", (e) => {
+        isEditingMap = !isEditingMap
+
+        console.log(isEditingMap)
+
+        if(isEditingMap)
+            editMapBtn.textContent = "Exit Edit Map Mode"
+        else {
+            editMapBtn.textContent = "Edit Map"
+        }
+    })
 
     wrapper.appendChild(input);
 
     document.getElementById('custom-input-container').appendChild(wrapper);
     document.getElementById('actionApplyButton')?.remove()
 
-    document.getElementById('custom-input-container').appendChild(applyBtn);
+    document.getElementById('custom-input-container').appendChild(editMapBtn);
 }
 
 function createSidebarItem(type, name, placeholder) {

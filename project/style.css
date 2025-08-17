@@ -463,7 +463,7 @@ body.edit-mode-active {
             display: none;
         }
 
-        .offers-preview p {
+        .offers-preview div {
             color: var(--text-color);
             font-size: 16px;
             padding: 20px;
@@ -1172,11 +1172,6 @@ iframe {
   filter: brightness(0.85); /* slightly darker */
 }
 
-.excel-table td button:active {
-  filter: brightness(0.7); /* even darker */
-  box-shadow: inset 0 3px 5px rgba(0,0,0,0.125);
-}
-
 .excel-table td:first-child {
   white-space: nowrap;
   width: 1%;
@@ -1270,4 +1265,52 @@ iframe {
 
 #confirm-btn:hover {
   background-color: #1e40af; /* blue-700 */
+}
+
+
+.doc-header {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 10px;
+}
+
+.doc-header input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.doc-header div:first-of-type {
+    display: flex;
+    padding-right: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.doc-header div button {
+  background-color: var(--section-color);
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: filter 0.3s ease;
+}
+
+.doc-header div button:hover {
+  filter: brightness(0.85); /* slightly darker */
+}
+
+.message-box {
+  padding: 6px 10px;
+  margin: 4px 0;
+  background: #f0f4ff;
+  border: 1px solid #d0d7ff;
+  border-radius: 6px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: #333;
 }

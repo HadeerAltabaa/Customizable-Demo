@@ -122,7 +122,7 @@ let currentX = 0;
 let currentY = 0;
 
 canvas.addEventListener("mousedown", (e) => {
-    if(editMode) isDrawing = true;
+    if(isEditingMap) isDrawing = true;
     const rect = canvas.getBoundingClientRect();
     startX = e.clientX - rect.left;
     startY = e.clientY - rect.top;
@@ -130,7 +130,7 @@ canvas.addEventListener("mousedown", (e) => {
 
 canvas.addEventListener("mousemove", (e) => {
     if (!isDrawing) return;
-    if(!editMode) isDrawing = false
+    if(!isEditingMap) isDrawing = false
 
     const rect = canvas.getBoundingClientRect();
     currentX = e.clientX - rect.left;
@@ -142,7 +142,7 @@ canvas.addEventListener("mousemove", (e) => {
 });
 
 canvas.addEventListener("mouseup", () => {
-    if(!editMode) return
+    if(!isEditingMap) return
     isDrawing = false;
     showAreaPopup(({ title, color }) => {
         saveAreaBox(title, color, startX, startY, currentX, currentY)
@@ -161,7 +161,6 @@ function drawAreaBox(color, title, ctx, x1, y1, x2, y2) {
     const h = Math.abs(y2 - y1);
 
     // Fill with 30% opacity
-    console.log(color)
     ctx.fillStyle = hexToRgba(color, 0.3);
     ctx.fillRect(x, y, w, h);
 
@@ -221,6 +220,7 @@ function loadAreaBoxes() {
     let areaBoxes = JSON.parse(localStorage.getItem(`${projectID}-areas`)) || []
     const sidebarAreaList = document.getElementById('sidebarAreaList');
 
+    sidebarAreaList.innerHTML = "<h3>Areas:</h3>"
     
     areaBoxes.forEach(area => {
         drawAreaBox(area.color, area.title, ctx, area.x1, area.y1, area.x2, area.y2);

@@ -34,6 +34,19 @@ async function sendAPIRequest(id, data) {
 
 
     if(!data) return
+
+    let actionInputs = document.querySelectorAll(".action-input")
+    let actions = {}
+
+    actionInputs.forEach(input => {
+        actions[input.getAttribute("name")] = input.value
+    })
+
+    if(!data.id) data.id = crypto.randomUUID().replace(/-/g, '');
+    if(!data.area) data.area = area || 0
+    if(!data.actions) data.actions = actions
+
+    console.log(data)
     
     try {
         const res = await fetch(apiURL, {
@@ -50,23 +63,26 @@ async function sendAPIRequest(id, data) {
             const content = json;
             const graphData = json.graphData;
 
-            // Show content in the preview element
-            console.log(content)
-            document.querySelector(`#previewID-${id}`).innerHTML = content.message;
+            // Create styled message element
+            const msgEl = document.createElement("div");
+            msgEl.textContent = content.message;
+            msgEl.classList.add("message-box");
+            msgEl.id = data.id
 
-            addUserToWSWaitlist(id, data.id)
+            // Append to target
+            const target = document.querySelector(`#previewID-${id}`);
+            if (target) {
+                target.appendChild(msgEl);
+                const p = target.querySelector("p");
+                if (p) p.remove();
+            }
 
-            // // Load existing graphs from localStorage or initialize empty object
+            addUserToWSWaitlist(id, data.id);
+
+            // --- optional graph storage code (commented) ---
             // let allGraphs = JSON.parse(localStorage.getItem("allGraphs")) || {};
-
-            // console.log(json)
-
-            // // Store graphData keyed by file name
             // allGraphs[fileData.name] = graphData;
-
-            // // Save updated graphs object back to localStorage
             // localStorage.setItem("allGraphs", JSON.stringify(allGraphs));
-
         } else {
             const text = await res.text();
             console.error("Invalid response:", text);

@@ -49,36 +49,36 @@ function saveCommentsToLocalStorage(id, commentList) {
 }
 
 function loadCommentsFromLocalStorage(section) {
-    const id = section.id.split("_")[section.id.split("_").length - 1]
-    const savedComments = JSON.parse(localStorage.getItem(`documentComments-${id}`) || "[]");
-    const commentList = document.getElementById(`commentList_${id}`);
+    // const id = section.id.split("_")[section.id.split("_").length - 1]
+    // const savedComments = JSON.parse(localStorage.getItem(`documentComments-${id}`) || "[]");
+    // const commentList = document.getElementById(`commentList_${id}`);
 
-    commentList.innerHTML = "";
+    // commentList.innerHTML = "";
 
-    savedComments.forEach(commentText => {
-        const comment = document.createElement("div");
-        comment.className = "comment";
+    // savedComments.forEach(commentText => {
+    //     const comment = document.createElement("div");
+    //     comment.className = "comment";
 
-        const textSpan = document.createElement("span");
-        textSpan.textContent = commentText;
+    //     const textSpan = document.createElement("span");
+    //     textSpan.textContent = commentText;
 
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "\u00D7";
-        deleteBtn.className = "delete-comment-btn";
-        deleteBtn.title = "Delete this Comment";
-        deleteBtn.onclick = () => {
-            comment.remove();
-            updateCommentTitleVisibility(id, commentList);
-            saveCommentsToLocalStorage(id, commentList);
-        };
+    //     const deleteBtn = document.createElement("button");
+    //     deleteBtn.textContent = "\u00D7";
+    //     deleteBtn.className = "delete-comment-btn";
+    //     deleteBtn.title = "Delete this Comment";
+    //     deleteBtn.onclick = () => {
+    //         comment.remove();
+    //         updateCommentTitleVisibility(id, commentList);
+    //         saveCommentsToLocalStorage(id, commentList);
+    //     };
 
-        comment.appendChild(textSpan);
-        comment.appendChild(deleteBtn);
+    //     comment.appendChild(textSpan);
+    //     comment.appendChild(deleteBtn);
 
-        commentList.appendChild(comment);
-    });
+    //     commentList.appendChild(comment);
+    // });
 
-    updateCommentTitleVisibility(id, commentList);
+    // updateCommentTitleVisibility(id, commentList);
 }
 
 // window.addEventListener("DOMContentLoaded", loadCommentsFromLocalStorage);
