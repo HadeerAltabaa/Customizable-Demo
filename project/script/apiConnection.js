@@ -38,13 +38,19 @@ async function sendAPIRequest(id, data) {
     let actionInputs = document.querySelectorAll(".action-input")
     let actions = {}
 
+    let actionType = document.querySelector("#customer-actions-choices")
+
     actionInputs.forEach(input => {
-        actions[input.getAttribute("name")] = input.value
+        if(!data[input.getAttribute("name")]) {
+            actions[input.getAttribute("name")] = input.value
+        }
     })
 
     if(!data.id) data.id = crypto.randomUUID().replace(/-/g, '');
     if(!data.area) data.area = area || 0
-    if(!data.actions) data.actions = actions
+    if(!data.actionType) data.actionType = actionType.value || "None"
+
+    data = { ...data, ...actions }
 
     console.log(data)
     

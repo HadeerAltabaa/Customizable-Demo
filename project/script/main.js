@@ -3,6 +3,7 @@ let mouseY = 0;
 let area = 0;
 let selectedFile = null;
 let isEditingMap = false
+let mockBoxes = {}
 
 let mockDataDefualtInputs = [
     {

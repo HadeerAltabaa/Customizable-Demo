@@ -147,7 +147,7 @@ function createInput(type, name, placeholder) {
     wrapper.appendChild(input);
 
     document.getElementById('custom-input-container').appendChild(wrapper);
-    document.getElementById('actionApplyButton')?.remove()
+    document.getElementById('editMapButton')?.remove()
 
     document.getElementById('custom-input-container').appendChild(editMapBtn);
 }

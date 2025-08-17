@@ -219,6 +219,10 @@ function previewExcelFile(fileId, sectionId) {
         sendAllRows()
     })
 
+
+    mockBoxes[sectionId] = headers
+    reloadMockBoxes()
+
     // commentsTitle.style.display = commentList.childElementCount > 0 ? 'block' : 'none';
     // updateCommentTitleVisibility(sectionId, commentList);
 }
