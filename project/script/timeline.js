@@ -88,3 +88,7 @@ function addItemToTimeLine(location, timestamp) {
         container.appendChild(div);
     });
 }
+
+addItemToTimeLine("Pool", "04JUL25:18:00:00");
+addItemToTimeLine("Villa-304", "05JUL25:10:45:00");
+addItemToTimeLine("Beach", "06JUL25:12:30:00");
