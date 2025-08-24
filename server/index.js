@@ -1,107 +1,87 @@
-import express from "express";
-import cors from "cors"
-import os from "os";
-import XLSX from "xlsx"
+import express from "express"
+import mqtt from "mqtt"
+import cors from "cors";
+import config from "./config.js"
+import { WebSocketServer } from 'ws';
 
-const app = express();
-app.use(cors())
+// Create WebSocket server on the same HTTP server as Express
+const wss = new WebSocketServer({ noServer: true });
 
-app.use(express.json({ limit: "20mb" }));
+const app = express()
 
-app.post("/upload", (req, res) => {
-  const { name, type, data, area } = req.body;
+const mClient = mqtt.connect(config.mqtt.server)
 
-  try {
-    const buffer = Buffer.from(data);
+// Handle error event
+mClient.on('error', (err) => {
+  console.error('Connection error:', err);
+});
 
-    // Extract graph data from Excel buffer
-    // const graphData = extractGraphDataFromExcel(buffer);
+mClient.subscribe(config.mqtt.espTopic, (err) => {
+    if (err) {
+        console.error("Failed to subscribe:", err);
+    }
+});
 
-    res.json({
-      content: `
-        <div style="font-family: Arial, sans-serif;">
-            <strong>Processed file in area: ${area}</strong> ${name}
-            <div style="font-size: 12px; color: gray; margin-top: 4px;">
-                (This response was sent via API)
-            </div>
-        </div>
-      `
-      // graphData: graphData // send graph data to client
+app.get("/", (req, res) => {
+    res.send({
+        
+    })
+})
+
+app.use(express.json())
+app.use(cors());
+
+app.post("/send", (req, res) => {   
+    try {
+        let data = req.body || {}
+
+        mClient.publish(config.mqtt.espTopic, JSON.stringify(data), (err) => {
+            if (err) {
+                console.log(err)
+                res.sendStatus(400)
+            } else {
+                res.send({
+                    message: "Waiting for ID to respond...",
+                    data
+                })
+            }
+        });
+
+    } catch (error) {
+        console.log(error)
+        res.sendStatus(400, error)
+    }
+})
+
+// ---------------------
+// SAS SERVER MOCKUP
+mClient.on("message", (topic, message) => {
+    if (topic === config.mqtt.espTopic) {
+        const data = JSON.parse(message.toString());
+
+        setTimeout(() => {
+            broadcast(message.toString());
+            console.log("SEND")
+        }, 3000);
+        mClient.publish(
+            config.mqtt.demoTopic,
+            JSON.stringify({ message: `ESP DATA FOR USER`, data })
+        );
+    }
+});
+
+const server = app.listen(config.PORT, () => {
+    console.log(`Server is running on port ${config.PORT}`)
+})
+
+server.on('upgrade', (req, socket, head) => {
+    wss.handleUpgrade(req, socket, head, (ws) => {
+        wss.emit('connection', ws, req)
+    })
+})
+
+function broadcast(data) {
+    wss.clients.forEach(client => {
+        client.send(JSON.stringify({ message: "ID OFFER", data }));
     });
-
-  } catch (err) {
-    console.error("Error processing file:", err);
-    res.status(400).json({ content: "Failed to process file." });
-  }
-});
-
-function extractGraphDataFromExcel(buffer) {
-  const workbook = XLSX.read(buffer, { type: "buffer" });
-  const firstSheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[firstSheetName];
-  const rows = XLSX.utils.sheet_to_json(worksheet);
-
-  if (rows.length === 0) {
-    return { labels: [], values: [] };
-  }
-
-  const firstRow = rows[0];
-
-  // Find the first string-type key for labels
-  let labelKey = null;
-  // Find the first number-type key for values
-  let valueKey = null;
-
-  for (const key of Object.keys(firstRow)) {
-    const val = firstRow[key];
-    if (labelKey === null && typeof val === "string") {
-      labelKey = key;
-    }
-    if (valueKey === null && typeof val === "number") {
-      valueKey = key;
-    }
-    if (labelKey && valueKey) break; // Found both keys
-  }
-
-  // If either key not found, return empty arrays
-  if (!labelKey || !valueKey) {
-    console.warn("Could not find suitable label or value columns.");
-    return { labels: [], values: [] };
-  }
-
-  const labels = [];
-  const values = [];
-
-  rows.forEach(row => {
-    const label = row[labelKey];
-    const value = row[valueKey];
-    if (typeof label === "string" && typeof value === "number") {
-      labels.push(label);
-      values.push(value);
-    }
-  });
-
-  return { labels, values };
 }
-
-function getLocalIPAddress() {
-  const interfaces = os.networkInterfaces();
-  for (const name of Object.keys(interfaces)) {
-    for (const iface of interfaces[name]) {
-      if (iface.family === "IPv4" && !iface.internal) {
-        return iface.address;
-      }
-    }
-  }
-  return "localhost";
-}
-
-
-const ip = getLocalIPAddress();
-const port = 3000;
-
-app.listen(port, () => {
-  console.log(`Server running at:`);
-  console.log(`- Local:   http://localhost:${port}`);
-  console.log(`- Network: http://${ip}:${port}`);
-});

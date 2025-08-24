@@ -10,7 +10,7 @@ openModalBtn.addEventListener('click', () => modal.classList.remove('hidden'));
 // Hide modal
 closeModalBtn.addEventListener('click', () => modal.classList.add('hidden'));
 modal.addEventListener('click', (e) => {
-if (e.target === modal) modal.classList.add('hidden');
+    if (e.target === modal) modal.classList.add('hidden');
 });
 
 function loadProjects() {
@@ -32,7 +32,7 @@ function loadProjects() {
         const image = localStorage.getItem(`${p.id}-logoImage`)
         card.innerHTML = `
             <div class="flex-1 w-full justify-center items-center p-5">
-                <img src="${image}" alt="${p.title}" class="w-fit object-cover rounded-t-lg" />  
+                <img src="${image ?? defaultImage}" alt="${p.title}" class="w-fit object-cover rounded-t-lg" />  
             </div>
             <div class="px-5 pt-3">
                 <h2 class="text-white font-bold text-xl">${p.title}</h2>
