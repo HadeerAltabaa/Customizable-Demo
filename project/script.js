@@ -551,8 +551,8 @@ function renderChart(ctx, config) {
 }
 
 // add the notes functionality
-const notesInput = document.getElementById("notesInput");
-const addBtn = document.getElementById("addNotesBtn");
+// const notesInput = document.getElementById("notesInput");
+// const addBtn = document.getElementById("addNotesBtn");
 
 function getNotes(id) {
     const notes = JSON.parse(localStorage.getItem(`notes-${id}`)) || []
@@ -560,8 +560,8 @@ function getNotes(id) {
 }
 
 let notes = {}
-notes[notesInput.id] = getNotes(notesInput.id);
-renderNotes(notesInput.id)
+// notes[notesInput.id] = getNotes(notesInput.id);
+// renderNotes(notesInput.id)
 loadCustomSections()
 
 const noteSections = document.querySelectorAll(".notes-section.custom-section textarea")
@@ -617,9 +617,9 @@ function renderNotes(uniqueId) {
     };
 }
 
-addBtn.onclick = () => {
-    addNotes(notesInput)
-};
+// addBtn.onclick = () => {
+//     addNotes(notesInput)
+// };
 
 function addNotes(noteInputID) {
     let noteInput = null
@@ -673,18 +673,18 @@ downloadImageBtn.addEventListener("click", () => {
 });
 
 // Download graph button functionality
-const downloadGraphBtn = document.getElementById("downloadGraphBtn");
-const graphCanvas = document.getElementById("generatedChart");
+// const downloadGraphBtn = document.getElementById("downloadGraphBtn");
+// const graphCanvas = document.getElementById("generatedChart");
 
-downloadGraphBtn.addEventListener("click", () => {
-    const imageURL = graphCanvas.toDataURL("image/png");
-    const link = document.createElement('a');
-    link.href = imageURL;
-    link.download = 'graph.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-});
+// downloadGraphBtn.addEventListener("click", () => {
+//     const imageURL = graphCanvas.toDataURL("image/png");
+//     const link = document.createElement('a');
+//     link.href = imageURL;
+//     link.download = 'graph.png';
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+// });
 
 const mapSections = document.querySelectorAll(".map-section")
 
