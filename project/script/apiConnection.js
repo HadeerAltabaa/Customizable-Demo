@@ -47,11 +47,18 @@ async function sendAPIRequest(id, data) {
     })
 
     if(!data.id) data.id = crypto.randomUUID().replace(/-/g, '');
-    if(!data.area) data.area = area || 0
+    if(!data.area) data.area = area || "none"
     if(!data.actionType) data.actionType = actionType.value || "None"
 
     data = { ...data, ...actions }
 
+    
+    for(let i in data) {
+        if(i.includes(" ")) {
+            data[i.replaceAll(" ", "_")] = data[i]
+            delete data[i]
+        }
+    }
     console.log(data)
     
     try {

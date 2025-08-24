@@ -22,6 +22,12 @@ mClient.subscribe(config.mqtt.espTopic, (err) => {
     }
 });
 
+mClient.subscribe(config.mqtt.webTopic, (err) => {
+    if (err) {
+        console.error("Failed to subscribe:", err);
+    }
+});
+
 app.get("/", (req, res) => {
     res.send({
         
@@ -56,17 +62,10 @@ app.post("/send", (req, res) => {
 // ---------------------
 // SAS SERVER MOCKUP
 mClient.on("message", (topic, message) => {
-    if (topic === config.mqtt.espTopic) {
-        const data = JSON.parse(message.toString());
+    if (topic === config.mqtt.webTopic) {
+        const data = JSON.parse(message.toString())[0][0];
 
-        setTimeout(() => {
-            broadcast(message.toString());
-            console.log("SEND")
-        }, 3000);
-        mClient.publish(
-            config.mqtt.demoTopic,
-            JSON.stringify({ message: `ESP DATA FOR USER`, data })
-        );
+        broadcast(data);
     }
 });
 
@@ -82,6 +81,6 @@ server.on('upgrade', (req, socket, head) => {
 
 function broadcast(data) {
     wss.clients.forEach(client => {
-        client.send(JSON.stringify({ message: "ID OFFER", data }));
+        client.send(JSON.stringify({ message: `This offer is for the user with the identifier ${data._Identifier}`, data: JSON.stringify(data) }));
     });
 }
