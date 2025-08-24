@@ -1314,3 +1314,71 @@ iframe {
   font-size: 14px;
   color: #333;
 }
+
+/* Timeline container */
+.timeline-section {
+  display: flex;
+  overflow-x: auto;
+  gap: 40px;
+  padding: 20px 10px;
+  border-top: 3px solid #ccc;
+  scroll-behavior: smooth;
+
+  /* 🔑 Force full row inside flex container */
+  flex-basis: 100% !important;
+  flex-grow: 1 !important;
+}
+
+.timeline-section::-webkit-scrollbar {
+    height: 8px;
+}
+
+.timeline-section::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.timeline-section::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* Timeline item */
+.timeline-item {
+    position: relative;
+    flex: 0 0 auto;
+    min-width: 160px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Circle marker */
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    top: -23px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 15px;
+    background: #fff;
+    border: 3px solid #4CAF50;
+    border-radius: 50%;
+}
+
+.timeline-item .emoji {
+    display: block;
+    font-size: 1.5em;
+    margin-bottom: 5px;
+}
+
+.timeline-item .location {
+    font-weight: bold;
+    color: #333;
+}
+
+.timeline-item .timestamp {
+    display: block;
+    font-size: 0.9em;
+    color: #777;
+    margin-top: 2px;
+}

@@ -52,6 +52,10 @@ async function sendAPIRequest(id, data) {
 
     data = { ...data, ...actions }
 
+    if(data.Location && data.Timestamp) {
+        addItemToTimeLine(data.Location, data.Timestamp)
+    }
+
     
     for(let i in data) {
         if(i.includes(" ")) {
@@ -59,8 +63,7 @@ async function sendAPIRequest(id, data) {
             delete data[i]
         }
     }
-    console.log(data)
-    
+        
     try {
         const res = await fetch(apiURL, {
             method: "POST",
@@ -99,10 +102,10 @@ async function sendAPIRequest(id, data) {
         } else {
             const text = await res.text();
             console.error("Invalid response:", text);
-            alert("Upload failed: " + text);
+            // alert("Upload failed: " + text);
         }
     } catch (error) {
         console.error("Error uploading file:", error);
-        alert("Failed to reach API server.");
+        // alert("Failed to reach API server.");
     }
 }
