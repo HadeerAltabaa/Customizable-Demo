@@ -32,7 +32,7 @@ function formatDate(input) {
 
 let timelineItems = []; // Changed from {} to []
 
-function addItemToTimeLine(location, timestamp) {
+function addItemToTimeLine(value1, value2) {
     const container = document.getElementById("timelineSection");
     let emoji = "";
 
@@ -41,29 +41,29 @@ function addItemToTimeLine(location, timestamp) {
     console.log(container.style.display)
 
     // Prevent duplicates
-    if (timelineItems.some(item => item.timestamp === timestamp)) return;
+    if (timelineItems.some(item => item.timestamp === value2)) return;
 
     // Add new item
-    timelineItems.push({ location, timestamp });
+    timelineItems.push({ value1, value2 });
 
     // Sort by timestamp
-    timelineItems.sort((a, b) => {
-        const parseDate = (str) => {
-            const day = parseInt(str.slice(0, 2), 10);
-            const monthStr = str.slice(2, 5).toUpperCase();
-            const year = 2000 + parseInt(str.slice(5, 7), 10);
-            const [hour, minute, second] = str.split(":").slice(1).map(Number);
+    // timelineItems.sort((a, b) => {
+    //     const parseDate = (str) => {
+    //         const day = parseInt(str.slice(0, 2), 10);
+    //         const monthStr = str.slice(2, 5).toUpperCase();
+    //         const year = 2000 + parseInt(str.slice(5, 7), 10);
+    //         const [hour, minute, second] = str.split(":").slice(1).map(Number);
 
-            const months = {
-                JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5,
-                JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11
-            };
+    //         const months = {
+    //             JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5,
+    //             JUL: 6, AUG: 7, SEP: 8, OCT: 9, NOV: 10, DEC: 11
+    //         };
 
-            return new Date(year, months[monthStr], day, hour, minute, second);
-        };
+    //         return new Date(year, months[monthStr], day, hour, minute, second);
+    //     };
 
-        return parseDate(a.timestamp) - parseDate(b.timestamp);
-    });
+    //     return parseDate(a.timestamp) - parseDate(b.timestamp);
+    // });
 
     // Clear container
     container.innerHTML = "";
@@ -71,7 +71,7 @@ function addItemToTimeLine(location, timestamp) {
     const ICONS = {
         "Pool":"🏊","Villa-304":"🏡","Beach":"🏖️","Spa":"💆",
         "Restaurant":"🍽️","Resturant":"🍽️","Reception":"🛎️",
-        "Jetty":"🚤","Stargazing Deck":"🔭"
+        "Jetty":"🚤","Stargazing Deck":"🔭", "Failure": "❌", "Success": "✔️"
     };
 
     // Render timeline items
@@ -79,14 +79,14 @@ function addItemToTimeLine(location, timestamp) {
         const div = document.createElement("div");
         div.className = "timeline-item";
 
-        const readableTime = formatDate(item.timestamp); // You can keep your previous formatDate function
+        // const readableTime = formatDate(item.timestamp); // You can keep your previous formatDate function
 
-        emoji = ICONS[item.location];
+        emoji = ICONS[item.value1];
 
         div.innerHTML = `
             ${emoji ? `<span class="emoji">${emoji}</span>` : ""}
-            <span class="location">${item.location}</span>
-            <span class="timestamp">${readableTime}</span>
+            <span class="location">${item.value1}</span>
+            <span class="timestamp">${item.value2}</span>
         `;
 
         container.appendChild(div);

@@ -52,9 +52,16 @@ async function sendAPIRequest(id, data) {
 
     data = { ...data, ...actions }
 
-    if(data.Location && data.Timestamp) {
-        addItemToTimeLine(data.Location, data.Timestamp)
+    // Change this to the values that will show in the timeline
+    // NOTE: Delete this block of code to remove the timeline
+    if(data.transaction_datetime) {
+        if(data.status == 0) {
+            addItemToTimeLine("Failure", data.transaction_datetime)
+        } else if(data.status == 1) {
+            addItemToTimeLine("Success", data.transaction_datetime)
+        }
     }
+    // END
 
     
     for(let i in data) {
@@ -63,7 +70,7 @@ async function sendAPIRequest(id, data) {
             delete data[i]
         }
     }
-        
+
     try {
         const res = await fetch(apiURL, {
             method: "POST",
