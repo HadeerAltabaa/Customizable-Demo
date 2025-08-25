@@ -36,6 +36,10 @@ function addItemToTimeLine(location, timestamp) {
     const container = document.getElementById("timelineSection");
     let emoji = "";
 
+    container.style.opacity = 100
+
+    console.log(container.style.display)
+
     // Prevent duplicates
     if (timelineItems.some(item => item.timestamp === timestamp)) return;
 
@@ -88,7 +92,3 @@ function addItemToTimeLine(location, timestamp) {
         container.appendChild(div);
     });
 }
-
-addItemToTimeLine("Pool", "04JUL25:18:00:00");
-addItemToTimeLine("Villa-304", "05JUL25:10:45:00");
-addItemToTimeLine("Beach", "06JUL25:12:30:00");
