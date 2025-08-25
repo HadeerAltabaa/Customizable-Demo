@@ -54,11 +54,11 @@ async function sendAPIRequest(id, data) {
 
     // Change this to the values that will show in the timeline
     // NOTE: Delete this block of code to remove the timeline
-    if(data.transaction_datetime) {
+    if(data["transaction datetime"]) {
         if(data.status == 0) {
-            addItemToTimeLine("Failure", data.transaction_datetime)
+            addItemToTimeLine("Failure", data["transaction datetime"], data.customerid)
         } else if(data.status == 1) {
-            addItemToTimeLine("Success", data.transaction_datetime)
+            addItemToTimeLine("Success", data["transaction datetime"], data.customerid)
         }
     }
     // END
@@ -68,8 +68,6 @@ async function sendAPIRequest(id, data) {
         data[i.replaceAll(" ", "_") + "_"] = data[i]
         delete data[i]
     }
-
-    console.log(data)
 
     try {
         const res = await fetch(apiURL, {
@@ -108,11 +106,11 @@ async function sendAPIRequest(id, data) {
             // localStorage.setItem("allGraphs", JSON.stringify(allGraphs));
         } else {
             const text = await res.text();
-            console.error("Invalid response:", text);
+            // console.error("Invalid response:", text);
             // alert("Upload failed: " + text);
         }
     } catch (error) {
-        console.error("Error uploading file:", error);
+        // console.error("Error uploading file:", error);
         // alert("Failed to reach API server.");
     }
 }

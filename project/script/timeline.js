@@ -30,21 +30,24 @@ function formatDate(input) {
     });
 }
 
-let timelineItems = []; // Changed from {} to []
+let timelineItems = [];
 
-function addItemToTimeLine(value1, value2) {
+function addItemToTimeLine(value1, value2, userid) {
     const container = document.getElementById("timelineSection");
     let emoji = "";
 
     container.style.opacity = 100
 
-    console.log(container.style.display)
+    console.log(value1)
 
-    // Prevent duplicates
-    if (timelineItems.some(item => item.value2 === value2)) return;
+    // Prevent duplicates (per user & value2)
+    if (timelineItems.some(item => item.value2 === value2 && item.userid === userid)) return;
+
+    // Keep only items with the same userid
+    timelineItems = timelineItems.filter(item => item.userid === userid);
 
     // Add new item
-    timelineItems.push({ value1, value2 });
+    timelineItems.push({ value1, value2, userid });
 
     // Sort by timestamp
     // timelineItems.sort((a, b) => {
@@ -75,7 +78,7 @@ function addItemToTimeLine(value1, value2) {
     };
 
     // Render timeline items
-    timelineItems.forEach(item => {
+    timelineItems.forEach((item, index) => {
         const div = document.createElement("div");
         div.className = "timeline-item";
 
