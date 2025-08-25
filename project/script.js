@@ -49,9 +49,6 @@ const sectionTemplates = {
                     </div>
 
                     <div class="image-wrapper" id="dropArea">
-                        <button type="button" id="downloadImageBtn" title="Download Image">
-                            <i class="fa-solid fa-circle-down"></i>
-                        </button>
                         <img src="images/map.png" id="previewImage" alt="Preview Image">
                         <canvas id="imageCanvas"></canvas>
                     </div>
@@ -132,9 +129,6 @@ const sectionTemplates = {
             </div>
             <div class="img-preview">
                 <div class="image-wrapper">
-                    <button type="button" id="downloadImageBtn" title="Download an Image">
-                        <i class="fa-solid fa-circle-down"></i>
-                    </button>
                     <label for="imageInput_${uniqueId}">
                         <img src="images/map.png" id="previewImage_${uniqueId}" alt="Preview an Image">
                     </label>
@@ -660,17 +654,17 @@ imageInput.onchange = function () {
     reader.readAsDataURL(file);
 }
 
-const downloadImageBtn = document.getElementById("downloadImageBtn");
+// const downloadImageBtn = document.getElementById("downloadImageBtn");
 
-downloadImageBtn.addEventListener("click", () => {
-    const imageURL = previewImage.src;
-    const link = document.createElement('a');
-    link.href = imageURL;
-    link.download = 'image.png'; // default name for download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-});
+// downloadImageBtn.addEventListener("click", () => {
+//     const imageURL = previewImage.src;
+//     const link = document.createElement('a');
+//     link.href = imageURL;
+//     link.download = 'image.png'; // default name for download
+//     document.body.appendChild(link);
+//     link.click();
+//     document.body.removeChild(link);
+// });
 
 // Download graph button functionality
 // const downloadGraphBtn = document.getElementById("downloadGraphBtn");

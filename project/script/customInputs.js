@@ -128,29 +128,29 @@ function createInput(type, name, placeholder) {
     input.step = '0.01';
     input.required = true;
 
-    const editMapBtn = document.createElement('button');
-    editMapBtn.textContent = 'Edit Map';
-    editMapBtn.id = 'editMapButton'
-
-    editMapBtn.addEventListener("click", (e) => {
-        isEditingMap = !isEditingMap
-
-        console.log(isEditingMap)
-
-        if(isEditingMap)
-            editMapBtn.textContent = "Exit Edit Map Mode"
-        else {
-            editMapBtn.textContent = "Edit Map"
-        }
-    })
-
+    
     wrapper.appendChild(input);
 
     document.getElementById('custom-input-container').appendChild(wrapper);
-    document.getElementById('editMapButton')?.remove()
-
-    document.getElementById('custom-input-container').appendChild(editMapBtn);
+    
 }
+
+const editMapBtn = document.getElementById("editMapButton");
+const downloadImageBtn = document.getElementById("downloadImageBtn")
+
+downloadImageBtn?.remove()
+
+editMapBtn.addEventListener("click", (e) => {
+    isEditingMap = !isEditingMap
+
+    console.log(isEditingMap)
+
+    if(isEditingMap)
+        editMapBtn.textContent = "Exit Edit Map Mode"
+    else {
+        editMapBtn.textContent = "Edit Map"
+    }
+})
 
 function createSidebarItem(type, name, placeholder) {
     const sidebarList = document.getElementById('sidebarInputList');
