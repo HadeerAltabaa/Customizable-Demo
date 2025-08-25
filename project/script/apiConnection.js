@@ -46,9 +46,9 @@ async function sendAPIRequest(id, data) {
         }
     })
 
-    if(!data.id) data.id = crypto.randomUUID().replace(/-/g, '');
-    if(!data.area) data.area = area || "none"
-    if(!data.actionType) data.actionType = actionType.value || "None"
+    if(!data?.id) data.id = crypto.randomUUID().replace(/-/g, '');
+    if(!data?.area) data.area = area || "none"
+    if(!data?.actionType) data.actionType = actionType?.value || "None"
 
     data = { ...data, ...actions }
 
@@ -65,11 +65,11 @@ async function sendAPIRequest(id, data) {
 
     
     for(let i in data) {
-        if(i.includes(" ")) {
-            data[i.replaceAll(" ", "_")] = data[i]
-            delete data[i]
-        }
+        data[i.replaceAll(" ", "_") + "_"] = data[i]
+        delete data[i]
     }
+
+    console.log(data)
 
     try {
         const res = await fetch(apiURL, {

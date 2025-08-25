@@ -210,6 +210,16 @@ document.querySelectorAll('#sectionOptions button').forEach(btn => {
     });
 });
 
+let deletedSections = JSON.parse(localStorage.getItem(`${projectID}-deletedSections`)) || {}
+
+for(let sectionID in deletedSections) {
+    let section = document.getElementById(sectionID)
+
+    setTimeout(() => {
+        section?.remove()
+    }, 100);
+}
+
 function createCustomSection(type) {
     const section = document.createElement("div")
         const { html, id } = sectionTemplates[type]();
@@ -249,7 +259,7 @@ function createCustomSection(type) {
 
         document.querySelector('.main-body').appendChild(section)
         saveCustomSections();
-        //enterEditMode()
+        // enterEditMode()
         // attachDeleteLogic();
 }
 
@@ -324,6 +334,15 @@ function enterEditMode() {
                     if (customSections[section.parentElement.id]) {
                         delete customSections[section.parentElement.id]
                         localStorage.setItem(`${projectID}-customSections`, JSON.stringify(customSections))
+                    } else {
+                        console.log(section.parentElement.id)
+                        let deletedSections = JSON.parse(localStorage.getItem(`${projectID}-deletedSections`)) || {}
+
+                        if(!deletedSections[section.parentElement.id]) {
+                            deletedSections[section.parentElement.id] = "DELETED"
+                        }
+
+                        localStorage.setItem(`${projectID}-deletedSections`, JSON.stringify(deletedSections))
                     }
 
                     document.querySelector(`li#nav-${section.parentElement.id}`)?.remove();

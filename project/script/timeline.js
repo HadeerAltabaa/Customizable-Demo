@@ -41,7 +41,7 @@ function addItemToTimeLine(value1, value2) {
     console.log(container.style.display)
 
     // Prevent duplicates
-    if (timelineItems.some(item => item.timestamp === value2)) return;
+    if (timelineItems.some(item => item.value2 === value2)) return;
 
     // Add new item
     timelineItems.push({ value1, value2 });
