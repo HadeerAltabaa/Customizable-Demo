@@ -32,22 +32,23 @@ function formatDate(input) {
 
 let timelineItems = [];
 
-function addItemToTimeLine(value1, value2, userid) {
+let tracker = {}
+
+function addItemToTimeLine(value1, value2, userid, sectionId) {
     const container = document.getElementById("timelineSection");
     let emoji = "";
 
     container.style.opacity = 100
 
-    console.log(value1)
-
     // Prevent duplicates (per user & value2)
     if (timelineItems.some(item => item.value2 === value2 && item.userid === userid)) return;
 
-    // Keep only items with the same userid
-    timelineItems = timelineItems.filter(item => item.userid === userid);
-
+    
     // Add new item
     timelineItems.push({ value1, value2, userid });
+
+    // Keep only items with the same userid
+    let newTimelineItems = timelineItems.filter(item => item.userid === userid);
 
     // Sort by timestamp
     // timelineItems.sort((a, b) => {
@@ -77,14 +78,23 @@ function addItemToTimeLine(value1, value2, userid) {
         "Jetty":"🚤","Stargazing Deck":"🔭", "Failure": "❌", "Success": "✔️"
     };
 
+    // if(value1 == "Failure")
+    //     tracker[userid] = tracker[userid] != undefined ? tracker[userid] + 1 : 1
+    // else if (value1 == "Success")
+    //     tracker[userid] = 0
+
+    // if(tracker[userid] >= 3)
+    //     createAnOffer(sectionId, userid, "Too many failed attempts")
+
     // Render timeline items
-    timelineItems.forEach((item, index) => {
+    newTimelineItems.forEach((item, index) => {
         const div = document.createElement("div");
         div.className = "timeline-item";
 
-        // const readableTime = formatDate(item.timestamp); // You can keep your previous formatDate function
+        // const readableTime = formatDate(item.timestamp);
 
         emoji = ICONS[item.value1];
+        
 
         div.innerHTML = `
             ${emoji ? `<span class="emoji">${emoji}</span>` : ""}

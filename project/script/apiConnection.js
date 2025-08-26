@@ -52,13 +52,15 @@ async function sendAPIRequest(id, data) {
 
     data = { ...data, ...actions }
 
+    // createAnOffer(id, data.id, "TEST MESSAGE")
+
     // Change this to the values that will show in the timeline
     // NOTE: Delete this block of code to remove the timeline
     if(data["transaction datetime"]) {
         if(data.status == 0) {
-            addItemToTimeLine("Failure", data["transaction datetime"], data.customerid)
+            addItemToTimeLine("Failure", data["transaction datetime"], data.customerid, id)
         } else if(data.status == 1) {
-            addItemToTimeLine("Success", data["transaction datetime"], data.customerid)
+            addItemToTimeLine("Success", data["transaction datetime"], data.customerid, id)
         }
     }
     // END
@@ -83,20 +85,6 @@ async function sendAPIRequest(id, data) {
             const json = await res.json();
             const content = json;
             const graphData = json.graphData;
-
-            // Create styled message element
-            const msgEl = document.createElement("div");
-            msgEl.textContent = content.message;
-            msgEl.classList.add("message-box");
-            msgEl.id = data.id
-
-            // Append to target
-            const target = document.querySelector(`#previewID-${id}`);
-            if (target) {
-                target.appendChild(msgEl);
-                const p = target.querySelector("p");
-                if (p) p.remove();
-            }
 
             addUserToWSWaitlist(id, data.id);
 

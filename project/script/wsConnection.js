@@ -7,7 +7,8 @@ ws.onmessage = (event) => {
     content.data = JSON.parse(content.data)
 
     if(waitlist[content.data.id]) {
-        document.getElementById(content.data.id).innerText = content.message
+        createAnOffer(waitlist[content.data.id].elementId, content.data.id, content.message)
+
         delete waitlist[content.data.id]
     }
 };
