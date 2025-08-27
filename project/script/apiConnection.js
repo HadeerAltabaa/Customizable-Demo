@@ -54,6 +54,7 @@ async function sendAPIRequest(id, data) {
 
     // createAnOffer(id, data.id, "TEST MESSAGE")
 
+    
     // Change this to the values that will show in the timeline
     // NOTE: Delete this block of code to remove the timeline
     if(data["transaction datetime"]) {
@@ -64,12 +65,17 @@ async function sendAPIRequest(id, data) {
         }
     }
     // END
-
+    
     
     for(let i in data) {
-        data[i.replaceAll(" ", "_") + "_"] = data[i]
-        delete data[i]
+        if(i.includes(" ")) {
+            data[i.replaceAll(" ", "_")] = data[i]
+            delete data[i]
+        }
     }
+
+    console.log("THE FRONTEND IS SENDING THIS DATA ( MAKE SURE IT MATCHES THE SOURCE WINDOW )")
+    console.log(data)
 
     try {
         const res = await fetch(apiURL, {

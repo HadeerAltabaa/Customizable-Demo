@@ -335,7 +335,6 @@ function enterEditMode() {
                         delete customSections[section.parentElement.id]
                         localStorage.setItem(`${projectID}-customSections`, JSON.stringify(customSections))
                     } else {
-                        console.log(section.parentElement.id)
                         let deletedSections = JSON.parse(localStorage.getItem(`${projectID}-deletedSections`)) || {}
 
                         if(!deletedSections[section.parentElement.id]) {

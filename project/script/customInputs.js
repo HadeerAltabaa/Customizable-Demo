@@ -143,8 +143,6 @@ downloadImageBtn?.remove()
 editMapBtn.addEventListener("click", (e) => {
     isEditingMap = !isEditingMap
 
-    console.log(isEditingMap)
-
     if(isEditingMap)
         editMapBtn.textContent = "Exit Edit Map Mode"
     else {
