@@ -80,7 +80,7 @@ async function sendAPIRequest(id, data) {
         if(data[field]) {
             let date = new Date(data[field])
 
-            data[field] = date.getTime()
+            data[field] = date.getTime() * 1000
         }
     }
 

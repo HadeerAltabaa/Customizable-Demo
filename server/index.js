@@ -80,12 +80,13 @@ server.on('upgrade', (req, socket, head) => {
 })
 
 function broadcast(data) {
+    console.log("Data being sent from esp:")
+    console.log(data)
+
     wss.clients.forEach(client => {
         client.send(JSON.stringify({ message: data[config.mqtt.messageField] != undefined ? data[config.mqtt.messageField] : `${config.mqtt.messageField} does not exsist. check the server logs for details`, data: JSON.stringify(data) }));
         if(data[config.mqtt.messageField] == undefined) {
             console.log(`${config.mqtt.messageField} does not exsist on the data being sent from esp.`)
-            console.log("Data being sent from esp:")
-            console.log(data)
         }
     });
 }
