@@ -46,23 +46,25 @@ async function sendAPIRequest(id, data) {
         }
     })
 
-    if(!data?.id) data.id = crypto.randomUUID().replace(/-/g, '');
-    if(!data?.area) data.area = area || "none"
-    if(!data?.actionType) data.actionType = actionType?.value || "None"
+    if(config.sendDefualtValues) {
+        if(!data?.id) data.id = crypto.randomUUID().replace(/-/g, '');
+        if(!data?.area) data.area = area || "none"
+        if(!data?.actionType) data.actionType = actionType?.value || "None"
 
-    data = { ...data, ...actions }
+        data = { ...data, ...actions }
+    }
 
     // createAnOffer(id, data.id, "TEST MESSAGE")
 
-    
     // Change this to the values that will show in the timeline
     // NOTE: Delete this block of code to remove the timeline
-    if(data["transaction datetime"]) {
-        if(data.status == 0) {
-            addItemToTimeLine("Failure", data["transaction datetime"], data.customerid, id)
-        } else if(data.status == 1) {
-            addItemToTimeLine("Success", data["transaction datetime"], data.customerid, id)
-        }
+    if(
+        config.timeline.isActive && 
+        data[config.timeline.value1Field] &&
+        data[config.timeline.value2Field] && 
+        data[config.timeline.idField])
+    {
+        addItemToTimeLine(config.timeline.value1Field, config.timeline.value2Field, config.timeline.id, id)
     }
     // END
     
@@ -71,6 +73,14 @@ async function sendAPIRequest(id, data) {
         if(i.includes(" ")) {
             data[i.replaceAll(" ", "_")] = data[i]
             delete data[i]
+        }
+    }
+
+    for(let field of config.timestampFields) {
+        if(data[field]) {
+            let date = new Date(data[field])
+
+            data[field] = date.getTime()
         }
     }
 
