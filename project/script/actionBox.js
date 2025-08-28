@@ -7,6 +7,7 @@ function reloadMockBoxes() {
         // Find the existing div inside the section
         const wrapperForm = section.querySelector(`#actions-box-${id}`);
         const boxes = mockBoxes[id]
+        let inputs = []
 
         wrapperForm.innerHTML = ""
 
@@ -19,8 +20,9 @@ function reloadMockBoxes() {
             input.name = name;
             input.id = name
             input.className = `mockdata-${id}`;
-            input.autocomplete = "on"
             // Optionally set input.type here if needed
+
+            inputs.push(input)
 
             wrapperForm.appendChild(input);
         });
@@ -29,9 +31,16 @@ function reloadMockBoxes() {
         button.innerText = "Send"
         button.type = "submit"
 
+        wrapperForm.autocomplete = "on"
+        
+
         wrapperForm.onsubmit = (e) => {
             e.preventDefault(); 
             sendMockData(id);
+
+            inputs.forEach(i => i.value = "")
+
+
         };
 
         wrapperForm.appendChild(button)
