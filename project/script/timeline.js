@@ -72,11 +72,7 @@ function addItemToTimeLine(value1, value2, userid, sectionId) {
     // Clear container
     container.innerHTML = "";
 
-    const ICONS = {
-        "Pool":"🏊","Villa-304":"🏡","Beach":"🏖️","Spa":"💆",
-        "Restaurant":"🍽️","Resturant":"🍽️","Reception":"🛎️",
-        "Jetty":"🚤","Stargazing Deck":"🔭", "Failure": "❌", "Success": "✔️"
-    };
+    const ICONS = config.timeline.icons
 
     // if(value1 == "Failure")
     //     tracker[userid] = tracker[userid] != undefined ? tracker[userid] + 1 : 1
