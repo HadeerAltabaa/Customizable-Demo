@@ -1,6 +1,6 @@
 # Customizable Web Demo
 
-This project is a customizable web demo consisting of a **frontend**, **backend server**, and an **MQTT broker (Mosquitto)**.  
+This project is a customizable web demo consisting of a **frontend**, **backend server**, and an **MQTT broker (Mosquitto)**.
 It is designed to run locally with Node.js and integrates with an ESP device via MQTT.
 
 ---
@@ -8,7 +8,6 @@ It is designed to run locally with Node.js and integrates with an ESP device via
 ## 📂 Project Structure
 
 ```
-
 (repo)/
 ├─ project/        # Frontend (accessed via localhost)
 ├─ server/         # Backend server
@@ -16,55 +15,59 @@ It is designed to run locally with Node.js and integrates with an ESP device via
 ├─ init.bat        # Installs required dependencies
 ├─ startMQTT.bat   # Starts the MQTT broker
 ├─ start.bat       # Starts backend + frontend servers
-
 ```
 
 ---
 
 ## ⚙️ Installation & Setup
 
-1. **Install Mosquitto**  
-Download and install from [https://mosquitto.org/](https://mosquitto.org/).  
-> ⚠️ The Mosquitto installation folder must be placed inside the repository alongside `server/` and `project/`:  
-```
+1. **Install Mosquitto**
+   Download and install from [https://mosquitto.org/](https://mosquitto.org/).
 
-(repo)/server
-(repo)/project
-(repo)/mosquitto
+   > ⚠️ The Mosquitto installation folder must be placed inside the repository alongside `server/` and `project/`:
 
-````
+   ```
+   (repo)/server
+   (repo)/project
+   (repo)/mosquitto
+   ```
 
-2. **Install Node.js**  
-Download and install from [https://nodejs.org/](https://nodejs.org/).  
-> Use the **default installation path**.
+2. **Install Node.js**
+   Download and install from [https://nodejs.org/](https://nodejs.org/).
 
-3. **Install Dependencies** Run:
-```bash
-init.bat
-````
+   > Use the **default installation path**.
 
-This will install all required npm packages for both the server and frontend.
+3. **Install Dependencies**
+   Run:
 
-4. **Start the MQTT Broker** Run:
+   ```bash
+   init.bat
+   ```
 
-```bash
-startMQTT.bat
-```
+   This will install all required npm packages for both the server and frontend.
 
-5. **Configure the Server** Open:
+4. **Start the MQTT Broker**
+   Run:
 
-```
-server/config.js
-```
+   ```bash
+   startMQTT.bat
+   ```
 
-Update the `server` to point to the **race image** you are connecting to.
+5. **Configure the Server**
+   Open:
+
+   ```
+   server/config.js
+   ```
+
+   Update the `server` to point to the **race image** you are connecting to.
 
 6. **Start the Backend & Frontend**
-Run:
+   Run:
 
-```bash
-start.bat
-```
+   ```bash
+   start.bat
+   ```
 
    > The frontend must be accessed from **[http://127.0.0.1](http://127.0.0.1)** (or `localhost`)
    > Do **not** open it directly from the file path.
@@ -82,14 +85,69 @@ When configuring the ESP:
 
 ---
 
+## 🔗 Connection to ESP
+
+**To send data from the frontend to ESP:**
+
+1. Inside the **source window**, create a new connector with type **MQTT**.
+2. Change the **IP** to the **race image IP** (no ports or protocols, just the IP).
+3. Change the **topic** to:
+
+   ```
+   sas-demo/esp
+   ```
+
+   (This can be changed from the server config file.)
+4. Make sure the **source window schema** matches the data being sent from the frontend.
+
+   > Check the browser console to confirm.
+
+**To get data back from ESP:**
+
+1. In a **compute window**, create the schema for the data you want to send back to the frontend.
+2. Create a new connector and select **MQTT** as the type.
+3. Set the **IP** to the **race image IP**.
+4. Set the **topic** to:
+
+   ```
+   sas-demo/web
+   ```
+5. Set **Mqttmsgtype** to:
+
+   ```
+   json
+   ```
+
+---
+
+## 🎨 Frontend Customization
+
+You can customize the frontend behavior and logic via:
+
+```
+project/config.js
+```
+
+From here you can:
+
+* Select which fields are displayed in the **message box**.
+
+  > Ensure field names are spelled exactly as in the compute schema, or it will not work.
+* Change the **frontend logic** for handling messages.
+* Define which fields you want to send as a **stamp** to the ESP.
+
+---
+
 ## ✅ Quick Summary
 
 * Install **Mosquitto** inside `(repo)/mosquitto/`
 * Install **Node.js** (default path)
 * Run `init.bat` → install dependencies
 * Run `startMQTT.bat` → start MQTT broker
-* Update `server/config.js` → set correct IP\:port
+* Update `server/config.js` → set correct IP
 * Run `start.bat` → launch server + frontend (open via `localhost`)
-* Configure ESP → set MQTT IP + required fields
+* Configure ESP:
 
----
+  * Source window → `sas-demo/esp`
+  * Compute window → `sas-demo/web`
+* Customize frontend via `project/config.js`
