@@ -5,10 +5,10 @@ function reloadMockBoxes() {
         let id = section.id.split("_")[1];
 
         // Find the existing div inside the section
-        const wrapperDiv = section.querySelector(`#actions-box-${id}`);
+        const wrapperForm = section.querySelector(`#actions-box-${id}`);
         const boxes = mockBoxes[id]
 
-        wrapperDiv.innerHTML = ""
+        wrapperForm.innerHTML = ""
 
         if(!boxes)
             return
@@ -17,17 +17,24 @@ function reloadMockBoxes() {
             const input = document.createElement('input');
             input.placeholder = name;
             input.name = name;
+            input.id = name
             input.className = `mockdata-${id}`;
+            input.autocomplete = "on"
             // Optionally set input.type here if needed
 
-            wrapperDiv.appendChild(input);
+            wrapperForm.appendChild(input);
         });
 
         const button = document.createElement('button')
         button.innerText = "Send"
-        button.onclick = () => sendMockData(id)
+        button.type = "submit"
 
-        wrapperDiv.appendChild(button)
+        wrapperForm.onsubmit = (e) => {
+            e.preventDefault(); 
+            sendMockData(id);
+        };
+
+        wrapperForm.appendChild(button)
     });
 }
 
