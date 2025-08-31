@@ -32,13 +32,15 @@ function loadProjects() {
         const image = localStorage.getItem(`${p.id}-logoImage`)
         card.innerHTML = `
             <div class="flex-1 w-full justify-center items-center p-5">
-                <img src="${image ?? defaultImage}" alt="${p.title}" class="w-fit object-cover rounded-t-lg" />  
+                <div class="bg-white/70 rounded-md  p-2 w-fit">
+                    <img src="${image ?? defaultImage}" alt="${p.title}" class="w-fit object-cover rounded-t-lg" />
+                </div>
             </div>
             <div class="px-5 pt-3">
-                <h2 class="text-white font-bold text-xl">${p.title}</h2>
+                <h2 class="text-black font-bold text-xl bg-white/70 rounded-md px-3 py-2 ml-1">${p.title}</h2>
             </div>
             <div class="flex justify-between m-5">
-                <button class="bg-white/10 hover:bg-white/30 text-white px-4 py-2 rounded-md font-semibold" onClick="localStorage.setItem('currentProject', ${p.id});window.location.href = '/project';">Go to project</button>
+                <button class="bg-white/70 hover:bg-white/30 text-black px-4 py-2 ml-1 rounded-md font-semibold" onClick="localStorage.setItem('currentProject', ${p.id});window.location.href = '/project';">Go to project</button>
                 <button class="text-white hover:text-gray-700 text-2xl font-bold z-[999]" onClick="deleteProject(${p.id})">&times;</button>
             </div>
         `;
